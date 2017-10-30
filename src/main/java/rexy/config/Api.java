@@ -1,19 +1,12 @@
 
 package rexy.config;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -24,6 +17,8 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 })
 public class Api {
 
+    @JsonProperty("name")
+    private String name;
     @JsonProperty("baseUrl")
     private String baseUrl;
     @JsonProperty("contentType")
@@ -32,8 +27,16 @@ public class Api {
     private String proxy;
     @JsonProperty("endpoints")
     private List<Endpoint> endpoints = new ArrayList<Endpoint>();
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    @JsonProperty("headers")
+    private Headers headers;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getBaseUrl() {
         return baseUrl;
@@ -67,36 +70,11 @@ public class Api {
         this.endpoints = endpoints;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
+    public Headers getHeaders() {
+        return headers;
     }
 
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
+    public void setHeaders(Headers headers) {
+        this.headers = headers;
     }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("baseUrl", baseUrl).append("contentType", contentType).append("proxy", proxy).append("endpoints", endpoints).append("additionalProperties", additionalProperties).toString();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(baseUrl).append(additionalProperties).append(endpoints).append(proxy).append(contentType).toHashCode();
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        if (!(other instanceof Api)) {
-            return false;
-        }
-        Api rhs = ((Api) other);
-        return new EqualsBuilder().append(baseUrl, rhs.baseUrl).append(additionalProperties, rhs.additionalProperties).append(endpoints, rhs.endpoints).append(proxy, rhs.proxy).append(contentType, rhs.contentType).isEquals();
-    }
-
 }

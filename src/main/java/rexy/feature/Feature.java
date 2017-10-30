@@ -1,6 +1,7 @@
 package rexy.feature;
 
 import com.sun.net.httpserver.HttpExchange;
+import org.codehaus.jackson.JsonNode;
 import rexy.config.Api;
 
 import java.io.IOException;
@@ -9,11 +10,9 @@ public interface Feature {
 	
 	String getName();
 	
-	void preInit() throws FeatureInitialisationException;
+	void init(JsonNode config) throws FeatureInitialisationException;
 	
-	boolean endpointCreation(Api api);
-	
-	void postInit() throws IOException;
-	
+	void endpointCreation(Api api) throws FeatureInitialisationException;
+
 	boolean onRequest(Api api, HttpExchange exchange);
 }

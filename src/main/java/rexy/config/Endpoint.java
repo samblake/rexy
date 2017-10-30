@@ -22,12 +22,20 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 })
 public class Endpoint {
 
+    @JsonProperty("name")
+    private String name;
     @JsonProperty("endpoint")
     private String endpoint;
     @JsonProperty("responses")
     private List<Response> responses = new ArrayList<Response>();
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getEndpoint() {
         return endpoint;
@@ -44,37 +52,4 @@ public class Endpoint {
     public void setResponses(List<Response> responses) {
         this.responses = responses;
     }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("endpoint", endpoint).append("responses", responses).append("additionalProperties", additionalProperties).toString();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(additionalProperties).append(responses).append(endpoint).toHashCode();
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        if (!(other instanceof Endpoint)) {
-            return false;
-        }
-        Endpoint rhs = ((Endpoint) other);
-        return new EqualsBuilder().append(additionalProperties, rhs.additionalProperties).append(responses, rhs.responses).append(endpoint, rhs.endpoint).isEquals();
-    }
-
 }

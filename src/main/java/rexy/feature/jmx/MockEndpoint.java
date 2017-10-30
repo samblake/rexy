@@ -1,12 +1,18 @@
 package rexy.feature.jmx;
 
-public class RexyEndpoint implements RexyEndpointMBean {
+public class MockEndpoint implements MockEndpointMBean {
 	
 	private boolean intercept;
 	private String contentType;
 	private int httpStatus;
 	private String response;
-	
+
+	public MockEndpoint(String contentType, int httpStatus, String response) {
+		this.intercept = false;
+		this.contentType = contentType;
+		this.response = response;
+	}
+
 	@Override
 	public boolean isIntercept() {
 		return intercept;
@@ -46,5 +52,6 @@ public class RexyEndpoint implements RexyEndpointMBean {
 	public void setResponse(String response) {
 		this.response = response;
 	}
+
 
 }

@@ -1,6 +1,7 @@
 package rexy.feature;
 
 import com.sun.net.httpserver.HttpExchange;
+import org.codehaus.jackson.JsonNode;
 import rexy.config.Api;
 
 import java.io.IOException;
@@ -13,16 +14,11 @@ public abstract class FeatureAdapter implements Feature {
 	}
 	
 	@Override
-	public void preInit() throws FeatureInitialisationException {
+	public void init(JsonNode config) throws FeatureInitialisationException {
 	}
 	
 	@Override
-	public boolean endpointCreation(Api api) {
-		return true;
-	}
-	
-	@Override
-	public void postInit() throws IOException {
+	public void endpointCreation(Api api) throws FeatureInitialisationException {
 	}
 	
 	@Override

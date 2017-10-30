@@ -4,13 +4,11 @@
   "features": ["jmx", "proxy"],
   "apis": [
     {
-      "name": "metaweather",
       "baseUrl": "api/",
       "contentType": "text/json",
       "proxy": "https://www.metaweather.com/api",
       "endpoints": [
         {
-          "name": "location",
           "endpoint": "location/search/?query={query}",
           "responses": [
             {

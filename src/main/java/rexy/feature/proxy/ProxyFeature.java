@@ -14,6 +14,7 @@ import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.codehaus.jackson.JsonNode;
 import rexy.config.Api;
 import rexy.feature.FeatureAdapter;
 import rexy.feature.FeatureInitialisationException;
@@ -31,7 +32,7 @@ public class ProxyFeature extends FeatureAdapter {
 	private CloseableHttpClient httpClient;
 	
 	@Override
-	public void preInit() throws FeatureInitialisationException {
+	public void init(JsonNode config) throws FeatureInitialisationException {
 		httpClient = HttpClients.createDefault();
 	}
 	

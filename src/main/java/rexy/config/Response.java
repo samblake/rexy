@@ -26,8 +26,6 @@ public class Response {
     private int httpStatus;
     @JsonProperty("body")
     private JsonNode body;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     public int getHttpStatus() {
         return httpStatus;
@@ -36,7 +34,8 @@ public class Response {
     public void setHttpStatus(int httpStatus) {
         this.httpStatus = httpStatus;
     }
-    
+
+
     public JsonNode getBody() {
         return body;
     }
@@ -44,37 +43,4 @@ public class Response {
     public void setBody(JsonNode body) {
         this.body = body;
     }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("httpStatus", httpStatus).append("body", body).append("additionalProperties", additionalProperties).toString();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(body).append(httpStatus).append(additionalProperties).toHashCode();
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        if (!(other instanceof Response)) {
-            return false;
-        }
-        Response rhs = ((Response) other);
-        return new EqualsBuilder().append(body, rhs.body).append(httpStatus, rhs.httpStatus).append(additionalProperties, rhs.additionalProperties).isEquals();
-    }
-
 }
