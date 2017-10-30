@@ -4,19 +4,22 @@
   "features": ["jmx", "proxy"],
   "apis": [
     {
+      "name": "metaweather",
       "baseUrl": "api/",
       "contentType": "text/json",
-      "proxy": "https://www.metaweather.com/api",
+      "proxy": "http://www.metaweather.com/api",
       "endpoints": [
         {
+          "name": "location",
           "endpoint": "location/search/?query={query}",
           "responses": [
             {
               "httpStatus": 200,
               "body": {
-                "lon": -1243143,
-                "lat": 4325356,
-                "town": "london"
+                "title":"London",
+                "location_type":"City",
+                "woeid":44418,
+                "latt_long":"51.506321,-0.12714"
               }
             },
             {

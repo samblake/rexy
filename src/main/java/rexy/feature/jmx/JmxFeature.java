@@ -1,16 +1,16 @@
 package rexy.feature.jmx;
 
 import com.sun.net.httpserver.HttpExchange;
-import org.apache.http.Header;
 import org.codehaus.jackson.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rexy.config.Api;
 import rexy.config.Endpoint;
+import rexy.config.Headers;
 import rexy.feature.FeatureAdapter;
 import rexy.feature.FeatureInitialisationException;
 
-import javax.management.*;
+import javax.management.JMException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -41,7 +41,9 @@ public class JmxFeature extends FeatureAdapter {
 
 	@Override
 	public boolean onRequest(Api api, HttpExchange exchange) {
-		MockEndpoint endpoint = registry.getEndpoint(exchange.getRequestURI().getPath());
+		String query = exchange.getRequestURI().getQuery();
+		String request = exchange.getRequestURI().getPath() + (query == null ? "" : "?" + query);
+		MockEndpoint endpoint = registry.getEndpoint(request);
 		if (endpoint != null) {
 			if (endpoint.isIntercept()) {
 				logger.info("Returning mock response for " + exchange.getRequestURI().getPath());
@@ -75,13 +77,15 @@ public class JmxFeature extends FeatureAdapter {
 			}
 		}
 
-		// TODO allow override fom endpoint
-		for (Map.Entry<String, String> header : api.getHeaders().getHeaders()) {
+		// TODO allow override from endpoint
+		Headers headers = api.getHeaders();
+		for (Map.Entry<String, String> header : headers.getHeaders()) {
             exchange.getResponseHeaders().add(header.getKey(), header.getValue());
         }
 
 		OutputStream os = exchange.getResponseBody();
 		os.write(body);
-		os.close();
+
+		exchange.close();
 	}
 }

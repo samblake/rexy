@@ -10,10 +10,12 @@ import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+    "name",
     "baseUrl",
     "contentType",
     "proxy",
-    "endpoints"
+    "endpoints",
+    "headers"
 })
 public class Api {
 
@@ -28,7 +30,7 @@ public class Api {
     @JsonProperty("endpoints")
     private List<Endpoint> endpoints = new ArrayList<Endpoint>();
     @JsonProperty("headers")
-    private Headers headers;
+    private Headers headers = new Headers();
 
     public String getName() {
         return name;

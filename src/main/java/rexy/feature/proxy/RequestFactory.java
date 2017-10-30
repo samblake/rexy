@@ -17,42 +17,50 @@ import java.util.Map.Entry;
 
 public class RequestFactory {
 	
-	public static HttpUriRequest createRequest(HttpExchange exchange) {
-		HttpUriRequest request = createRequest(exchange.getRequestMethod(), exchange.getRequestURI());
-		
+	public static HttpUriRequest createRequest(String baseUrl, HttpExchange exchange) {
+		String url = createUrl(baseUrl, exchange);
+		HttpUriRequest request = createRequest(exchange.getRequestMethod(), url);
+
 		for (Entry<String, List<String>> header : exchange.getRequestHeaders().entrySet()) {
 			for (String value : header.getValue()) {
-				request.addHeader(header.getKey(), value);
+				if (!header.getKey().equals("Host")) {
+					request.addHeader(header.getKey(), value);
+				}
 			}
 		}
 		
 		return request;
 	}
-	
-	public static HttpUriRequest createRequest(String requestMethod, URI requestURI) {
+
+	private static String createUrl(String baseUrl, HttpExchange exchange) {
+		String url = baseUrl + exchange.getRequestURI().getPath().replace(exchange.getHttpContext().getPath(), "/");
+		return exchange.getRequestURI().getQuery() == null ? url : url + "?" + exchange.getRequestURI().getQuery();
+	}
+
+	public static HttpUriRequest createRequest(String requestMethod, String url) {
 		if (requestMethod.equals(HttpGet.METHOD_NAME)) {
-			return new HttpGet(requestURI);
+			return new HttpGet(url);
 		}
 		if (requestMethod.equals(HttpPost.METHOD_NAME)) {
-			return new HttpPost(requestURI);
+			return new HttpPost(url);
 		}
 		if (requestMethod.equals(HttpPut.METHOD_NAME)) {
-			return new HttpPut(requestURI);
+			return new HttpPut(url);
 		}
 		if (requestMethod.equals(HttpDelete.METHOD_NAME)) {
-			return new HttpDelete(requestURI);
+			return new HttpDelete(url);
 		}
 		if (requestMethod.equals(HttpPatch.METHOD_NAME)) {
-			return new HttpPatch(requestURI);
+			return new HttpPatch(url);
 		}
 		if (requestMethod.equals(HttpHead.METHOD_NAME)) {
-			return new HttpHead(requestURI);
+			return new HttpHead(url);
 		}
 		if (requestMethod.equals(HttpOptions.METHOD_NAME)) {
-			return new HttpOptions(requestURI);
+			return new HttpOptions(url);
 		}
 		if (requestMethod.equals(HttpTrace.METHOD_NAME)) {
-			return new HttpTrace(requestURI);
+			return new HttpTrace(url);
 		}
 		throw new RuntimeException("Unknown http method: " + requestMethod);
 	}

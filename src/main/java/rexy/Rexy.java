@@ -34,11 +34,11 @@ public class Rexy {
 			Config config = parseConfig();
 			List<Feature> features = initFeatures(config, findFeatures());
 			new Server(config, features).start();
+			logger.info("Rexy started on port " + config.getPort());
 		}
 		catch (IOException | RexyException e) {
 			logger.error("Rexy server failed to start", e);
 		}
-		logger.info("Rexy started");
 	}
 
 	private Config parseConfig() throws ConfigException {

@@ -5,12 +5,13 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class Headers {
 
-    private Map<String, String> headers;
+    private Map<String, String> headers = new HashMap<>();
     
     @JsonAnySetter
     public void add(String key, String value) {
