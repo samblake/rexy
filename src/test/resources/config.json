@@ -1,0 +1,33 @@
+{
+  "port": "8080",
+  "baseUrl": "/",
+  "features": ["jmx", "proxy"],
+  "apis": [
+    {
+      "baseUrl": "api/",
+      "contentType": "text/json",
+      "proxy": "https://www.metaweather.com/api",
+      "endpoints": [
+        {
+          "endpoint": "location/search/?query={query}",
+          "responses": [
+            {
+              "httpStatus": 200,
+              "body": {
+                "lon": -1243143,
+                "lat": 4325356,
+                "town": "london"
+              }
+            },
+            {
+              "httpStatus": 401,
+              "body": {
+                "error": "invalid request"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
