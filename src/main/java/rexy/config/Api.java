@@ -35,42 +35,34 @@ public class Api {
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @JsonProperty("baseUrl")
     public String getBaseUrl() {
         return baseUrl;
     }
 
-    @JsonProperty("baseUrl")
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
     }
 
-    @JsonProperty("contentType")
     public String getContentType() {
         return contentType;
     }
 
-    @JsonProperty("contentType")
     public void setContentType(String contentType) {
         this.contentType = contentType;
     }
 
-    @JsonProperty("proxy")
     public String getProxy() {
         return proxy;
     }
 
-    @JsonProperty("proxy")
     public void setProxy(String proxy) {
         this.proxy = proxy;
     }
 
-    @JsonProperty("endpoints")
     public List<Endpoint> getEndpoints() {
         return endpoints;
     }
 
-    @JsonProperty("endpoints")
     public void setEndpoints(List<Endpoint> endpoints) {
         this.endpoints = endpoints;
     }
@@ -100,7 +92,7 @@ public class Api {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Api) == false) {
+        if (!(other instanceof Api)) {
             return false;
         }
         Api rhs = ((Api) other);

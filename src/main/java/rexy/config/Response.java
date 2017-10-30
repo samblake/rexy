@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonRawValue;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.codehaus.jackson.JsonNode;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -23,31 +24,24 @@ public class Response {
 
     @JsonProperty("httpStatus")
     private int httpStatus;
-    @JsonRawValue
     @JsonProperty("body")
-    private String body;
+    private JsonNode body;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @JsonProperty("httpStatus")
     public int getHttpStatus() {
         return httpStatus;
     }
 
-    @JsonProperty("httpStatus")
     public void setHttpStatus(int httpStatus) {
         this.httpStatus = httpStatus;
     }
     
-    @JsonRawValue
-    @JsonProperty("body")
-    public String getBody() {
+    public JsonNode getBody() {
         return body;
     }
     
-    @JsonRawValue
-    @JsonProperty("body")
-    public void setBody(String body) {
+    public void setBody(JsonNode body) {
         this.body = body;
     }
 
@@ -76,7 +70,7 @@ public class Response {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Response) == false) {
+        if (!(other instanceof Response)) {
             return false;
         }
         Response rhs = ((Response) other);

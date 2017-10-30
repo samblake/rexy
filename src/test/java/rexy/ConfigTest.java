@@ -1,13 +1,13 @@
 package rexy;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import rexy.config.Config;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import static org.junit.Assert.assertNotNull;
 
 public class ConfigTest {
 

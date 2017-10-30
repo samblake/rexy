@@ -29,22 +29,18 @@ public class Endpoint {
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @JsonProperty("endpoint")
     public String getEndpoint() {
         return endpoint;
     }
 
-    @JsonProperty("endpoint")
     public void setEndpoint(String endpoint) {
         this.endpoint = endpoint;
     }
 
-    @JsonProperty("responses")
     public List<Response> getResponses() {
         return responses;
     }
 
-    @JsonProperty("responses")
     public void setResponses(List<Response> responses) {
         this.responses = responses;
     }
@@ -74,7 +70,7 @@ public class Endpoint {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Endpoint) == false) {
+        if (!(other instanceof Endpoint)) {
             return false;
         }
         Endpoint rhs = ((Endpoint) other);

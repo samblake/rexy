@@ -35,42 +35,34 @@ public class Config {
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @JsonProperty("port")
     public int getPort() {
         return port;
     }
 
-    @JsonProperty("port")
     public void setPort(int port) {
         this.port = port;
     }
 
-    @JsonProperty("baseUrl")
     public String getBaseUrl() {
         return baseUrl;
     }
 
-    @JsonProperty("baseUrl")
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
     }
 
-    @JsonProperty("features")
     public List<String> getFeatures() {
         return features;
     }
 
-    @JsonProperty("features")
     public void setFeatures(List<String> features) {
         this.features = features;
     }
 
-    @JsonProperty("apis")
     public List<Api> getApis() {
         return apis;
     }
 
-    @JsonProperty("apis")
     public void setApis(List<Api> apis) {
         this.apis = apis;
     }
@@ -100,7 +92,7 @@ public class Config {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Config) == false) {
+        if (!(other instanceof Config)) {
             return false;
         }
         Config rhs = ((Config) other);
