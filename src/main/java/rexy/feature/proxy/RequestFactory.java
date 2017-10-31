@@ -11,7 +11,6 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.client.methods.HttpUriRequest;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -20,7 +19,7 @@ public class RequestFactory {
 	public static HttpUriRequest createRequest(String baseUrl, HttpExchange exchange) {
 		String url = createUrl(baseUrl, exchange);
 		HttpUriRequest request = createRequest(exchange.getRequestMethod(), url);
-
+		
 		for (Entry<String, List<String>> header : exchange.getRequestHeaders().entrySet()) {
 			for (String value : header.getValue()) {
 				if (!header.getKey().equals("Host")) {
@@ -31,12 +30,12 @@ public class RequestFactory {
 		
 		return request;
 	}
-
+	
 	private static String createUrl(String baseUrl, HttpExchange exchange) {
 		String url = baseUrl + exchange.getRequestURI().getPath().replace(exchange.getHttpContext().getPath(), "/");
 		return exchange.getRequestURI().getQuery() == null ? url : url + "?" + exchange.getRequestURI().getQuery();
 	}
-
+	
 	public static HttpUriRequest createRequest(String requestMethod, String url) {
 		if (requestMethod.equals(HttpGet.METHOD_NAME)) {
 			return new HttpGet(url);

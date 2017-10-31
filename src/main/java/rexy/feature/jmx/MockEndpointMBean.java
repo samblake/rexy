@@ -1,7 +1,7 @@
 package rexy.feature.jmx;
 
 public interface MockEndpointMBean {
-
+	
 	boolean isIntercept();
 	
 	void setIntercept(boolean intercept);

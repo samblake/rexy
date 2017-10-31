@@ -14,9 +14,9 @@ import java.util.List;
 
 public class Server {
 	private static final Logger logger = LoggerFactory.getLogger(Server.class);
-
+	
 	private final HttpServer server;
-
+	
 	public Server(Config config, List<Feature> features) throws IOException, FeatureInitialisationException {
 		server = HttpServer.create(new InetSocketAddress(config.getPort()), 0);
 		for (Api api : config.getApis()) {
@@ -26,7 +26,8 @@ public class Server {
 		server.setExecutor(null); // creates a default executor
 	}
 	
-	private void createEndpoing(List<Feature> features, Api api, String apiEndpoint) throws FeatureInitialisationException {
+	private void createEndpoing(List<Feature> features, Api api, String apiEndpoint)
+			throws FeatureInitialisationException {
 		logger.debug("Creating API endpoint for " + apiEndpoint);
 		for (Feature feature : features) {
 			feature.endpointCreation(api);

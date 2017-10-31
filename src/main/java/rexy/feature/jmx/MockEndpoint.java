@@ -6,14 +6,14 @@ public class MockEndpoint implements MockEndpointMBean {
 	private String contentType;
 	private int httpStatus;
 	private String response;
-
+	
 	public MockEndpoint(String contentType, int httpStatus, String response) {
 		this.intercept = false;
 		this.httpStatus = httpStatus;
 		this.contentType = contentType;
 		this.response = response;
 	}
-
+	
 	@Override
 	public boolean isIntercept() {
 		return intercept;
@@ -53,6 +53,6 @@ public class MockEndpoint implements MockEndpointMBean {
 	public void setResponse(String response) {
 		this.response = response;
 	}
-
-
+	
+	
 }

@@ -1,7 +1,10 @@
 {
   "port": "8080",
   "baseUrl": "/",
-  "features": ["jmx", "proxy"],
+  "features": [
+    "jmx",
+    "proxy"
+  ],
   "apis": [
     {
       "name": "metaweather",
@@ -16,10 +19,10 @@
             {
               "httpStatus": 200,
               "body": {
-                "title":"London",
-                "location_type":"City",
-                "woeid":44418,
-                "latt_long":"51.506321,-0.12714"
+                "title": "London",
+                "location_type": "City",
+                "woeid": 44418,
+                "latt_long": "51.506321,-0.12714"
               }
             },
             {

@@ -18,14 +18,14 @@ import java.util.Map;
 
 public class JmxFeature extends FeatureAdapter {
 	private static final Logger logger = LoggerFactory.getLogger(JmxFeature.class);
-
+	
 	private JmxRegistry registry;
-
+	
 	@Override
 	public void init(JsonNode jsonNode) throws FeatureInitialisationException {
 		registry = JmxRegistry.getInstance();
 	}
-
+	
 	@Override
 	public void endpointCreation(Api api) throws FeatureInitialisationException {
 		for (Endpoint endpoint : api.getEndpoints()) {
@@ -38,7 +38,7 @@ public class JmxFeature extends FeatureAdapter {
 			}
 		}
 	}
-
+	
 	@Override
 	public boolean onRequest(Api api, HttpExchange exchange) {
 		MockEndpoint endpoint = findEndpoint(exchange);
@@ -46,14 +46,14 @@ public class JmxFeature extends FeatureAdapter {
 		if (endpoint != null) {
 			if (endpoint.isIntercept()) {
 				logger.info("Returning mock response for " + exchange.getRequestURI().getPath());
-
+				
 				try {
 					sendResponse(exchange, api, endpoint);
 				}
 				catch (IOException e) {
 					logger.error("Error sending response for " + exchange.getRequestURI().getPath(), e);
 				}
-
+				
 				return false;
 			}
 		}
@@ -74,7 +74,7 @@ public class JmxFeature extends FeatureAdapter {
 		int contentLength = body == null ? 0 : body.length;
 		int httpStatus = endpoint.getHttpStatus();
 		exchange.sendResponseHeaders(httpStatus, contentLength);
-
+		
 		List<String> contentType = exchange.getRequestHeaders().get("Content-Type");
 		if (contentType != null) {
 			for (String value : contentType) {
@@ -85,12 +85,12 @@ public class JmxFeature extends FeatureAdapter {
 		// TODO allow override from endpoint
 		Headers headers = api.getHeaders();
 		for (Map.Entry<String, String> header : headers.getHeaders()) {
-            exchange.getResponseHeaders().add(header.getKey(), header.getValue());
-        }
-
+			exchange.getResponseHeaders().add(header.getKey(), header.getValue());
+		}
+		
 		OutputStream os = exchange.getResponseBody();
 		os.write(body);
-
+		
 		exchange.close();
 	}
 }

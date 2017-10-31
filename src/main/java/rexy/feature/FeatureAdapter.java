@@ -3,7 +3,6 @@ package rexy.feature;
 import com.sun.net.httpserver.HttpExchange;
 import org.codehaus.jackson.JsonNode;
 import rexy.config.Api;
-import rexy.exception.RexyException;
 
 import java.io.IOException;
 
