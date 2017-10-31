@@ -9,6 +9,7 @@ public class MockEndpoint implements MockEndpointMBean {
 
 	public MockEndpoint(String contentType, int httpStatus, String response) {
 		this.intercept = false;
+		this.httpStatus = httpStatus;
 		this.contentType = contentType;
 		this.response = response;
 	}

@@ -3,6 +3,7 @@ package rexy.feature;
 import com.sun.net.httpserver.HttpExchange;
 import org.codehaus.jackson.JsonNode;
 import rexy.config.Api;
+import rexy.exception.RexyException;
 
 import java.io.IOException;
 
@@ -22,7 +23,7 @@ public abstract class FeatureAdapter implements Feature {
 	}
 	
 	@Override
-	public boolean onRequest(Api api, HttpExchange exchange) {
+	public boolean onRequest(Api api, HttpExchange exchange) throws IOException {
 		return true;
 	}
 }

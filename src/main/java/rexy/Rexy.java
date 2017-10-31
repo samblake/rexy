@@ -12,6 +12,7 @@ import rexy.feature.Feature;
 import rexy.feature.FeatureInitialisationException;
 import rexy.http.Server;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
@@ -21,11 +22,18 @@ import java.util.List;
 
 public class Rexy {
 	private static final Logger logger = LoggerFactory.getLogger(Rexy.class);
+	
+	private static final String DEFAULT_PATH = "rexy.json";
 
-	public static final String CONFIG_FILE = "rexy.json";
-
+	private final String configPath;
+	
+	public Rexy(String configPath) {
+		this.configPath = configPath;
+	}
+	
 	public static void main(String[] args) {
-		new Rexy().start();
+		String path = (args.length == 0) ? DEFAULT_PATH : args[0];
+		new Rexy(path).start();
 	}
 
 	public void start() {
@@ -43,12 +51,17 @@ public class Rexy {
 
 	private Config parseConfig() throws ConfigException {
 		try {
-			InputStream inputStream = getClass().getResourceAsStream("/" + CONFIG_FILE);
 			ObjectMapper mapper = new ObjectMapper();
-			return mapper.readValue(inputStream, Config.class);
+			InputStream inputStream = getClass().getResourceAsStream("/" + configPath);
+			if (inputStream != null) {
+				return mapper.readValue(inputStream, Config.class);
+			}
+			
+			logger.debug("Config not found on classpath, looking for absolute file");
+			return mapper.readValue(new File(configPath), Config.class);
 		}
 		catch (IOException e) {
-			throw new ConfigException("Could not read " + CONFIG_FILE, e);
+			throw new ConfigException("Could not read " + configPath, e);
 		}
 	}
 

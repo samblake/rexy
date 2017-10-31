@@ -41,9 +41,8 @@ public class JmxFeature extends FeatureAdapter {
 
 	@Override
 	public boolean onRequest(Api api, HttpExchange exchange) {
-		String query = exchange.getRequestURI().getQuery();
-		String request = exchange.getRequestURI().getPath() + (query == null ? "" : "?" + query);
-		MockEndpoint endpoint = registry.getEndpoint(request);
+		MockEndpoint endpoint = findEndpoint(exchange);
+		
 		if (endpoint != null) {
 			if (endpoint.isIntercept()) {
 				logger.info("Returning mock response for " + exchange.getRequestURI().getPath());
@@ -59,11 +58,17 @@ public class JmxFeature extends FeatureAdapter {
 			}
 		}
 		else {
-			logger.debug("No match for " + exchange.getRequestURI().getPath());
+			logger.warn("No match for " + exchange.getRequestURI().getPath());
 		}
 		return true;
 	}
-
+	
+	private MockEndpoint findEndpoint(HttpExchange exchange) {
+		String query = exchange.getRequestURI().getQuery();
+		String request = exchange.getRequestURI().getPath() + (query == null ? "" : "?" + query);
+		return registry.getEndpoint(request);
+	}
+	
 	private void sendResponse(HttpExchange exchange, Api api, MockEndpoint endpoint) throws IOException {
 		byte[] body = endpoint.getResponse() == null ? null : endpoint.getResponse().getBytes();
 		int contentLength = body == null ? 0 : body.length;
@@ -76,7 +81,7 @@ public class JmxFeature extends FeatureAdapter {
 				exchange.getResponseHeaders().add("Content-Type", value);
 			}
 		}
-
+		
 		// TODO allow override from endpoint
 		Headers headers = api.getHeaders();
 		for (Map.Entry<String, String> header : headers.getHeaders()) {

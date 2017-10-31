@@ -35,7 +35,6 @@ public class Response {
         this.httpStatus = httpStatus;
     }
 
-
     public JsonNode getBody() {
         return body;
     }

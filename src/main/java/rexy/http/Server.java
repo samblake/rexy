@@ -21,15 +21,18 @@ public class Server {
 		server = HttpServer.create(new InetSocketAddress(config.getPort()), 0);
 		for (Api api : config.getApis()) {
 			String apiEndpoint = config.getBaseUrl() + api.getBaseUrl();
-			logger.debug("Creating API endpoint for " + apiEndpoint);
-
-			for (Feature feature : features) {
-				feature.endpointCreation(api);
-			}
-			server.createContext(apiEndpoint, new RexyHandler(api, features));
-			logger.info("API endpoint created for " + apiEndpoint);
+			createEndpoing(features, api, apiEndpoint);
 		}
 		server.setExecutor(null); // creates a default executor
+	}
+	
+	private void createEndpoing(List<Feature> features, Api api, String apiEndpoint) throws FeatureInitialisationException {
+		logger.debug("Creating API endpoint for " + apiEndpoint);
+		for (Feature feature : features) {
+			feature.endpointCreation(api);
+		}
+		server.createContext(apiEndpoint, new RexyHandler(api, features));
+		logger.info("API endpoint created for " + apiEndpoint);
 	}
 	
 	public void start() throws IOException {

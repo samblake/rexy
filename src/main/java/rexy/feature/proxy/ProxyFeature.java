@@ -18,6 +18,7 @@ import org.codehaus.jackson.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rexy.config.Api;
+import rexy.exception.RexyException;
 import rexy.feature.FeatureAdapter;
 import rexy.feature.FeatureInitialisationException;
 
@@ -34,17 +35,13 @@ public class ProxyFeature extends FeatureAdapter {
 	private static final Logger logger = LoggerFactory.getLogger(ProxyFeature.class);
 	
 	@Override
-	public boolean onRequest(Api api, HttpExchange exchange) {
-		try {
-			logger.info("Proxying request for " + exchange.getRequestURI().getPath());
+	public boolean onRequest(Api api, HttpExchange exchange) throws IOException {
+		logger.info("Proxying request for " + exchange.getRequestURI().getPath());
 
-			HttpUriRequest request = createRequest(api.getProxy(), exchange);
-			// FIXME don't create client for every request, perhaps per API
-			CloseableHttpResponse response = HttpClients.createDefault().execute(request);
- 			writeResponse(exchange, response);
-		}
-		catch (IOException e) {
-			e.printStackTrace();
+		HttpUriRequest request = createRequest(api.getProxy(), exchange);
+		// TODO don't create client for every request, perhaps per API
+		try (CloseableHttpClient client = HttpClients.createDefault()) {
+			writeResponse(exchange, client.execute(request));
 		}
 		
 		return true;

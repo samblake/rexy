@@ -30,7 +30,7 @@ public class JmxRegistry {
 
 	public void addEndpoint(Api api, Endpoint endpoint) throws OperationsException, MBeanRegistrationException {
 		Response response = endpoint.getResponses().iterator().next();
-		MockEndpoint mockEndpoint = new MockEndpoint(api.getContentType(), response.getHttpStatus(), response.getBody().asText());
+		MockEndpoint mockEndpoint = new MockEndpoint(api.getContentType(), response.getHttpStatus(), response.getBody().toString());
 		registerMBean(api.getName(), endpoint.getName(), mockEndpoint);
 		repo.put(createRegex(api, endpoint), mockEndpoint);
 	}
