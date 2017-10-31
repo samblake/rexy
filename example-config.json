@@ -1,10 +1,14 @@
 {
   "port": "8080",
   "baseUrl": "/",
-  "features": [
-    "jmx",
-    "proxy"
-  ],
+  "features": {
+    "jmx": {
+      "enabled": true
+    },
+    "proxy": {
+      "enabled": true
+    }
+  },
   "apis": [
     {
       "name": "metaweather",
