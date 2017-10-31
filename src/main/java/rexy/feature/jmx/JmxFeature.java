@@ -1,7 +1,6 @@
 package rexy.feature.jmx;
 
 import com.sun.net.httpserver.HttpExchange;
-import org.codehaus.jackson.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rexy.config.Api;
@@ -22,7 +21,7 @@ public class JmxFeature extends FeatureAdapter {
 	private JmxRegistry registry;
 	
 	@Override
-	public void init(JsonNode jsonNode) throws FeatureInitialisationException {
+	public void init(Map<String, Object> jsonNode) throws FeatureInitialisationException {
 		registry = JmxRegistry.getInstance();
 	}
 	

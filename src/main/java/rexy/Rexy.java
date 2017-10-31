@@ -18,8 +18,17 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+/**
+ * A lightweight REST mock/proxy framework.
+ *
+ * <p>This is the main class. Run it from the command line with the path to the config file as the argument.
+ * The path can either be an absolute file or relative to the classpath.</p>
+ */
 public class Rexy {
 	private static final Logger logger = LoggerFactory.getLogger(Rexy.class);
 	
@@ -31,16 +40,24 @@ public class Rexy {
 		this.configPath = configPath;
 	}
 	
+	/**
+	 * Runs the Rexy server.
+	 *
+	 * @param args There should be a single argument, the path to the config file
+	 */
 	public static void main(String[] args) {
 		String path = (args.length == 0) ? DEFAULT_PATH : args[0];
 		new Rexy(path).start();
 	}
 	
+	/**
+	 * Reads the config file and runs the server.
+	 */
 	public void start() {
 		logger.debug("Starting Rexy");
 		try {
 			Config config = parseConfig();
-			List<Feature> features = initFeatures(config, findFeatures());
+			List<Feature> features = initFeatures(config, findFeatures(config.getScanPackages()));
 			new Server(config, features).start();
 			logger.info("Rexy started on port " + config.getPort());
 		}
@@ -68,34 +85,34 @@ public class Rexy {
 	private List<Feature> initFeatures(Config config, List<Feature> features)
 			throws ConfigException, FeatureInitialisationException {
 		
-		List<Feature> enabledFeatures = new ArrayList<>(config.getFeatures().size());
-		for (String featureName : config.getFeatures()) {
+		List<Feature> enabledFeatures = new LinkedList<>();
+		for (Feature feature : features) {
+			String featureName = feature.getName();
 			logger.debug("Starting feature: " + featureName);
-			Feature feature = findFeature(features, featureName);
-			feature.init(null); // TODO from config
-			enabledFeatures.add(feature);
-			logger.info("Started feature: " + featureName);
+			rexy.config.Feature featureConfig = config.getFeatures().get(featureName);
+			if ((featureConfig != null && featureConfig.isEnabled()) || feature.enabledDefault()) {
+				feature.init(featureConfig == null ? Collections.<String, Object>emptyMap() : featureConfig.getConfig());
+				enabledFeatures.add(feature);
+				logger.info("Started feature: " + featureName);
+			}
 		}
 		
 		return enabledFeatures;
 	}
 	
-	private List<Feature> findFeatures() {
+	private List<Feature> findFeatures(List<String> scanPackages) {
 		List<Feature> features = new ArrayList<>();
-		new FastClasspathScanner(
-				getClass().getPackage().getName()) // TODO allow configurable packages
-				.matchClassesImplementing(Feature.class, new FeatureCreator(features))
-				.scan();
+		scan(features, getClass().getPackage().getName());
+		for (String scanPackage : scanPackages) {
+			scan(features, scanPackage);
+		}
 		return features;
 	}
 	
-	private Feature findFeature(List<Feature> features, String featureName) throws ConfigException {
-		for (Feature feature : features) {
-			if (feature.getName().equals(featureName)) {
-				return feature;
-			}
-		}
-		throw new ConfigException("Could not find feature " + featureName);
+	private void scan(List<Feature> features, String scanPackage) {
+		new FastClasspathScanner(scanPackage)
+				.matchClassesImplementing(Feature.class, new FeatureCreator(features))
+				.scan();
 	}
 	
 	private static class FeatureCreator implements ImplementingClassMatchProcessor<Feature> {

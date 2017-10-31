@@ -1,16 +1,18 @@
 package rexy.feature;
 
 import com.sun.net.httpserver.HttpExchange;
-import org.codehaus.jackson.JsonNode;
 import rexy.config.Api;
 
 import java.io.IOException;
+import java.util.Map;
 
 public interface Feature {
 	
+	boolean enabledDefault();
+	
 	String getName();
 	
-	void init(JsonNode config) throws FeatureInitialisationException;
+	void init(Map<String, Object> config) throws FeatureInitialisationException;
 	
 	void endpointCreation(Api api) throws FeatureInitialisationException;
 	

@@ -1,10 +1,10 @@
 package rexy.feature;
 
 import com.sun.net.httpserver.HttpExchange;
-import org.codehaus.jackson.JsonNode;
 import rexy.config.Api;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public abstract class FeatureAdapter implements Feature {
@@ -12,12 +12,17 @@ public abstract class FeatureAdapter implements Feature {
 	private static final Pattern FEATURE_PATTERN = Pattern.compile("Feature");
 	
 	@Override
+	public boolean enabledDefault() {
+		return true;
+	}
+	
+	@Override
 	public String getName() {
 		return FEATURE_PATTERN.matcher(getClass().getSimpleName()).replaceAll("").toLowerCase();
 	}
 	
 	@Override
-	public void init(JsonNode config) throws FeatureInitialisationException {
+	public void init(Map<String, Object> config) throws FeatureInitialisationException {
 	}
 	
 	@Override

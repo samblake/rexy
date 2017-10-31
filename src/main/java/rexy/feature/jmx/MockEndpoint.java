@@ -1,11 +1,17 @@
 package rexy.feature.jmx;
 
+import rexy.config.Response;
+
 public class MockEndpoint implements MockEndpointMBean {
 	
 	private boolean intercept;
 	private String contentType;
 	private int httpStatus;
 	private String response;
+	
+	public MockEndpoint(String contentType, Response response) {
+		this(contentType, response.getHttpStatus(), response.getBody().toString());
+	}
 	
 	public MockEndpoint(String contentType, int httpStatus, String response) {
 		this.intercept = false;
