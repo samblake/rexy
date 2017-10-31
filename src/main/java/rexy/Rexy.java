@@ -1,25 +1,17 @@
 package rexy;
 
-import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
-import io.github.lukehutch.fastclasspathscanner.matchprocessor.ImplementingClassMatchProcessor;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import rexy.config.ConfigException;
 import rexy.config.ConfigParser;
 import rexy.config.model.Config;
-import rexy.config.ConfigException;
 import rexy.exception.RexyException;
 import rexy.feature.Feature;
 import rexy.feature.FeatureInitialisationException;
 import rexy.feature.FeatureScanner;
 import rexy.http.Server;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
