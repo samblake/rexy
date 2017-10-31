@@ -20,7 +20,7 @@ public class Endpoint {
 	@JsonProperty("endpoint")
 	private String endpoint;
 	@JsonProperty("responses")
-	private List<Response> responses = new ArrayList<Response>();
+	private List<Response> responses = new ArrayList<>();
 	
 	public String getName() {
 		return name;

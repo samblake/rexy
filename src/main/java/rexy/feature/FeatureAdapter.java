@@ -5,12 +5,15 @@ import org.codehaus.jackson.JsonNode;
 import rexy.config.Api;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 public abstract class FeatureAdapter implements Feature {
 	
+	private static final Pattern FEATURE_PATTERN = Pattern.compile("Feature");
+	
 	@Override
 	public String getName() {
-		return getClass().getSimpleName().replace("Feature", "").toLowerCase();
+		return FEATURE_PATTERN.matcher(getClass().getSimpleName()).replaceAll("").toLowerCase();
 	}
 	
 	@Override

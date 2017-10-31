@@ -45,9 +45,6 @@ public class ProxyFeature extends FeatureAdapter {
 			exchange.getResponseHeaders().add(header.getName(), header.getValue());
 		}
 		
-		logger.info("Writing response for " + exchange.getRequestURI().getPath());
-		logger.info(new String(body));
-		
 		OutputStream os = exchange.getResponseBody();
 		os.write(body);
 		os.flush();
@@ -57,8 +54,8 @@ public class ProxyFeature extends FeatureAdapter {
 	
 	private byte[] getBody(CloseableHttpResponse response) throws IOException {
 		InputStream content = response.getEntity().getContent();
-		java.util.Scanner s = new java.util.Scanner(content).useDelimiter("\\A");
-		String body = s.hasNext() ? s.next() : "";
+		java.util.Scanner scanner = new java.util.Scanner(content).useDelimiter("\\A");
+		String body = scanner.hasNext() ? scanner.next() : "";
 		return body.getBytes(); // TODO parse encoding from headers
 	}
 	

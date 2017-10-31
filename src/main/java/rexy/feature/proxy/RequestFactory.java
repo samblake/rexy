@@ -11,10 +11,20 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.client.methods.HttpUriRequest;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
-public class RequestFactory {
+import static java.util.Arrays.asList;
+
+public final class RequestFactory {
+	
+	private static final Set<String> STRIP_HEADERS = new HashSet<>(asList("Host", "Connection", "TE",
+			"Transfer-Encoding", "Keep-Alive", "Proxy-Authorization", "Proxy-Authentication", "Trailer" , "Upgrade"));
+	
+	private RequestFactory() {
+	}
 	
 	public static HttpUriRequest createRequest(String baseUrl, HttpExchange exchange) {
 		String url = createUrl(baseUrl, exchange);
@@ -22,7 +32,7 @@ public class RequestFactory {
 		
 		for (Entry<String, List<String>> header : exchange.getRequestHeaders().entrySet()) {
 			for (String value : header.getValue()) {
-				if (!header.getKey().equals("Host")) {
+				if (!STRIP_HEADERS.contains(header.getKey())) {
 					request.addHeader(header.getKey(), value);
 				}
 			}
@@ -33,7 +43,7 @@ public class RequestFactory {
 	
 	private static String createUrl(String baseUrl, HttpExchange exchange) {
 		String url = baseUrl + exchange.getRequestURI().getPath().replace(exchange.getHttpContext().getPath(), "/");
-		return exchange.getRequestURI().getQuery() == null ? url : url + "?" + exchange.getRequestURI().getQuery();
+		return exchange.getRequestURI().getQuery() == null ? url : url + '?' + exchange.getRequestURI().getQuery();
 	}
 	
 	public static HttpUriRequest createRequest(String requestMethod, String url) {

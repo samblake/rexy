@@ -11,10 +11,11 @@ import javax.management.OperationsException;
 import java.lang.management.ManagementFactory;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class JmxRegistry {
+public final class JmxRegistry {
 	
 	private static final JmxRegistry INSTANCE = new JmxRegistry();
 	
@@ -51,9 +52,9 @@ public class JmxRegistry {
 	}
 	
 	public MockEndpoint getEndpoint(String path) {
-		for (Pattern pattern : repo.keySet()) {
-			if (pattern.matcher(path).matches()) {
-				return repo.get(pattern);
+		for (Entry<Pattern, MockEndpoint> entry : repo.entrySet()) {
+			if (entry.getKey().matcher(path).matches()) {
+				return entry.getValue();
 			}
 		}
 		return null;

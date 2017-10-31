@@ -27,7 +27,7 @@ public class Api {
 	@JsonProperty("proxy")
 	private String proxy;
 	@JsonProperty("endpoints")
-	private List<Endpoint> endpoints = new ArrayList<Endpoint>();
+	private List<Endpoint> endpoints = new ArrayList<>();
 	@JsonProperty("headers")
 	private Headers headers = new Headers();
 	

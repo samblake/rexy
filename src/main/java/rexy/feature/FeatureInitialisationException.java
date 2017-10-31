@@ -13,6 +13,6 @@ public class FeatureInitialisationException extends RexyException {
 	}
 	
 	public FeatureInitialisationException(Feature feature, String message, Throwable cause) {
-		super("Could not initialise " + feature.getName() + ":" + message, cause);
+		super("Could not initialise " + feature.getName() + ':' + message, cause);
 	}
 }

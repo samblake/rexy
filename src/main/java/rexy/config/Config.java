@@ -21,9 +21,9 @@ public class Config {
 	@JsonProperty("baseUrl")
 	private String baseUrl;
 	@JsonProperty("features")
-	private List<String> features = new ArrayList<String>();
+	private List<String> features = new ArrayList<>();
 	@JsonProperty("apis")
-	private List<Api> apis = new ArrayList<Api>();
+	private List<Api> apis = new ArrayList<>();
 	
 	public int getPort() {
 		return port;

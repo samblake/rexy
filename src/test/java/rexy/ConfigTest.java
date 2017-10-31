@@ -1,13 +1,17 @@
 package rexy;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.junit.Test;
 import rexy.config.Config;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 public class ConfigTest {
 	
@@ -16,6 +20,6 @@ public class ConfigTest {
 		InputStream inputStream = getClass().getResourceAsStream("/config.json");
 		ObjectMapper mapper = new ObjectMapper();
 		Config value = mapper.readValue(inputStream, Config.class);
-		assertNotNull(value);
+		assertThat(value, notNullValue());
 	}
 }

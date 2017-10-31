@@ -52,7 +52,7 @@ public class Rexy {
 	private Config parseConfig() throws ConfigException {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			InputStream inputStream = getClass().getResourceAsStream("/" + configPath);
+			InputStream inputStream = getClass().getResourceAsStream('/' + configPath);
 			if (inputStream != null) {
 				return mapper.readValue(inputStream, Config.class);
 			}
@@ -82,26 +82,10 @@ public class Rexy {
 	
 	private List<Feature> findFeatures() {
 		List<Feature> features = new ArrayList<>();
-		
-		new FastClasspathScanner(getClass().getPackage().getName())
-				.matchClassesImplementing(Feature.class, new ImplementingClassMatchProcessor<Feature>() {
-					@Override
-					public void processMatch(Class<? extends Feature> featureClass) {
-						if (!Modifier.isAbstract(featureClass.getModifiers()) && !Modifier
-								.isInterface(featureClass.getModifiers())) {
-							logger.debug("Found feature: " + featureClass.getCanonicalName());
-							try {
-								Constructor<? extends Feature> constructor = featureClass.getConstructor();
-								constructor.setAccessible(true);
-								features.add(constructor.newInstance());
-							}
-							catch (ReflectiveOperationException e) {
-								logger.error("Could not create " + featureClass.getCanonicalName(), e);
-							}
-						}
-					}
-				}).scan();
-		
+		new FastClasspathScanner(
+				getClass().getPackage().getName()) // TODO allow configurable packages
+				.matchClassesImplementing(Feature.class, new FeatureCreator(features))
+				.scan();
 		return features;
 	}
 	
@@ -112,5 +96,27 @@ public class Rexy {
 			}
 		}
 		throw new ConfigException("Could not find feature " + featureName);
+	}
+	
+	private static class FeatureCreator implements ImplementingClassMatchProcessor<Feature> {
+		private final List<Feature> features;
+		
+		FeatureCreator(List<Feature> features) {this.features = features;}
+		
+		@Override
+		public void processMatch(Class<? extends Feature> featureClass) {
+			if (!Modifier.isAbstract(featureClass.getModifiers()) && !Modifier
+					.isInterface(featureClass.getModifiers())) {
+				logger.debug("Found feature: " + featureClass.getCanonicalName());
+				try {
+					Constructor<? extends Feature> constructor = featureClass.getConstructor();
+					constructor.setAccessible(true);
+					features.add(constructor.newInstance());
+				}
+				catch (ReflectiveOperationException e) {
+					logger.error("Could not create " + featureClass.getCanonicalName(), e);
+				}
+			}
+		}
 	}
 }

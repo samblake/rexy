@@ -65,7 +65,7 @@ public class JmxFeature extends FeatureAdapter {
 	
 	private MockEndpoint findEndpoint(HttpExchange exchange) {
 		String query = exchange.getRequestURI().getQuery();
-		String request = exchange.getRequestURI().getPath() + (query == null ? "" : "?" + query);
+		String request = exchange.getRequestURI().getPath() + (query == null ? "" : '?' + query);
 		return registry.getEndpoint(request);
 	}
 	
@@ -88,8 +88,10 @@ public class JmxFeature extends FeatureAdapter {
 			exchange.getResponseHeaders().add(header.getKey(), header.getValue());
 		}
 		
-		OutputStream os = exchange.getResponseBody();
-		os.write(body);
+		if (body != null) {
+			OutputStream os = exchange.getResponseBody();
+			os.write(body);
+		}
 		
 		exchange.close();
 	}
