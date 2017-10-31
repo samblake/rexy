@@ -2,7 +2,7 @@ package rexy.http;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import rexy.config.Api;
+import rexy.config.model.Api;
 import rexy.feature.Feature;
 
 import java.io.IOException;

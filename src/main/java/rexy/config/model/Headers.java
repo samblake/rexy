@@ -1,4 +1,4 @@
-package rexy.config;
+package rexy.config.model;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import org.apache.commons.lang.builder.EqualsBuilder;

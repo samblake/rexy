@@ -8,7 +8,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import rexy.config.Api;
+import rexy.config.model.Api;
 import rexy.feature.FeatureAdapter;
 
 import java.io.IOException;

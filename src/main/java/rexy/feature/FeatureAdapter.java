@@ -1,7 +1,7 @@
 package rexy.feature;
 
 import com.sun.net.httpserver.HttpExchange;
-import rexy.config.Api;
+import rexy.config.model.Api;
 
 import java.io.IOException;
 import java.util.Map;

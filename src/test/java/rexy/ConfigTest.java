@@ -1,10 +1,8 @@
 package rexy;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
 import org.junit.Test;
-import rexy.config.Config;
+import rexy.config.model.Config;
 
 import java.io.IOException;
 import java.io.InputStream;

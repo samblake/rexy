@@ -5,11 +5,13 @@ import io.github.lukehutch.fastclasspathscanner.matchprocessor.ImplementingClass
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import rexy.config.Config;
+import rexy.config.ConfigParser;
+import rexy.config.model.Config;
 import rexy.config.ConfigException;
 import rexy.exception.RexyException;
 import rexy.feature.Feature;
 import rexy.feature.FeatureInitialisationException;
+import rexy.feature.FeatureScanner;
 import rexy.http.Server;
 
 import java.io.File;
@@ -21,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A lightweight REST mock/proxy framework.
@@ -56,29 +57,14 @@ public class Rexy {
 	public void start() {
 		logger.debug("Starting Rexy");
 		try {
-			Config config = parseConfig();
-			List<Feature> features = initFeatures(config, findFeatures(config.getScanPackages()));
-			new Server(config, features).start();
+			Config config = new ConfigParser(configPath).parse();
+			List<Feature> allFeatures = new FeatureScanner(config.getScanPackages()).scan();
+			List<Feature> enabledFeatures = initFeatures(config, allFeatures);
+			new Server(config, enabledFeatures).start();
 			logger.info("Rexy started on port " + config.getPort());
 		}
 		catch (IOException | RexyException e) {
 			logger.error("Rexy server failed to start", e);
-		}
-	}
-	
-	private Config parseConfig() throws ConfigException {
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			InputStream inputStream = getClass().getResourceAsStream('/' + configPath);
-			if (inputStream != null) {
-				return mapper.readValue(inputStream, Config.class);
-			}
-			
-			logger.debug("Config not found on classpath, looking for absolute file");
-			return mapper.readValue(new File(configPath), Config.class);
-		}
-		catch (IOException e) {
-			throw new ConfigException("Could not read " + configPath, e);
 		}
 	}
 	
@@ -89,7 +75,7 @@ public class Rexy {
 		for (Feature feature : features) {
 			String featureName = feature.getName();
 			logger.debug("Starting feature: " + featureName);
-			rexy.config.Feature featureConfig = config.getFeatures().get(featureName);
+			rexy.config.model.Feature featureConfig = config.getFeatures().get(featureName);
 			if ((featureConfig != null && featureConfig.isEnabled()) || feature.enabledDefault()) {
 				feature.init(featureConfig == null ? Collections.<String, Object>emptyMap() : featureConfig.getConfig());
 				enabledFeatures.add(feature);
@@ -98,42 +84,5 @@ public class Rexy {
 		}
 		
 		return enabledFeatures;
-	}
-	
-	private List<Feature> findFeatures(List<String> scanPackages) {
-		List<Feature> features = new ArrayList<>();
-		scan(features, getClass().getPackage().getName());
-		for (String scanPackage : scanPackages) {
-			scan(features, scanPackage);
-		}
-		return features;
-	}
-	
-	private void scan(List<Feature> features, String scanPackage) {
-		new FastClasspathScanner(scanPackage)
-				.matchClassesImplementing(Feature.class, new FeatureCreator(features))
-				.scan();
-	}
-	
-	private static class FeatureCreator implements ImplementingClassMatchProcessor<Feature> {
-		private final List<Feature> features;
-		
-		FeatureCreator(List<Feature> features) {this.features = features;}
-		
-		@Override
-		public void processMatch(Class<? extends Feature> featureClass) {
-			if (!Modifier.isAbstract(featureClass.getModifiers()) && !Modifier
-					.isInterface(featureClass.getModifiers())) {
-				logger.debug("Found feature: " + featureClass.getCanonicalName());
-				try {
-					Constructor<? extends Feature> constructor = featureClass.getConstructor();
-					constructor.setAccessible(true);
-					features.add(constructor.newInstance());
-				}
-				catch (ReflectiveOperationException e) {
-					logger.error("Could not create " + featureClass.getCanonicalName(), e);
-				}
-			}
-		}
 	}
 }

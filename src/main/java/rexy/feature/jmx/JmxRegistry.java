@@ -1,8 +1,8 @@
 package rexy.feature.jmx;
 
-import rexy.config.Api;
-import rexy.config.Endpoint;
-import rexy.config.Response;
+import rexy.config.model.Api;
+import rexy.config.model.Endpoint;
+import rexy.config.model.Response;
 
 import javax.management.MBeanRegistrationException;
 import javax.management.MBeanServer;

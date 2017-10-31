@@ -3,8 +3,8 @@ package rexy.http;
 import com.sun.net.httpserver.HttpServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import rexy.config.Api;
-import rexy.config.Config;
+import rexy.config.model.Api;
+import rexy.config.model.Config;
 import rexy.feature.Feature;
 import rexy.feature.FeatureInitialisationException;
 

@@ -3,9 +3,9 @@ package rexy.feature.jmx;
 import com.sun.net.httpserver.HttpExchange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import rexy.config.Api;
-import rexy.config.Endpoint;
-import rexy.config.Headers;
+import rexy.config.model.Api;
+import rexy.config.model.Endpoint;
+import rexy.config.model.Headers;
 import rexy.feature.FeatureAdapter;
 import rexy.feature.FeatureInitialisationException;
 

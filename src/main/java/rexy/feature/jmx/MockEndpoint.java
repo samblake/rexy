@@ -1,6 +1,6 @@
 package rexy.feature.jmx;
 
-import rexy.config.Response;
+import rexy.config.model.Response;
 
 public class MockEndpoint implements MockEndpointMBean {
 	
