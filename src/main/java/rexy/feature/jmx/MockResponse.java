@@ -5,8 +5,8 @@ import rexy.config.model.Response;
 public class MockResponse implements MockResponseMBean {
 	
 	private final MockEndpoint endpoint;
-	private int httpStatus;
-	private String response;
+	private final int httpStatus;
+	private final String response;
 	
 	public MockResponse(MockEndpoint endpoint, Response response) {
 		this(endpoint, response.getHttpStatus(), response.getBody(). toString());

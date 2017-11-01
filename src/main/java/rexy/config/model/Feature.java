@@ -19,7 +19,7 @@ public class Feature {
 	@JsonProperty("enabled")
 	private boolean enabled;
 	@JsonIgnore
-	private Map<String, Object> config = new HashMap<>();
+	private final Map<String, Object> config = new HashMap<>();
 	
 	public boolean isEnabled() {
 		return enabled;
@@ -31,11 +31,11 @@ public class Feature {
 	
 	@JsonAnyGetter
 	public Map<String, Object> getConfig() {
-		return this.config;
+		return config;
 	}
 	
 	@JsonAnySetter
 	public void setConfig(String name, Object value) {
-		this.config.put(name, value);
+		config.put(name, value);
 	}
 }

@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
@@ -14,6 +15,9 @@ import rexy.feature.FeatureAdapter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
 import static rexy.feature.proxy.RequestFactory.createRequest;
 
@@ -54,9 +58,19 @@ public class ProxyFeature extends FeatureAdapter {
 	
 	private byte[] getBody(CloseableHttpResponse response) throws IOException {
 		InputStream content = response.getEntity().getContent();
-		java.util.Scanner scanner = new java.util.Scanner(content).useDelimiter("\\A");
+		Scanner scanner = new java.util.Scanner(content).useDelimiter("\\A");
 		String body = scanner.hasNext() ? scanner.next() : "";
-		return body.getBytes(); // TODO parse encoding from headers
+		return body.getBytes(getCharset(response));
 	}
 	
+	private Charset getCharset(CloseableHttpResponse response) {
+		Header[] contentType = response.getHeaders("Content-Type");
+		for (Header header : contentType) {
+			Charset charset = ContentType.parse(header.getValue()).getCharset();
+			if (charset != null) {
+				return charset;
+			}
+		}
+		return StandardCharsets.ISO_8859_1;
+	}
 }

@@ -22,7 +22,7 @@ public class RexyHandler implements HttpHandler {
 	public void handle(HttpExchange exchange) throws IOException {
 		for (Feature feature : features) {
 			if (!feature.onRequest(api, exchange)) {
-				break;
+				return;
 			}
 		}
 	}

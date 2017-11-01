@@ -71,6 +71,13 @@ public final class RequestFactory {
 		if (requestMethod.equals(HttpTrace.METHOD_NAME)) {
 			return new HttpTrace(url);
 		}
-		throw new RuntimeException("Unknown http method: " + requestMethod);
+		throw new UnknownMethodException(requestMethod);
+	}
+	
+	private static class UnknownMethodException extends RuntimeException {
+		
+		public UnknownMethodException(String method) {
+			super("Unknown http method: " + method);
+		}
 	}
 }
