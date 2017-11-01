@@ -15,6 +15,8 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
+import static java.nio.charset.Charset.defaultCharset;
+
 public class JmxFeature extends FeatureAdapter {
 	private static final Logger logger = LoggerFactory.getLogger(JmxFeature.class);
 	
@@ -69,7 +71,7 @@ public class JmxFeature extends FeatureAdapter {
 	}
 	
 	private void sendResponse(HttpExchange exchange, Api api, MockEndpoint endpoint) throws IOException {
-		byte[] body = endpoint.getResponse() == null ? null : endpoint.getResponse().getBytes();
+		byte[] body = endpoint.getResponse() == null ? null : endpoint.getResponse().getBytes(defaultCharset());
 		int contentLength = body == null ? 0 : body.length;
 		int httpStatus = endpoint.getHttpStatus();
 		exchange.sendResponseHeaders(httpStatus, contentLength);
@@ -88,8 +90,9 @@ public class JmxFeature extends FeatureAdapter {
 		}
 		
 		if (body != null) {
-			OutputStream os = exchange.getResponseBody();
-			os.write(body);
+			try (OutputStream os = exchange.getResponseBody()) {
+				os.write(body);
+			}
 		}
 		
 		exchange.close();

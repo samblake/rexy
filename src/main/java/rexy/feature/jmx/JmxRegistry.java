@@ -58,9 +58,14 @@ public final class JmxRegistry {
 	
 	private Pattern createRegex(Api api, Endpoint endpoint) {
 		Pattern pattern = Pattern.compile("\\{.+?\\}");
-		Matcher matcher = pattern.matcher(endpoint.getEndpoint().replace("?", "\\?")); // TODO better escaping
+		Matcher matcher = pattern.matcher(escape(endpoint.getEndpoint()));
 		String regex = ".*" + api.getBaseUrl() + matcher.replaceAll(".+?");
 		return Pattern.compile(regex);
+	}
+	
+	private String escape(String endpoint) {
+		// TODO better escaping
+		return endpoint.replace("?", "\\?");
 	}
 	
 	public MockEndpoint getEndpoint(String path) {

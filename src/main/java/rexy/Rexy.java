@@ -60,13 +60,12 @@ public class Rexy {
 		}
 	}
 	
-	private List<Feature> initFeatures(Config config, List<Feature> features)
-			throws ConfigException, FeatureInitialisationException {
-		
+	private List<Feature> initFeatures(Config config, List<Feature> features) throws FeatureInitialisationException {
 		List<Feature> enabledFeatures = new LinkedList<>();
 		for (Feature feature : features) {
 			String featureName = feature.getName();
 			logger.debug("Starting feature: " + featureName);
+			
 			rexy.config.model.Feature featureConfig = config.getFeatures().get(featureName);
 			if ((featureConfig != null && featureConfig.isEnabled()) || feature.enabledDefault()) {
 				feature.init(featureConfig == null ? Collections.<String, Object>emptyMap() : featureConfig.getConfig());

@@ -76,7 +76,7 @@ public final class RequestFactory {
 	
 	private static class UnknownMethodException extends RuntimeException {
 		
-		public UnknownMethodException(String method) {
+		private UnknownMethodException(String method) {
 			super("Unknown http method: " + method);
 		}
 	}

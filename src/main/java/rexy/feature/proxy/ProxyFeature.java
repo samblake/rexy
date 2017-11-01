@@ -38,7 +38,6 @@ public class ProxyFeature extends FeatureAdapter {
 	}
 	
 	private void writeResponse(HttpExchange exchange, CloseableHttpResponse response) throws IOException {
-		
 		byte[] body = getBody(response);
 		int contentLength = body.length;
 		
@@ -49,18 +48,21 @@ public class ProxyFeature extends FeatureAdapter {
 			exchange.getResponseHeaders().add(header.getName(), header.getValue());
 		}
 		
-		OutputStream os = exchange.getResponseBody();
-		os.write(body);
-		os.flush();
+		try (OutputStream os = exchange.getResponseBody()) {
+			os.write(body);
+		}
 		
 		exchange.close();
 	}
 	
 	private byte[] getBody(CloseableHttpResponse response) throws IOException {
-		InputStream content = response.getEntity().getContent();
-		Scanner scanner = new java.util.Scanner(content).useDelimiter("\\A");
-		String body = scanner.hasNext() ? scanner.next() : "";
-		return body.getBytes(getCharset(response));
+		Charset charset = getCharset(response);
+		try (InputStream content = response.getEntity().getContent()) {
+			try (Scanner scanner = new java.util.Scanner(content, charset.name()).useDelimiter("\\A")) {
+				String body = scanner.hasNext() ? scanner.next() : "";
+				return body.getBytes(charset);
+			}
+		}
 	}
 	
 	private Charset getCharset(CloseableHttpResponse response) {
