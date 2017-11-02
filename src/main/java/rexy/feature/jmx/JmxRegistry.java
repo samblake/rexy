@@ -1,5 +1,6 @@
 package rexy.feature.jmx;
 
+import org.apache.commons.lang.StringUtils;
 import rexy.config.model.Api;
 import rexy.config.model.Endpoint;
 import rexy.config.model.Response;
@@ -15,6 +16,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.apache.commons.lang.StringUtils.isEmpty;
 
 public final class JmxRegistry {
 	
@@ -36,8 +39,9 @@ public final class JmxRegistry {
 		registerMBean(api.getName(), endpoint.getName(), mockEndpoint);
 		int i = 0;
 		for (Response response : responses) {
+			String name = isEmpty(response.getName()) ? Integer.toString(i++) : response.getName();
 			MockResponse mockResponse = new MockResponse(mockEndpoint, response);
-			registerMBean(api.getName(), endpoint.getName(), mockResponse, i++);
+			registerMBean(api.getName(), endpoint.getName(), mockResponse, name);
 		}
 		repo.put(createRegex(api, endpoint), mockEndpoint);
 	}
@@ -49,10 +53,10 @@ public final class JmxRegistry {
 		server.registerMBean(endpoint, objectName);
 	}
 	
-	private void registerMBean(String type, String name, MockResponse response, int i)
+	private void registerMBean(String type, String name, MockResponse response, String presetName)
 			throws OperationsException, MBeanRegistrationException {
 		MBeanServer server = ManagementFactory.getPlatformMBeanServer();
-		ObjectName objectName = new ObjectName("Rexy:type=" + type + ",scope=" + name + ",name=preset-" + i);
+		ObjectName objectName = new ObjectName("Rexy:type=" + type + ",scope=" + name + ",name=preset-" + presetName);
 		server.registerMBean(response, objectName);
 	}
 	
