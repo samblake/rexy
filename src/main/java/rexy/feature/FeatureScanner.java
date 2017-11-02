@@ -10,15 +10,28 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Scans certain packages on the classpath to find features. The {@code rexy} classpath will always be
+ * scanned. Additional packages may be supplied.
+ */
 public class FeatureScanner {
 	private static final Logger logger = LoggerFactory.getLogger(FeatureScanner.class);
 	
 	private final List<String> scanPackages;
 	
+	/**
+	 * Creates a scanner that will scan the {@code rexy} classpath as well as any additional
+	 * classpaths supplied.
+	 */
 	public FeatureScanner(List<String> scanPackages) {
 		this.scanPackages = scanPackages;
 	}
 	
+	/**
+	 * Scans the classspath for any concrete classes that implement {@link Feature features}.
+	 *
+	 * @return The features found with their no-args constructors called.
+	 */
 	public List<Feature> scan() {
 		List<Feature> features = new ArrayList<>();
 		scan(features, getClass().getPackage().getName());

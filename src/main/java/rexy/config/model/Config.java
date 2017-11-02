@@ -5,9 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -26,7 +25,7 @@ public class Config {
 	@JsonProperty("scanPackages")
 	private List<String> scanPackages = new ArrayList<>();
 	@JsonProperty("features")
-	private Map<String, Feature> features = new HashMap<>();
+	private LinkedHashMap<String, Feature> features = new LinkedHashMap<>();
 	@JsonProperty("apis")
 	private List<Api> apis = new ArrayList<>();
 	
@@ -54,11 +53,11 @@ public class Config {
 		this.scanPackages = scanPackages;
 	}
 	
-	public Map<String, Feature> getFeatures() {
+	public LinkedHashMap<String, Feature> getFeatures() {
 		return features;
 	}
 	
-	public void setFeatures(Map<String, Feature> features) {
+	public void setFeatures(LinkedHashMap<String, Feature> features) {
 		this.features = features;
 	}
 	

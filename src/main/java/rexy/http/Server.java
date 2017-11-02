@@ -12,11 +12,23 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.List;
 
+/**
+ * Creates a server with the {@link Api APIs} defined in the {@link Config configuration} with the supplied
+ * {@link Feature features}. Each API is registered against the server as a different context.
+ */
 public class Server {
 	private static final Logger logger = LoggerFactory.getLogger(Server.class);
 	
 	private final HttpServer server;
 	
+	/**
+	 * Creates a server and initialises the features for each API.
+	 *
+	 * @param config   The configuration containing the port, base URL and APIs
+	 * @param features The features to register with the endpoints
+	 * @throws IOException                    Thrown if the server cannot be created
+	 * @throws FeatureInitialisationException Thrown if a feature cannot be initialised
+	 */
 	public Server(Config config, List<Feature> features) throws IOException, FeatureInitialisationException {
 		server = HttpServer.create(new InetSocketAddress(config.getPort()), 0);
 		for (Api api : config.getApis()) {
@@ -30,12 +42,17 @@ public class Server {
 			throws FeatureInitialisationException {
 		logger.debug("Creating API endpoint for " + apiEndpoint);
 		for (Feature feature : features) {
-			feature.endpointCreation(api);
+			feature.initEndpoint(api);
 		}
 		server.createContext(apiEndpoint, new RexyHandler(api, features));
 		logger.info("API endpoint created for " + apiEndpoint);
 	}
 	
+	/**
+	 * Starts the HTTP server.
+	 *
+	 * @throws IOException Thrown if the server cannot be started
+	 */
 	public void start() throws IOException {
 		server.start();
 	}

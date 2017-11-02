@@ -2,7 +2,6 @@ package rexy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import rexy.config.ConfigException;
 import rexy.config.ConfigParser;
 import rexy.config.model.Config;
 import rexy.exception.RexyException;
@@ -12,9 +11,10 @@ import rexy.feature.FeatureScanner;
 import rexy.http.Server;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * A lightweight REST mock/proxy framework.
@@ -62,18 +62,25 @@ public class Rexy {
 	
 	private List<Feature> initFeatures(Config config, List<Feature> features) throws FeatureInitialisationException {
 		List<Feature> enabledFeatures = new LinkedList<>();
-		for (Feature feature : features) {
-			String featureName = feature.getName();
-			logger.debug("Starting feature: " + featureName);
-			
-			rexy.config.model.Feature featureConfig = config.getFeatures().get(featureName);
-			if ((featureConfig != null && featureConfig.isEnabled()) || feature.enabledDefault()) {
-				feature.init(featureConfig == null ? Collections.<String, Object>emptyMap() : featureConfig.getConfig());
-				enabledFeatures.add(feature);
-				logger.info("Started feature: " + featureName);
-			}
+		Set<Entry<String, rexy.config.model.Feature>> featureConfigs = config.getFeatures().entrySet();
+		for (Entry<String, rexy.config.model.Feature> featureConfig : featureConfigs) {
+			initFeature(features, enabledFeatures, featureConfig);
 		}
 		
 		return enabledFeatures;
+	}
+	
+	private void initFeature(List<Feature> features, List<Feature> enabledFeatures, Entry<String, rexy.config.model.Feature> featureConfig)
+			throws FeatureInitialisationException {
+		String featureName = featureConfig.getKey();
+		logger.debug("Starting feature: " + featureName);
+		for (Feature feature : features) {
+			if (feature.getName().equals(featureName)) {
+				feature.init(featureConfig.getValue().getConfig());
+			}
+			enabledFeatures.add(feature);
+			logger.info("Started feature: " + featureName);
+		}
+		throw new FeatureInitialisationException("Could not find feature " + featureName);
 	}
 }

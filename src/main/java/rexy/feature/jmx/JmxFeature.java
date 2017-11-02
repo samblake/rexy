@@ -28,7 +28,7 @@ public class JmxFeature extends FeatureAdapter {
 	}
 	
 	@Override
-	public void endpointCreation(Api api) throws FeatureInitialisationException {
+	public void initEndpoint(Api api) throws FeatureInitialisationException {
 		for (Endpoint endpoint : api.getEndpoints()) {
 			try {
 				registry.addEndpoint(api, endpoint);
@@ -41,7 +41,7 @@ public class JmxFeature extends FeatureAdapter {
 	}
 	
 	@Override
-	public boolean onRequest(Api api, HttpExchange exchange) {
+	public boolean handleRequest(Api api, HttpExchange exchange) {
 		MockEndpoint endpoint = findEndpoint(exchange);
 		
 		if (endpoint != null) {
@@ -55,13 +55,13 @@ public class JmxFeature extends FeatureAdapter {
 					logger.error("Error sending response for " + exchange.getRequestURI().getPath(), e);
 				}
 				
-				return false;
+				return true;
 			}
 		}
 		else {
 			logger.warn("No match for " + exchange.getRequestURI().getPath());
 		}
-		return true;
+		return false;
 	}
 	
 	private MockEndpoint findEndpoint(HttpExchange exchange) {

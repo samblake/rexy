@@ -25,7 +25,7 @@ public class ProxyFeature extends FeatureAdapter {
 	private static final Logger logger = LoggerFactory.getLogger(ProxyFeature.class);
 	
 	@Override
-	public boolean onRequest(Api api, HttpExchange exchange) throws IOException {
+	public boolean handleRequest(Api api, HttpExchange exchange) throws IOException {
 		logger.info("Proxying request for " + exchange.getRequestURI().getPath());
 		
 		HttpUriRequest request = createRequest(api.getProxy(), exchange);

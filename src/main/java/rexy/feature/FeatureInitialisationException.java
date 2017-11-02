@@ -5,7 +5,11 @@ import rexy.exception.RexyException;
 public class FeatureInitialisationException extends RexyException {
 	
 	public FeatureInitialisationException(Feature feature) {
-		super("Could not initialise " + feature.getName());
+		this("Could not initialise " + feature.getName());
+	}
+	
+	public FeatureInitialisationException(String message) {
+		super(message);
 	}
 	
 	public FeatureInitialisationException(Feature feature, Throwable cause) {
