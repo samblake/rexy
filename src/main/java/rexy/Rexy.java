@@ -75,11 +75,12 @@ public class Rexy {
 		String featureName = featureConfig.getKey();
 		logger.debug("Starting feature: " + featureName);
 		for (Feature feature : features) {
-			if (feature.getName().equals(featureName)) {
+			if (feature.getName().equalsIgnoreCase(featureName)) {
 				feature.init(featureConfig.getValue().getConfig());
+				enabledFeatures.add(feature);
+				logger.info("Started feature: " + featureName);
+				return;
 			}
-			enabledFeatures.add(feature);
-			logger.info("Started feature: " + featureName);
 		}
 		throw new FeatureInitialisationException("Could not find feature " + featureName);
 	}
