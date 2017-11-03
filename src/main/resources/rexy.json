@@ -2,7 +2,10 @@
   "port": "8080",
   "baseUrl": "/",
   "features": {
-    "jmx": {
+    "delay": {
+      "enabled": true
+    },
+    "mock": {
       "enabled": true
     },
     "proxy": {

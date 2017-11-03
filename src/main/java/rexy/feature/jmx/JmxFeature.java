@@ -5,27 +5,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rexy.config.model.Api;
 import rexy.config.model.Endpoint;
-import rexy.config.model.Headers;
 import rexy.feature.FeatureAdapter;
 import rexy.feature.FeatureInitialisationException;
 
 import javax.management.JMException;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.List;
 import java.util.Map;
 
-import static java.nio.charset.Charset.defaultCharset;
-
-public class JmxFeature extends FeatureAdapter {
+public abstract class JmxFeature<T> extends FeatureAdapter {
 	private static final Logger logger = LoggerFactory.getLogger(JmxFeature.class);
 	
-	private JmxRegistry registry;
+	private JmxRegistry<T> registry;
 	
 	@Override
 	public void init(Map<String, Object> jsonNode) throws FeatureInitialisationException {
-		registry = JmxRegistry.getInstance();
+		registry = getRegistry();
 	}
+	
+	protected abstract JmxRegistry<T> getRegistry();
 	
 	@Override
 	public void initEndpoint(Api api) throws FeatureInitialisationException {
@@ -42,19 +38,10 @@ public class JmxFeature extends FeatureAdapter {
 	
 	@Override
 	public boolean handleRequest(Api api, HttpExchange exchange) {
-		MockEndpoint endpoint = findEndpoint(exchange);
+		T endpoint = findEndpoint(exchange);
 		
 		if (endpoint != null) {
-			if (endpoint.isIntercept()) {
-				logger.info("Returning mock response for " + exchange.getRequestURI().getPath());
-				
-				try {
-					sendResponse(exchange, api, endpoint);
-				}
-				catch (IOException e) {
-					logger.error("Error sending response for " + exchange.getRequestURI().getPath(), e);
-				}
-				
+			if (handleRequest(api, exchange, endpoint)) {
 				return true;
 			}
 		}
@@ -64,37 +51,11 @@ public class JmxFeature extends FeatureAdapter {
 		return false;
 	}
 	
-	private MockEndpoint findEndpoint(HttpExchange exchange) {
+	private T findEndpoint(HttpExchange exchange) {
 		String query = exchange.getRequestURI().getQuery();
 		String request = exchange.getRequestURI().getPath() + (query == null ? "" : '?' + query);
 		return registry.getEndpoint(request);
 	}
 	
-	private void sendResponse(HttpExchange exchange, Api api, MockEndpoint endpoint) throws IOException {
-		byte[] body = endpoint.getResponse() == null ? null : endpoint.getResponse().getBytes(defaultCharset());
-		int contentLength = body == null ? 0 : body.length;
-		int httpStatus = endpoint.getHttpStatus();
-		exchange.sendResponseHeaders(httpStatus, contentLength);
-		
-		List<String> contentType = exchange.getRequestHeaders().get("Content-Type");
-		if (contentType != null) {
-			for (String value : contentType) {
-				exchange.getResponseHeaders().add("Content-Type", value);
-			}
-		}
-		
-		// TODO allow override from endpoint
-		Headers headers = api.getHeaders();
-		for (Map.Entry<String, String> header : headers.getHeaders()) {
-			exchange.getResponseHeaders().add(header.getKey(), header.getValue());
-		}
-		
-		if (body != null) {
-			try (OutputStream os = exchange.getResponseBody()) {
-				os.write(body);
-			}
-		}
-		
-		exchange.close();
-	}
+	protected abstract boolean handleRequest(Api api, HttpExchange exchange, T endpoint);
 }

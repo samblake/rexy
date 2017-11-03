@@ -1,4 +1,4 @@
-package rexy.feature.jmx;
+package rexy.feature.jmx.mock;
 
 import rexy.config.model.Response;
 
