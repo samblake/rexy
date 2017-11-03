@@ -7,13 +7,19 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+/**
+ * A feature implementation that performs no logic. The name is bassed on the class name with 'Feature'
+ * removed, converted to lowercase.
+ */
 public abstract class FeatureAdapter implements Feature {
 	
 	private static final Pattern FEATURE_PATTERN = Pattern.compile("Feature");
 	
+	private final String NAME = FEATURE_PATTERN.matcher(getClass().getSimpleName()).replaceAll("").toLowerCase();
+	
 	@Override
 	public String getName() {
-		return FEATURE_PATTERN.matcher(getClass().getSimpleName()).replaceAll("").toLowerCase();
+		return NAME;
 	}
 	
 	@Override

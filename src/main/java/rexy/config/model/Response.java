@@ -12,18 +12,18 @@ import org.codehaus.jackson.JsonNode;
 		"body"
 })
 public class Response {
-
+	
 	@JsonProperty("name")
 	private String name;
 	@JsonProperty("httpStatus")
 	private int httpStatus;
 	@JsonProperty("body")
 	private JsonNode body;
-
+	
 	public String getName() {
 		return name;
 	}
-
+	
 	public void setName(String name) {
 		this.name = name;
 	}

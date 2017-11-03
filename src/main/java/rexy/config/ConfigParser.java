@@ -9,6 +9,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Parses the JSON configuration. The path can either be relative to the classpath or an absolute path on
+ * the filesystem. The classpath is checked before the filesystem.
+ */
 public class ConfigParser {
 	private static final Logger logger = LoggerFactory.getLogger(ConfigParser.class);
 	

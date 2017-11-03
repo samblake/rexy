@@ -18,6 +18,10 @@ import java.util.Set;
 
 import static java.util.Arrays.asList;
 
+/**
+ * Takes a {@link HttpExchange} and converts it into a {@link HttpUriRequest} that can be used to proxy
+ * the request to another URL.
+ */
 public final class RequestFactory {
 	
 	private static final Set<String> STRIP_HEADERS = new HashSet<>(asList("Host", "Connection", "TE",

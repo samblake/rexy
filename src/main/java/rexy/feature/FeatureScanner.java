@@ -47,6 +47,10 @@ public class FeatureScanner {
 				.scan();
 	}
 	
+	/**
+	 * Processes a {@link Feature feature} class. Checks to see if it's a concrete class and, if it is,
+	 * call it's no-args constructor and adds it to the list of features.
+	 */
 	private static class FeatureCreator implements ImplementingClassMatchProcessor<Feature> {
 		private final List<Feature> features;
 		

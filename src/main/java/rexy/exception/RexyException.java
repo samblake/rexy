@@ -1,7 +1,7 @@
 package rexy.exception;
 
 /**
- *
+ * A base exception for all exceptions thrown by Rexy.
  */
 public class RexyException extends Exception {
 	

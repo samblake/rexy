@@ -21,8 +21,39 @@ import java.util.Scanner;
 
 import static rexy.feature.proxy.RequestFactory.createRequest;
 
+/**
+ * <p></p>A feature that proxys a request to another URL. This will always write a response so will always be the
+ * last feature in a chain.</p>
+ *
+ * <p>To configure a proxy an API is created in the configuration. The {@code baseUrl} of the API corrosponds
+ * to the context root of the API on the Rexy server. The {@code proxy} value is the base URL that any request
+ * to that context root will be forwarded to.</p>
+ *
+ * <p>For example, if the following configuration, if Rexy was running on localhost going to
+ * http://localhost/api would be proxied to http://www.metaweather.com/api and going to
+ * http://localhost/api/location/search/?query=london would be proxied to
+ * http://www.metaweather.com/api/location/search/?query=london.</p>
+ *
+ * {@code
+ * "apis": [
+ * {
+ * "name": "metaweather",
+ * "baseUrl": "api/",
+ * "contentType": "application/json",
+ * "proxy": "http://www.metaweather.com/api",
+ * "endpoints": [
+ * {
+ * "name": "location",
+ * "endpoint": "location/search/?query={query}",
+ * }
+ * }
+ * ]
+ * }
+ */
 public class ProxyFeature extends FeatureAdapter {
 	private static final Logger logger = LoggerFactory.getLogger(ProxyFeature.class);
+	
+	public static final String HEADER_CONTENT_TYPE = "Content-Type";
 	
 	@Override
 	public boolean handleRequest(Api api, HttpExchange exchange) throws IOException {
@@ -66,7 +97,7 @@ public class ProxyFeature extends FeatureAdapter {
 	}
 	
 	private Charset getCharset(CloseableHttpResponse response) {
-		Header[] contentType = response.getHeaders("Content-Type");
+		Header[] contentType = response.getHeaders(HEADER_CONTENT_TYPE);
 		for (Header header : contentType) {
 			Charset charset = ContentType.parse(header.getValue()).getCharset();
 			if (charset != null) {

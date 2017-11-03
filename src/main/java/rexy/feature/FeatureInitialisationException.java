@@ -2,6 +2,10 @@ package rexy.feature;
 
 import rexy.exception.RexyException;
 
+/**
+ * An exception that is thrown when a feature could not be initialised. If this is thrown the server will
+ * fail to start .
+ */
 public class FeatureInitialisationException extends RexyException {
 	
 	public FeatureInitialisationException(Feature feature) {
