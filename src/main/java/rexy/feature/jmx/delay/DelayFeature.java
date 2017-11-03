@@ -21,7 +21,7 @@ public class DelayFeature extends JmxFeature<DelayEndpoint> {
 	protected boolean handleRequest(Api api, HttpExchange exchange, DelayEndpoint endpoint) {
 		if (endpoint.getDelay() > 0) {
 			String requestPath = exchange.getRequestURI().getPath();
-			logger.info("Delaying request for " + requestPath + " " + endpoint.getDelay() + " seconds");
+			logger.info("Delaying request for " + requestPath + " by " + endpoint.getDelay() + " seconds");
 			
 			try {
 				Thread.sleep(TimeUnit.SECONDS.toMillis(endpoint.getDelay()));
