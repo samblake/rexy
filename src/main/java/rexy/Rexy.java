@@ -73,12 +73,16 @@ public class Rexy {
 	private void initFeature(List<Feature> features, List<Feature> enabledFeatures, Entry<String, rexy.config.model.Feature> featureConfig)
 			throws FeatureInitialisationException {
 		String featureName = featureConfig.getKey();
-		logger.debug("Starting feature: " + featureName);
 		for (Feature feature : features) {
 			if (feature.getName().equalsIgnoreCase(featureName)) {
-				feature.init(featureConfig.getValue().getConfig());
-				enabledFeatures.add(feature);
-				logger.info("Started feature: " + featureName);
+				if (featureConfig.getValue().isEnabled()) {
+					feature.init(featureConfig.getValue().getConfig());
+					enabledFeatures.add(feature);
+					logger.info("Started feature: " + featureName);
+				}
+				else {
+					logger.info("Feature disabled: " + featureName);
+				}
 				return;
 			}
 		}

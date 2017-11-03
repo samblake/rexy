@@ -20,15 +20,15 @@ public class Feature {
 	private boolean enabled;
 	@JsonIgnore
 	private final Map<String, Object> config = new HashMap<>();
-	
+
 	public boolean isEnabled() {
 		return enabled;
 	}
-	
+
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-	
+
 	@JsonAnyGetter
 	public Map<String, Object> getConfig() {
 		return config;
