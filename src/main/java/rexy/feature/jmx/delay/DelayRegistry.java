@@ -19,4 +19,9 @@ public final class DelayRegistry extends JmxRegistry<DelayEndpoint> {
 	protected DelayEndpoint createMBean(Api api, Endpoint endpoint) {
 		return new DelayEndpoint();
 	}
+
+	@Override
+	protected String getMBeanName() {
+		return "delay";
+	}
 }

@@ -1,5 +1,6 @@
 package rexy.feature.jmx.mock;
 
+import org.apache.commons.lang.StringUtils;
 import rexy.config.model.Api;
 import rexy.config.model.Endpoint;
 import rexy.config.model.Response;
@@ -10,6 +11,8 @@ import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import javax.management.OperationsException;
 import java.lang.management.ManagementFactory;
+
+import static org.apache.commons.lang.StringUtils.isEmpty;
 
 public final class MockRegistry extends JmxRegistry<MockEndpoint> {
 	
@@ -27,8 +30,9 @@ public final class MockRegistry extends JmxRegistry<MockEndpoint> {
 		MockEndpoint mockEndpoint = super.addEndpoint(api, endpoint);
 		int i = 0;
 		for (Response response : endpoint.getResponses()) {
+			String name = isEmpty(response.getName()) ? Integer.toString(i++) : response.getName();
 			MockResponse mockResponse = new MockResponse(mockEndpoint, response);
-			registerMBean(api.getName(), endpoint.getName(), mockResponse, i++);
+			registerMBean(api.getName(), endpoint.getName(), mockResponse, name);
 		}
 		return mockEndpoint;
 	}
@@ -39,10 +43,15 @@ public final class MockRegistry extends JmxRegistry<MockEndpoint> {
 		return new MockEndpoint(api.getContentType(), defaultResponse);
 	}
 	
-	private void registerMBean(String type, String name, MockResponse response, int i)
+	private void registerMBean(String type, String name, MockResponse response, String i)
 			throws OperationsException, MBeanRegistrationException {
 		MBeanServer server = ManagementFactory.getPlatformMBeanServer();
-		ObjectName objectName = new ObjectName("Rexy:type=" + type + ",scope=" + name + ",name=preset-" + i);
+		ObjectName objectName = new ObjectName("Rexy:type=" + type + ",scope=" + name + ",name=preset -  " + i);
 		server.registerMBean(response, objectName);
+	}
+
+	@Override
+	protected String getMBeanName() {
+		return "mock";
 	}
 }

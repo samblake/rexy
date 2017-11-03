@@ -34,17 +34,12 @@ public abstract class JmxRegistry<T> {
 	protected void registerMBean(String type, String name, T endpoint)
 			throws OperationsException, MBeanRegistrationException {
 		MBeanServer server = ManagementFactory.getPlatformMBeanServer();
-		ObjectName objectName = new ObjectName("Rexy:type=" + type + ",name=" + name);
+		ObjectName objectName = new ObjectName("Rexy:type=" + type + ",scope=" + name + ",name=" + getMBeanName());
 		server.registerMBean(endpoint, objectName);
 	}
-	
-	private void registerMBean(String type, String name, MockResponse response, int i)
-			throws OperationsException, MBeanRegistrationException {
-		MBeanServer server = ManagementFactory.getPlatformMBeanServer();
-		ObjectName objectName = new ObjectName("Rexy:type=" + type + ",scope=" + name + ",name=preset-" + i);
-		server.registerMBean(response, objectName);
-	}
-	
+
+	protected abstract String getMBeanName();
+
 	private Pattern createRegex(Api api, Endpoint endpoint) {
 		Pattern pattern = Pattern.compile("\\{.+?\\}");
 		Matcher matcher = pattern.matcher(escape(endpoint.getEndpoint()));
