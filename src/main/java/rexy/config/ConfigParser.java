@@ -18,10 +18,21 @@ public class ConfigParser {
 	
 	private final String path;
 	
+	/**
+	 * Creates a configuration parser for the file at the supplied path.
+	 *
+	 * @param path The path to the configuration file relative to the classpath or absolute path
+	 */
 	public ConfigParser(String path) {
 		this.path = path;
 	}
 	
+	/**
+	 * Parses the JSON configuration.
+	 *
+	 * @return The model representation of the config
+	 * @throws ConfigException Thrown if the configuration file cannot be found
+	 */
 	public Config parse() throws ConfigException {
 		try {
 			ObjectMapper mapper = new ObjectMapper();

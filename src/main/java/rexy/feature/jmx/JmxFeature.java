@@ -11,6 +11,11 @@ import rexy.feature.FeatureInitialisationException;
 import javax.management.JMException;
 import java.util.Map;
 
+/**
+ * A feature for registering MBeans against the endpoints of an API.
+ *
+ * @param <T> The type of MBean
+ */
 public abstract class JmxFeature<T> extends FeatureAdapter {
 	private static final Logger logger = LoggerFactory.getLogger(JmxFeature.class);
 	
@@ -21,6 +26,11 @@ public abstract class JmxFeature<T> extends FeatureAdapter {
 		registry = getRegistry();
 	}
 	
+	/**
+	 * Gets the registry to store the MBean in.
+	 *
+	 * @return The MBean registry
+	 */
 	protected abstract JmxRegistry<T> getRegistry();
 	
 	@Override
@@ -38,10 +48,10 @@ public abstract class JmxFeature<T> extends FeatureAdapter {
 	
 	@Override
 	public boolean handleRequest(Api api, HttpExchange exchange) {
-		T endpoint = findEndpoint(exchange);
+		T mBean = findEndpointMBean(exchange);
 		
-		if (endpoint != null) {
-			if (handleRequest(api, exchange, endpoint)) {
+		if (mBean != null) {
+			if (handleRequest(api, exchange, mBean)) {
 				return true;
 			}
 		}
@@ -51,11 +61,19 @@ public abstract class JmxFeature<T> extends FeatureAdapter {
 		return false;
 	}
 	
-	private T findEndpoint(HttpExchange exchange) {
+	private T findEndpointMBean(HttpExchange exchange) {
 		String query = exchange.getRequestURI().getQuery();
 		String request = exchange.getRequestURI().getPath() + (query == null ? "" : '?' + query);
-		return registry.getEndpoint(request);
+		return registry.getMBean(request);
 	}
 	
-	protected abstract boolean handleRequest(Api api, HttpExchange exchange, T endpoint);
+	/**
+	 * Handles the request when an MBean can be found for the endpoint.
+	 *
+	 * @param api      The API the request is against
+	 * @param exchange The exchange containing the request
+	 * @param mBean    The MBean associated with the request
+	 * @return True if the response has been written, false otherwise
+	 */
+	protected abstract boolean handleRequest(Api api, HttpExchange exchange, T mBean);
 }

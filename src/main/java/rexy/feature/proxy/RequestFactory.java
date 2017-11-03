@@ -30,6 +30,13 @@ public final class RequestFactory {
 	private RequestFactory() {
 	}
 	
+	/**
+	 * Creates a request that forwards the request in the exchange to the base URL.
+	 *
+	 * @param baseUrl  The URL to forward the request to
+	 * @param exchange The exchange containing the request to forward
+	 * @return The proxy request
+	 */
 	public static HttpUriRequest createRequest(String baseUrl, HttpExchange exchange) {
 		String url = createUrl(baseUrl, exchange);
 		HttpUriRequest request = createRequest(exchange.getRequestMethod(), url);
@@ -50,6 +57,13 @@ public final class RequestFactory {
 		return exchange.getRequestURI().getQuery() == null ? url : url + '?' + exchange.getRequestURI().getQuery();
 	}
 	
+	/**
+	 * Creates a request of a specific method (GET, POST, etc.) to the given URL.
+	 *
+	 * @param requestMethod The request method of the request
+	 * @param url The URL of the request
+	 * @return The created request
+	 */
 	public static HttpUriRequest createRequest(String requestMethod, String url) {
 		if (requestMethod.equals(HttpGet.METHOD_NAME)) {
 			return new HttpGet(url);

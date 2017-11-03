@@ -1,11 +1,11 @@
 package rexy.feature.jmx.mock;
 
-import org.apache.commons.lang.StringUtils;
 import rexy.config.model.Api;
 import rexy.config.model.Endpoint;
 import rexy.config.model.Response;
 import rexy.feature.jmx.JmxRegistry;
 
+import javax.management.JMException;
 import javax.management.MBeanRegistrationException;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
@@ -26,7 +26,7 @@ public final class MockRegistry extends JmxRegistry<MockEndpoint> {
 	}
 	
 	@Override
-	public MockEndpoint addEndpoint(Api api, Endpoint endpoint) throws OperationsException, MBeanRegistrationException {
+	public MockEndpoint addEndpoint(Api api, Endpoint endpoint) throws JMException {
 		MockEndpoint mockEndpoint = super.addEndpoint(api, endpoint);
 		int i = 0;
 		for (Response response : endpoint.getResponses()) {

@@ -7,7 +7,7 @@ import rexy.config.model.Api;
 import rexy.feature.jmx.JmxFeature;
 import rexy.feature.jmx.JmxRegistry;
 
-import java.util.concurrent.TimeUnit;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class DelayFeature extends JmxFeature<DelayEndpoint> {
 	private static final Logger logger = LoggerFactory.getLogger(DelayFeature.class);
@@ -18,13 +18,13 @@ public class DelayFeature extends JmxFeature<DelayEndpoint> {
 	}
 	
 	@Override
-	protected boolean handleRequest(Api api, HttpExchange exchange, DelayEndpoint endpoint) {
-		if (endpoint.getDelay() > 0) {
+	protected boolean handleRequest(Api api, HttpExchange exchange, DelayEndpoint mBean) {
+		if (mBean.getDelay() > 0) {
 			String requestPath = exchange.getRequestURI().getPath();
-			logger.info("Delaying request for " + requestPath + " by " + endpoint.getDelay() + " seconds");
+			logger.info("Delaying request for " + requestPath + " by " + mBean.getDelay() + " seconds");
 			
 			try {
-				Thread.sleep(TimeUnit.SECONDS.toMillis(endpoint.getDelay()));
+				Thread.sleep(SECONDS.toMillis(mBean.getDelay()));
 			}
 			catch (InterruptedException e) {
 				logger.error("Error delaying response for " + requestPath, e);
