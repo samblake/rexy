@@ -20,13 +20,14 @@ public class DelayFeature extends JmxFeature<DelayEndpoint> {
 	@Override
 	protected boolean handleRequest(Api api, HttpExchange exchange, DelayEndpoint endpoint) {
 		if (endpoint.getDelay() > 0) {
-			logger.info("Delaying response for " + exchange.getRequestURI().getPath());
+			String requestPath = exchange.getRequestURI().getPath();
+			logger.info("Delaying request for " + requestPath + " " + endpoint.getDelay() + " seconds");
 			
 			try {
 				Thread.sleep(TimeUnit.SECONDS.toMillis(endpoint.getDelay()));
 			}
 			catch (InterruptedException e) {
-				logger.error("Error sending response for " + exchange.getRequestURI().getPath(), e);
+				logger.error("Error delaying response for " + requestPath, e);
 			}
 		}
 		return false;
