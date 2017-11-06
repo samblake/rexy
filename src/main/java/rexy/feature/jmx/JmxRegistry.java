@@ -70,7 +70,7 @@ public abstract class JmxRegistry<T> {
 	private Pattern createRegex(Api api, Endpoint endpoint) {
 		Pattern pattern = Pattern.compile("\\{.+?\\}");
 		Matcher matcher = pattern.matcher(escape(endpoint.getEndpoint()));
-		String regex = ".*" + api.getBaseUrl() + matcher.replaceAll(".+?");
+		String regex = "/" + api.getBaseUrl() + matcher.replaceAll(".+?");
 		return Pattern.compile(regex);
 	}
 	
@@ -87,20 +87,24 @@ public abstract class JmxRegistry<T> {
 	 */
 	public T getMBean(String path) {
 		if (logger.isDebugEnabled()) {
-			logger.debug("Getting endpoint for " + path);
+			logger.debug("Finding endpoint for " + path);
 		}
 
 		for (Entry<Pattern, T> entry : repo.entrySet()) {
+			Pattern endpointMatcher = entry.getKey();
 			if (logger.isDebugEnabled()) {
-				logger.debug("Testing endpoint " + entry.getKey().toString());
+				logger.debug("Testing endpoint " + endpointMatcher);
 			}
 
-			if (entry.getKey().matcher(path).matches()) {
+			if (endpointMatcher.matcher(path).matches()) {
+				if (logger.isDebugEnabled()) {
+					logger.debug("Matched endpoint " + endpointMatcher);
+				}
 				return entry.getValue();
 			}
 		}
 
-		logger.debug("No matching endpoint for " + path);
+		logger.warn("No matching endpoint for " + path);
 		return null;
 	}
 }

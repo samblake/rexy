@@ -53,7 +53,7 @@ public final class RequestFactory {
 	}
 	
 	private static String createUrl(String baseUrl, HttpExchange exchange) {
-		String url = baseUrl + exchange.getRequestURI().getPath().replace(exchange.getHttpContext().getPath(), "/");
+		String url = baseUrl + exchange.getRequestURI().getPath().replace(exchange.getHttpContext().getPath(), "");
 		return exchange.getRequestURI().getQuery() == null ? url : url + '?' + exchange.getRequestURI().getQuery();
 	}
 	

@@ -15,13 +15,13 @@
   "apis": [
     {
       "name": "metaweather",
-      "baseUrl": "api/",
+      "baseUrl": "api",
       "contentType": "application/json",
       "proxy": "http://www.metaweather.com/api",
       "endpoints": [
         {
           "name": "location",
-          "endpoint": "location/search/?query={query}",
+          "endpoint": "/location/search/?query={query}",
           "responses": [
             {
               "name": "Successful",
