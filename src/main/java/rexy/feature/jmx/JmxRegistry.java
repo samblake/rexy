@@ -1,8 +1,9 @@
 package rexy.feature.jmx;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import rexy.config.model.Api;
 import rexy.config.model.Endpoint;
-import rexy.feature.jmx.mock.MockResponse;
 
 import javax.management.MBeanRegistrationException;
 import javax.management.MBeanServer;
@@ -16,6 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class JmxRegistry<T> {
+	private static final Logger logger = LoggerFactory.getLogger(JmxRegistry.class);
 	
 	private final Map<Pattern, T> repo = new HashMap<>();
 	
@@ -53,11 +55,21 @@ public abstract class JmxRegistry<T> {
 	}
 	
 	public T getEndpoint(String path) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("Getting endpoint for " + path);
+		}
+
 		for (Entry<Pattern, T> entry : repo.entrySet()) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("Testing endpoint " + entry.getKey().toString());
+			}
+
 			if (entry.getKey().matcher(path).matches()) {
 				return entry.getValue();
 			}
 		}
+
+		logger.debug("No matching endpoint for " + path);
 		return null;
 	}
 }

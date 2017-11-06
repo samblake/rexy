@@ -1,5 +1,5 @@
 {
-  "port": "8080",
+  "port": "8081",
   "baseUrl": "/",
   "features": {
     "delay": {
@@ -24,6 +24,7 @@
           "endpoint": "location/search/?query={query}",
           "responses": [
             {
+              "name": "Successful",
               "httpStatus": 200,
               "body": {
                 "title": "London",
@@ -33,6 +34,7 @@
               }
             },
             {
+              "name": "Invalid",
               "httpStatus": 401,
               "body": {
                 "error": "invalid request"
