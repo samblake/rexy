@@ -1,8 +1,8 @@
 package rexy.feature.jmx;
 
 import com.sun.net.httpserver.HttpExchange;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
 import rexy.config.model.Endpoint;
 import rexy.feature.FeatureAdapter;
@@ -17,7 +17,7 @@ import java.util.Map;
  * @param <T> The type of MBean
  */
 public abstract class JmxFeature<T> extends FeatureAdapter {
-	private static final Logger logger = LoggerFactory.getLogger(JmxFeature.class);
+	private static final Logger logger = LogManager.getLogger(JmxFeature.class);
 	
 	private JmxRegistry<T> registry;
 	

@@ -1,8 +1,8 @@
 package rexy.http;
 
 import com.sun.net.httpserver.HttpServer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
 import rexy.config.model.Config;
 import rexy.feature.Feature;
@@ -16,8 +16,8 @@ import java.util.List;
  * Creates a server with the {@link Api APIs} defined in the {@link Config configuration} with the supplied
  * {@link Feature features}. Each API is registered against the server as a different context.
  */
-public class Server {
-	private static final Logger logger = LoggerFactory.getLogger(Server.class);
+public class RexyServer {
+	private static final Logger logger = LogManager.getLogger(RexyServer.class);
 	
 	private final HttpServer server;
 	
@@ -29,7 +29,7 @@ public class Server {
 	 * @throws IOException                    Thrown if the server cannot be created
 	 * @throws FeatureInitialisationException Thrown if a feature cannot be initialised
 	 */
-	public Server(Config config, List<Feature> features) throws IOException, FeatureInitialisationException {
+	public RexyServer(Config config, List<Feature> features) throws IOException, FeatureInitialisationException {
 		server = HttpServer.create(new InetSocketAddress(config.getPort()), 0);
 		for (Api api : config.getApis()) {
 			String apiEndpoint = config.getBaseUrl() + api.getBaseUrl();

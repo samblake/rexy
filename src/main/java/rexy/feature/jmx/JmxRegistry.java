@@ -1,7 +1,7 @@
 package rexy.feature.jmx;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
 import rexy.config.model.Endpoint;
 
@@ -22,8 +22,8 @@ import java.util.regex.Pattern;
  * @param <T> The type of MBean to store
  */
 public abstract class JmxRegistry<T> {
-	private static final Logger logger = LoggerFactory.getLogger(JmxRegistry.class);
-	
+	private static final Logger logger = LogManager.getLogger(JmxRegistry.class);
+
 	private final Map<Pattern, T> repo = new HashMap<>();
 	
 	protected JmxRegistry() {
@@ -47,7 +47,7 @@ public abstract class JmxRegistry<T> {
 	
 	/**
 	 * Creates an MBean for an endpoint.
-	 
+	 *
 	 * @param api The API the endpoint is for
 	 * @param endpoint The endpoint to register an MBean for
 	 * @return The created MBean
@@ -59,14 +59,14 @@ public abstract class JmxRegistry<T> {
 		ObjectName objectName = new ObjectName("Rexy:type=" + type + ",scope=" + name + ",name=" + getMBeanName());
 		server.registerMBean(endpoint, objectName);
 	}
-	
+
 	/**
 	 * Returns the name of an MBean. This is used as part of the {@link ObjectName JMX object name}.
 	 *
 	 * @return The MBean name
 	 */
 	protected abstract String getMBeanName();
-	
+
 	private Pattern createRegex(Api api, Endpoint endpoint) {
 		Pattern pattern = Pattern.compile("\\{.+?\\}");
 		Matcher matcher = pattern.matcher(escape(endpoint.getEndpoint()));
@@ -86,7 +86,6 @@ public abstract class JmxRegistry<T> {
 	 * @return The MBean or null if one is not found
 	 */
 	public T getMBean(String path) {
-	public T getEndpoint(String path) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Getting endpoint for " + path);
 		}

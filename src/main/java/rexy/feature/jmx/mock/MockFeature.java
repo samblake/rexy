@@ -1,8 +1,8 @@
 package rexy.feature.jmx.mock;
 
 import com.sun.net.httpserver.HttpExchange;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
 import rexy.config.model.Headers;
 import rexy.feature.jmx.JmxFeature;
@@ -20,7 +20,7 @@ import static java.nio.charset.Charset.defaultCharset;
  * the request and return a mocked response. Preset responses can be set.
  */
 public class MockFeature extends JmxFeature<MockEndpoint> {
-	private static final Logger logger = LoggerFactory.getLogger(MockFeature.class);
+	private static final Logger logger = LogManager.getLogger(MockFeature.class);
 	
 	@Override
 	protected JmxRegistry<MockEndpoint> getRegistry() {

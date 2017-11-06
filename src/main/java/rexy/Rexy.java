@@ -1,14 +1,14 @@
 package rexy;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import rexy.config.ConfigParser;
 import rexy.config.model.Config;
 import rexy.exception.RexyException;
 import rexy.feature.Feature;
 import rexy.feature.FeatureInitialisationException;
 import rexy.feature.FeatureScanner;
-import rexy.http.Server;
+import rexy.http.RexyServer;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -23,7 +23,7 @@ import java.util.Set;
  * The path can either be an absolute file or relative to the classpath.</p>
  */
 public class Rexy {
-	private static final Logger logger = LoggerFactory.getLogger(Rexy.class);
+	private static final Logger logger = LogManager.getLogger(Rexy.class);
 	
 	private static final String DEFAULT_PATH = "rexy.json";
 	
@@ -47,12 +47,12 @@ public class Rexy {
 	 * Reads the config file and runs the server.
 	 */
 	public void start() {
-		logger.debug("Starting Rexy");
+		logger.info("Starting Rexy");
 		try {
 			Config config = new ConfigParser(configPath).parse();
 			List<Feature> allFeatures = new FeatureScanner(config.getScanPackages()).scan();
 			List<Feature> enabledFeatures = initFeatures(config, allFeatures);
-			new Server(config, enabledFeatures).start();
+			new RexyServer(config, enabledFeatures).start();
 			logger.info("Rexy started on port " + config.getPort());
 		}
 		catch (IOException | RexyException e) {

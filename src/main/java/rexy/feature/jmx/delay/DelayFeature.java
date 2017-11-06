@@ -1,8 +1,8 @@
 package rexy.feature.jmx.delay;
 
 import com.sun.net.httpserver.HttpExchange;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
 import rexy.feature.jmx.JmxFeature;
 import rexy.feature.jmx.JmxRegistry;
@@ -10,7 +10,7 @@ import rexy.feature.jmx.JmxRegistry;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class DelayFeature extends JmxFeature<DelayEndpoint> {
-	private static final Logger logger = LoggerFactory.getLogger(DelayFeature.class);
+	private static final Logger logger = LogManager.getLogger(DelayFeature.class);
 	
 	@Override
 	protected JmxRegistry<DelayEndpoint> getRegistry() {

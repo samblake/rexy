@@ -2,8 +2,8 @@ package rexy.feature;
 
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import io.github.lukehutch.fastclasspathscanner.matchprocessor.ImplementingClassMatchProcessor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
@@ -15,7 +15,7 @@ import java.util.List;
  * scanned. Additional packages may be supplied.
  */
 public class FeatureScanner {
-	private static final Logger logger = LoggerFactory.getLogger(FeatureScanner.class);
+	private static final Logger logger = LogManager.getLogger(FeatureScanner.class);
 	
 	private final List<String> scanPackages;
 	

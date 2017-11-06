@@ -7,8 +7,8 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
 import rexy.feature.FeatureAdapter;
 
@@ -51,7 +51,7 @@ import static rexy.feature.proxy.RequestFactory.createRequest;
  * }
  */
 public class ProxyFeature extends FeatureAdapter {
-	private static final Logger logger = LoggerFactory.getLogger(ProxyFeature.class);
+	private static final Logger logger = LogManager.getLogger(ProxyFeature.class);
 	
 	public static final String HEADER_CONTENT_TYPE = "Content-Type";
 	
