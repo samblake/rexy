@@ -22,7 +22,7 @@ import java.util.Scanner;
 import static rexy.feature.proxy.RequestFactory.createRequest;
 
 /**
- * <p></p>A feature that proxys a request to another URL. This will always write a response so will always be the
+ * <p></p>A feature that proxies a request to another URL. This will always write a response so will always be the
  * last feature in a chain.</p>
  *
  * <p>To configure a proxy an API is created in the configuration. The {@code baseUrl} of the API corrosponds
@@ -36,17 +36,17 @@ import static rexy.feature.proxy.RequestFactory.createRequest;
  *
  * {@code
  * "apis": [
- * {
- * "name": "metaweather",
- * "baseUrl": "api/",
- * "contentType": "application/json",
- * "proxy": "http://www.metaweather.com/api",
- * "endpoints": [
- * {
- * "name": "location",
- * "endpoint": "location/search/?query={query}",
- * }
- * }
+ *   {
+ *     "name": "metaweather",
+ *     "baseUrl": "api/",
+ *     "contentType": "application/json",
+ *     "proxy": "http://www.metaweather.com/api",
+ *     "endpoints": [
+ *     {
+ *       "name": "location",
+ *       "endpoint": "location/search/?query={query}",
+ *     }
+ *   }
  * ]
  * }
  */

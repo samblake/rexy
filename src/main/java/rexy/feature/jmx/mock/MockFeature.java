@@ -28,12 +28,12 @@ public class MockFeature extends JmxFeature<MockEndpoint> {
 	}
 	
 	@Override
-	protected boolean handleRequest(Api api, HttpExchange exchange, MockEndpoint endpoint) {
-		if (endpoint.isIntercept()) {
+	protected boolean handleRequest(Api api, HttpExchange exchange, MockEndpoint mBean) {
+		if (mBean.isIntercept()) {
 			logger.info("Returning mock response for " + exchange.getRequestURI().getPath());
 			
 			try {
-				sendResponse(exchange, api, endpoint);
+				sendResponse(exchange, api, mBean);
 			}
 			catch (IOException e) {
 				logger.error("Error sending response for " + exchange.getRequestURI().getPath(), e);
