@@ -24,15 +24,15 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  *
  * <p>{@code
  * "apis": [
- * {
- * "name": "metaweather",
- * ...
- * "endpoints": [
- * {
- * "name": "location",
- * ...
- * }
- * }
+ *   {
+ *     "name": "metaweather",
+ *     ...
+ *     "endpoints": [
+ *     {
+ *       "name": "location",
+ *       ...
+ *     }
+ *   }
  * ]
  * }</p>
  */
@@ -41,7 +41,7 @@ public class DelayFeature extends JmxFeature<DelayEndpoint> {
 	
 	@Override
 	protected JmxRegistry<DelayEndpoint> createRegistry(Map<String, Object> config) {
-		return DelayRegistry.getInstance();
+		return new DelayRegistry();
 	}
 	
 	@Override
