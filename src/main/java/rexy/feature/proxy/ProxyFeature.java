@@ -25,7 +25,7 @@ import static rexy.feature.proxy.RequestFactory.createRequest;
  * <p>A feature that proxies a request to another URL. This will always write a response so will always be the
  * last feature in a chain.</p>
  *
- * <p>To configure a proxy an API is created in the configuration. The {@code baseUrl} of the API corrosponds
+ * <p>To configure a proxy an API is created in the configuration. The {@code baseUrl} of the API corresponds
  * to the context root of the API on the Rexy server. The {@code proxy} value is the base URL that any request
  * to that context root will be forwarded to.</p>
  *

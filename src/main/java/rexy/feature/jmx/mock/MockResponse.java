@@ -30,6 +30,7 @@ public class MockResponse implements MockResponseMBean {
 		return response;
 	}
 	
+	@Override
 	public void set() {
 		endpoint.setHttpStatus(httpStatus);
 		endpoint.setBody(response);

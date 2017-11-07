@@ -19,7 +19,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * the value of <i>delay</i> is greater then zero then a delay of that number of seconds will be artificially
  * introduced.</p>
  *
- * <p>For example, if the following configuration an MBean would be configured under
+ * <p>For example, in the following configuration an MBean would be configured under
  * {@code Rexy/metaweather/location/delay}.</p>
  *
  * <p>{@code
