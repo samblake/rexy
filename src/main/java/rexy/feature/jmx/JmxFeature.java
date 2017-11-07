@@ -22,16 +22,17 @@ public abstract class JmxFeature<T> extends FeatureAdapter {
 	private JmxRegistry<T> registry;
 	
 	@Override
-	public void init(Map<String, Object> jsonNode) throws FeatureInitialisationException {
-		registry = getRegistry();
+	public void init(Map<String, Object> config) throws FeatureInitialisationException {
+		registry = createRegistry(config);
 	}
 	
 	/**
 	 * Gets the registry to store the MBean in.
 	 *
+	 * @param config The feature configuration
 	 * @return The MBean registry
 	 */
-	protected abstract JmxRegistry<T> getRegistry();
+	protected abstract JmxRegistry<T> createRegistry(Map<String, Object> config);
 	
 	@Override
 	public void initEndpoint(Api api) throws FeatureInitialisationException {

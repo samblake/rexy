@@ -7,6 +7,8 @@ import rexy.config.model.Api;
 import rexy.feature.jmx.JmxFeature;
 import rexy.feature.jmx.JmxRegistry;
 
+import java.util.Map;
+
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
@@ -38,7 +40,7 @@ public class DelayFeature extends JmxFeature<DelayEndpoint> {
 	private static final Logger logger = LogManager.getLogger(DelayFeature.class);
 	
 	@Override
-	protected JmxRegistry<DelayEndpoint> getRegistry() {
+	protected JmxRegistry<DelayEndpoint> createRegistry(Map<String, Object> config) {
 		return DelayRegistry.getInstance();
 	}
 	

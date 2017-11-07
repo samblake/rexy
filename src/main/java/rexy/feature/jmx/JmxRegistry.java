@@ -26,9 +26,6 @@ public abstract class JmxRegistry<T> {
 
 	private final Map<Pattern, T> repo = new HashMap<>();
 	
-	protected JmxRegistry() {
-	}
-	
 	/**
 	 * Creates and registers an MBean for an endpoint.
 	 *

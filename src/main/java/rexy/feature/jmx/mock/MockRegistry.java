@@ -16,13 +16,10 @@ import static org.apache.commons.lang.StringUtils.isEmpty;
 
 public final class MockRegistry extends JmxRegistry<MockEndpoint> {
 	
-	private static final MockRegistry INSTANCE = new MockRegistry();
+	private final boolean interceptOnSet;
 	
-	private MockRegistry() {
-	}
-	
-	public static MockRegistry getInstance() {
-		return INSTANCE;
+	public MockRegistry(boolean interceptOnSet) {
+		this.interceptOnSet = interceptOnSet;
 	}
 	
 	@Override
@@ -31,7 +28,7 @@ public final class MockRegistry extends JmxRegistry<MockEndpoint> {
 		int i = 0;
 		for (Response response : endpoint.getResponses()) {
 			String name = isEmpty(response.getName()) ? Integer.toString(i++) : response.getName();
-			MockResponse mockResponse = new MockResponse(mockEndpoint, response);
+			MockResponse mockResponse = new MockResponse(mockEndpoint, response, interceptOnSet);
 			registerMBean(api.getName(), endpoint.getName(), mockResponse, name);
 		}
 		return mockEndpoint;
