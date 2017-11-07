@@ -7,17 +7,17 @@ public class MockEndpoint implements MockEndpointMBean {
 	private boolean intercept;
 	private String contentType;
 	private int httpStatus;
-	private String response;
+	private String body;
 	
-	public MockEndpoint(String contentType, Response response) {
-		this(contentType, response.getHttpStatus(), response.getBody().toString());
+	public MockEndpoint(String contentType, Response body) {
+		this(contentType, body.getHttpStatus(), body.getBody().toString());
 	}
 	
-	public MockEndpoint(String contentType, int httpStatus, String response) {
+	public MockEndpoint(String contentType, int httpStatus, String body) {
 		this.intercept = false;
 		this.httpStatus = httpStatus;
 		this.contentType = contentType;
-		this.response = response;
+		this.body = body;
 	}
 	
 	@Override
@@ -51,13 +51,13 @@ public class MockEndpoint implements MockEndpointMBean {
 	}
 	
 	@Override
-	public String getResponse() {
-		return response;
+	public String getBody() {
+		return body;
 	}
 	
 	@Override
-	public void setResponse(String response) {
-		this.response = response;
+	public void setBody(String body) {
+		this.body = body;
 	}
 	
 	

@@ -16,8 +16,42 @@ import java.util.Map;
 import static java.nio.charset.Charset.defaultCharset;
 
 /**
- * A feature that registers an MBean with every API endpoint. When the MBean is enabled it will intercept
- * the request and return a mocked response. Preset responses can be set.
+ * <p>A feature that intercepts a request and optionally returns a mock response.</p>
+ *
+ * <p>To configure a delay an API is created in the configuration. Each endpoint has an an MBean associated with
+ * it under the name {@code Rexy/[API name]/[Endpoint name]/mock}. The MBean has an <i>intercept</i> property which
+ * is set to <i>false</i> by default. When it is set to <i>true</i> no mock response is returned and the feature
+ * chain continues, when it is set to <i>true</i> a mock response is written and no further MBeans in the chain will
+ * be called.</p>
+ *
+ * <p>The MBean has  other properties: <i>content type</i>, <i>HTTP status</i> and <i>body</i>. These values
+ * dictate what is returned as the mock response.</p>
+ *
+ *
+ *
+ *
+ *
+ *
+ * <p>For example, if the following configuration, if Rexy was running on localhost going to
+ * http://localhost/api would be proxied to http://www.metaweather.com/api and going to
+ * http://localhost/api/location/search/?query=london would be proxied to
+ * http://www.metaweather.com/api/location/search/?query=london.</p>
+ *
+ * <p>{@code
+ * "apis": [
+ *   {
+ *     "name": "metaweather",
+ *     "baseUrl": "api/",
+ *     "contentType": "application/json",
+ *     "proxy": "http://www.metaweather.com/api",
+ *     "endpoints": [
+ *     {
+ *       "name": "location",
+ *       "endpoint": "location/search/?query={query}",
+ *     }
+ *   }
+ * ]
+ * }</p>
  */
 public class MockFeature extends JmxFeature<MockEndpoint> {
 	private static final Logger logger = LogManager.getLogger(MockFeature.class);
@@ -45,7 +79,7 @@ public class MockFeature extends JmxFeature<MockEndpoint> {
 	}
 	
 	private void sendResponse(HttpExchange exchange, Api api, MockEndpoint endpoint) throws IOException {
-		byte[] body = endpoint.getResponse() == null ? null : endpoint.getResponse().getBytes(defaultCharset());
+		byte[] body = endpoint.getBody() == null ? null : endpoint.getBody().getBytes(defaultCharset());
 		int contentLength = body == null ? 0 : body.length;
 		int httpStatus = endpoint.getHttpStatus();
 		exchange.sendResponseHeaders(httpStatus, contentLength);

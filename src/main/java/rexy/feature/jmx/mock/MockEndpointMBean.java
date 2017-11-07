@@ -14,7 +14,7 @@ public interface MockEndpointMBean {
 	
 	void setHttpStatus(int httpStatus);
 	
-	String getResponse();
+	String getBody();
 	
-	void setResponse(String response);
+	void setBody(String body);
 }
