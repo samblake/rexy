@@ -1,6 +1,6 @@
 package rexy;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import rexy.config.model.Config;
 

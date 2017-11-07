@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,28 +15,31 @@ import java.util.Map;
 @JsonPropertyOrder({
 		"enabled"
 })
+@XmlRootElement
 public class Feature {
 	
 	@JsonProperty("enabled")
 	private boolean enabled;
 	@JsonIgnore
-	private final Map<String, Object> config = new HashMap<>();
-
+	private Map<String, Object> config = new HashMap<>();
+	
+	@JsonProperty("enabled")
 	public boolean isEnabled() {
 		return enabled;
 	}
-
+	
+	@JsonProperty("enabled")
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-
+	
 	@JsonAnyGetter
 	public Map<String, Object> getConfig() {
-		return config;
+		return this.config;
 	}
 	
 	@JsonAnySetter
 	public void setConfig(String name, Object value) {
-		config.put(name, value);
+		this.config.put(name, value);
 	}
 }

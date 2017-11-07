@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
 import rexy.config.model.Headers;
+import rexy.feature.FeatureInitialisationException;
 import rexy.feature.jmx.JmxFeature;
 import rexy.feature.jmx.JmxRegistry;
 
@@ -55,6 +56,17 @@ import static java.nio.charset.Charset.defaultCharset;
  */
 public class MockFeature extends JmxFeature<MockEndpoint> {
 	private static final Logger logger = LogManager.getLogger(MockFeature.class);
+	
+	private static final String CONFIG_INTERCEPT_ON_SET = "interceptOnSet";
+	
+	private boolean interceptOnSet;
+	
+	@Override
+	public void init(Map<String, Object> config) throws FeatureInitialisationException {
+		super.init(config);
+		Object iosValue = config.get(CONFIG_INTERCEPT_ON_SET);
+		this.interceptOnSet = iosValue != null && Boolean.parseBoolean(iosValue.toString());
+	}
 	
 	@Override
 	protected JmxRegistry<MockEndpoint> getRegistry() {

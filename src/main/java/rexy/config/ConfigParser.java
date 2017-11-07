@@ -1,8 +1,8 @@
 package rexy.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.codehaus.jackson.map.ObjectMapper;
 import rexy.config.model.Config;
 
 import java.io.File;
