@@ -2,21 +2,25 @@ package rexy.feature.jmx.mock;
 
 import rexy.config.model.Response;
 
+import java.util.Map;
+
 public class MockEndpoint implements MockEndpointMBean {
 	
 	private boolean intercept;
 	private String contentType;
 	private int httpStatus;
 	private String body;
+	private Map<String, String> headers;
 	
-	public MockEndpoint(String contentType, Response body) {
-		this(contentType, body.getHttpStatus(), body.getBody().toString());
+	public MockEndpoint(String contentType, Response response) {
+		this(contentType, response.getHttpStatus(), response.getHeaders(), response.getBody().toString());
 	}
 	
-	public MockEndpoint(String contentType, int httpStatus, String body) {
+	public MockEndpoint(String contentType, int httpStatus, Map<String, String> headers, String body) {
 		this.intercept = false;
 		this.httpStatus = httpStatus;
 		this.contentType = contentType;
+		this.headers = headers;
 		this.body = body;
 	}
 	
@@ -51,6 +55,16 @@ public class MockEndpoint implements MockEndpointMBean {
 	}
 	
 	@Override
+	public Map<String, String> getHeaders() {
+		return headers;
+	}
+	
+	@Override
+	public void setHeaders(Map<String, String> headers) {
+		this.headers = headers;
+	}
+	
+	@Override
 	public String getBody() {
 		return body;
 	}
@@ -59,6 +73,5 @@ public class MockEndpoint implements MockEndpointMBean {
 	public void setBody(String body) {
 		this.body = body;
 	}
-	
 	
 }

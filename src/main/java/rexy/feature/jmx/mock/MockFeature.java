@@ -4,7 +4,6 @@ import com.sun.net.httpserver.HttpExchange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
-import rexy.config.model.Headers;
 import rexy.feature.jmx.JmxFeature;
 import rexy.feature.jmx.JmxRegistry;
 
@@ -63,6 +62,12 @@ import static java.nio.charset.Charset.defaultCharset;
  * ]
  * }</p>
  *
+ * <p>It is also possible to create presets that can be set to be returned. These can be seen in the above
+ * example under the <i>responses</i> array. Each response will have bean an MBean associated with it under
+ * {@code Rexy/metaweather/location/preset-[name]} where <i>name</i> is the name of the response. If no name
+ * is given the index of the response in the array is used instead. The http status, headers and body to
+ * return can be specified in the response. The <i>body</i> value can be any unstructured JSON.</p>
+ *
  * <p>The feature has a single configuration value - <i>interceptOnSet</i>. If this property is set to true
  * then, when the set operator is called on an example response, the mock bean will have it's <i>intercept</i>
  * value set to <i>true</i>.</p>
@@ -113,8 +118,7 @@ public class MockFeature extends JmxFeature<MockEndpoint> {
 		}
 		
 		// TODO allow override from endpoint
-		Headers headers = api.getHeaders();
-		for (Map.Entry<String, String> header : headers.getHeaders()) {
+		for (Map.Entry<String, String> header : api.getHeaders().entrySet()) {
 			exchange.getResponseHeaders().add(header.getKey(), header.getValue());
 		}
 		
