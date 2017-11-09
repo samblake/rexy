@@ -1,10 +1,10 @@
 package rexy.feature;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.sun.net.httpserver.HttpExchange;
 import rexy.config.model.Api;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -23,7 +23,7 @@ public abstract class FeatureAdapter implements Feature {
 	}
 	
 	@Override
-	public void init(Map<String, Object> config) throws FeatureInitialisationException {
+	public void init(JsonNode config) throws FeatureInitialisationException {
 	}
 	
 	@Override

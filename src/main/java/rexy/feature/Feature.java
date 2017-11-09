@@ -1,10 +1,10 @@
 package rexy.feature;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.sun.net.httpserver.HttpExchange;
 import rexy.config.model.Api;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * A feature defines configurable logic that can be applied to an endpoint. A feature may or may not
@@ -26,7 +26,7 @@ public interface Feature {
 	 * @param config The feature configuration
 	 * @throws FeatureInitialisationException Thrown if the feature cannot be initialised
 	 */
-	void init(Map<String, Object> config) throws FeatureInitialisationException;
+	void init(JsonNode config) throws FeatureInitialisationException;
 	
 	/**
 	 * Initialises in the feature for a specific @{@link Api API}. This will be called after the {@code init} method.

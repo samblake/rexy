@@ -1,5 +1,6 @@
 package rexy;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.ConfigParser;
@@ -62,21 +63,22 @@ public class Rexy {
 	
 	private List<Feature> initFeatures(Config config, List<Feature> features) throws FeatureInitialisationException {
 		List<Feature> enabledFeatures = new LinkedList<>();
-		Set<Entry<String, rexy.config.model.Feature>> featureConfigs = config.getFeatures().entrySet();
-		for (Entry<String, rexy.config.model.Feature> featureConfig : featureConfigs) {
+		Set<Entry<String, JsonNode>> featureConfigs = config.getFeatures().entrySet();
+		for (Entry<String, JsonNode> featureConfig : featureConfigs) {
 			initFeature(features, enabledFeatures, featureConfig);
 		}
 		
 		return enabledFeatures;
 	}
 	
-	private void initFeature(List<Feature> features, List<Feature> enabledFeatures, Entry<String, rexy.config.model.Feature> featureConfig)
+	private void initFeature(List<Feature> features, List<Feature> enabledFeatures, Entry<String, JsonNode> featureConfig)
 			throws FeatureInitialisationException {
 		String featureName = featureConfig.getKey();
 		for (Feature feature : features) {
 			if (feature.getName().equalsIgnoreCase(featureName)) {
-				if (featureConfig.getValue().isEnabled()) {
-					feature.init(featureConfig.getValue().getConfig());
+				JsonNode enabled = featureConfig.getValue().get("enabled");
+				if (enabled != null && enabled.isBoolean() && enabled.booleanValue()) {
+					feature.init(featureConfig.getValue());
 					enabledFeatures.add(feature);
 					logger.info("Started feature: " + featureName);
 				}

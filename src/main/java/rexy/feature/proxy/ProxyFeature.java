@@ -16,9 +16,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
+import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import static rexy.feature.proxy.RequestFactory.createRequest;
 import static rexy.http.Headers.HEADER_CONTENT_TYPE;
 
@@ -103,6 +103,6 @@ public class ProxyFeature extends FeatureAdapter {
 				return charset;
 			}
 		}
-		return StandardCharsets.ISO_8859_1;
+		return ISO_8859_1;
 	}
 }

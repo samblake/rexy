@@ -6,7 +6,8 @@
       "enabled": true
     },
     "mock": {
-      "enabled": true
+      "enabled": true,
+      "interceptOnSet": true
     },
     "proxy": {
       "enabled": true
@@ -26,6 +27,10 @@
             {
               "name": "Successful",
               "httpStatus": 200,
+              "headers": {
+                "abc": "Test 1",
+                "xyz": "Test 2"
+              },
               "body": {
                 "title": "London",
                 "location_type": "City",

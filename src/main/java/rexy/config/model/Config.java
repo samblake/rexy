@@ -3,6 +3,7 @@ package rexy.config.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -25,7 +26,7 @@ public class Config {
 	@JsonProperty("scanPackages")
 	private List<String> scanPackages = new ArrayList<>();
 	@JsonProperty("features")
-	private LinkedHashMap<String, Feature> features = new LinkedHashMap<>();
+	private LinkedHashMap<String, JsonNode> features = new LinkedHashMap<>();
 	@JsonProperty("apis")
 	private List<Api> apis = new ArrayList<>();
 	
@@ -53,11 +54,11 @@ public class Config {
 		this.scanPackages = scanPackages;
 	}
 	
-	public LinkedHashMap<String, Feature> getFeatures() {
+	public LinkedHashMap<String, JsonNode> getFeatures() {
 		return features;
 	}
 	
-	public void setFeatures(LinkedHashMap<String, Feature> features) {
+	public void setFeatures(LinkedHashMap<String, JsonNode> features) {
 		this.features = features;
 	}
 	

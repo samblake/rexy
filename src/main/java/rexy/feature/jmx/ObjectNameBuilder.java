@@ -54,16 +54,27 @@ public class ObjectNameBuilder {
 	}
 	
 	private String buildName() {
-		StringBuilder name = new StringBuilder(base);
+		boolean initial = true;
+		StringBuilder objectName = new StringBuilder(base).append(":");
 		
 		if (type != null) {
-			name.append(":type=").append(type);
+			objectName.append("type=").append(type);
+			initial = false;
 		}
-		if (scope != null) {
-			name.append(",scope=").append(scope);
-		}
-		name.append(",name=").append(name);
 		
-		return name.toString();
+		if (scope != null) {
+			if (!initial) {
+				objectName.append(",");
+			}
+			objectName.append("scope=").append(scope);
+			initial = false;
+		}
+		
+		if (!initial) {
+			objectName.append(",");
+		}
+		objectName.append("objectName=").append(name);
+		
+		return objectName.toString();
 	}
 }

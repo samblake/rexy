@@ -1,5 +1,6 @@
 package rexy.feature.jmx;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.sun.net.httpserver.HttpExchange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,7 +10,6 @@ import rexy.feature.FeatureAdapter;
 import rexy.feature.FeatureInitialisationException;
 
 import javax.management.JMException;
-import java.util.Map;
 
 /**
  * A feature for registering MBeans against the endpoints of an API.
@@ -22,7 +22,7 @@ public abstract class JmxFeature<T> extends FeatureAdapter {
 	private JmxRegistry<T> registry;
 	
 	@Override
-	public void init(Map<String, Object> config) throws FeatureInitialisationException {
+	public void init(JsonNode config) throws FeatureInitialisationException {
 		registry = createRegistry(config);
 	}
 	
@@ -32,7 +32,7 @@ public abstract class JmxFeature<T> extends FeatureAdapter {
 	 * @param config The feature configuration
 	 * @return The MBean registry
 	 */
-	protected abstract JmxRegistry<T> createRegistry(Map<String, Object> config);
+	protected abstract JmxRegistry<T> createRegistry(JsonNode config);
 	
 	@Override
 	public void initEndpoint(Api api) throws FeatureInitialisationException {

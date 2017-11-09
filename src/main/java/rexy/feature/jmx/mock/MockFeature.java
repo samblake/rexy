@@ -1,5 +1,6 @@
 package rexy.feature.jmx.mock;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.sun.net.httpserver.HttpExchange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -79,13 +80,13 @@ public class MockFeature extends JmxFeature<MockEndpoint> {
 	private static final String CONFIG_INTERCEPT_ON_SET = "interceptOnSet";
 	
 	@Override
-	protected JmxRegistry<MockEndpoint> createRegistry(Map<String, Object> config) {
+	protected JmxRegistry<MockEndpoint> createRegistry(JsonNode config) {
 		return new MockRegistry(isInterceptOnSet(config));
 	}
 	
-	private boolean isInterceptOnSet(Map<String, Object> config) {
-		Object iosValue = config.get(CONFIG_INTERCEPT_ON_SET);
-		return iosValue != null && Boolean.parseBoolean(iosValue.toString());
+	private boolean isInterceptOnSet(JsonNode config) {
+		JsonNode jsonNode = config.get(CONFIG_INTERCEPT_ON_SET);
+		return jsonNode != null && jsonNode.isBoolean() && jsonNode.booleanValue();
 	}
 	
 	@Override
