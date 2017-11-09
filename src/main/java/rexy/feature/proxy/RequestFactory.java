@@ -92,7 +92,7 @@ public final class RequestFactory {
 		throw new UnknownMethodException(requestMethod);
 	}
 	
-	private static class UnknownMethodException extends RuntimeException {
+	private static final class UnknownMethodException extends RuntimeException {
 		
 		private UnknownMethodException(String method) {
 			super("Unknown http method: " + method);

@@ -20,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 import static rexy.feature.proxy.RequestFactory.createRequest;
+import static rexy.http.Headers.HEADER_CONTENT_TYPE;
 
 /**
  * <p>A feature that proxies a request to another URL. This will always write a response so will always be the
@@ -52,8 +53,6 @@ import static rexy.feature.proxy.RequestFactory.createRequest;
  */
 public class ProxyFeature extends FeatureAdapter {
 	private static final Logger logger = LogManager.getLogger(ProxyFeature.class);
-	
-	public static final String HEADER_CONTENT_TYPE = "Content-Type";
 	
 	@Override
 	public boolean handleRequest(Api api, HttpExchange exchange) throws IOException {

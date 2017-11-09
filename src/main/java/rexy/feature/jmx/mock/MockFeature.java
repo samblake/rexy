@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.nio.charset.Charset.defaultCharset;
+import static rexy.http.Headers.HEADER_CONTENT_TYPE;
 
 /**
  * <p>A feature that intercepts a request and optionally returns a mock response.</p>
@@ -110,10 +111,10 @@ public class MockFeature extends JmxFeature<MockEndpoint> {
 		int httpStatus = endpoint.getHttpStatus();
 		exchange.sendResponseHeaders(httpStatus, contentLength);
 		
-		List<String> contentType = exchange.getRequestHeaders().get("Content-Type");
+		List<String> contentType = exchange.getRequestHeaders().get(HEADER_CONTENT_TYPE);
 		if (contentType != null) {
 			for (String value : contentType) {
-				exchange.getResponseHeaders().add("Content-Type", value);
+				exchange.getResponseHeaders().add(HEADER_CONTENT_TYPE, value);
 			}
 		}
 		

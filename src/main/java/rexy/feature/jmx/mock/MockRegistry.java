@@ -4,6 +4,7 @@ import rexy.config.model.Api;
 import rexy.config.model.Endpoint;
 import rexy.config.model.Response;
 import rexy.feature.jmx.JmxRegistry;
+import rexy.feature.jmx.ObjectNameBuilder;
 
 import javax.management.JMException;
 import javax.management.MBeanRegistrationException;
@@ -40,15 +41,18 @@ public final class MockRegistry extends JmxRegistry<MockEndpoint> {
 		return new MockEndpoint(api.getContentType(), defaultResponse);
 	}
 	
-	private void registerMBean(String type, String name, MockResponse response, String i)
+	private void registerMBean(String type, String endpoint, MockResponse response, String name)
 			throws OperationsException, MBeanRegistrationException {
 		MBeanServer server = ManagementFactory.getPlatformMBeanServer();
-		ObjectName objectName = new ObjectName("Rexy:type=" + type + ",scope=" + name + ",name=preset -  " + i);
+		
+		ObjectName objectName = new ObjectNameBuilder()
+				.withType(type).withScope(endpoint).withName("preset - " + name).build();
 		server.registerMBean(response, objectName);
 	}
-
+	
 	@Override
 	protected String getMBeanName() {
 		return "mock";
 	}
+	
 }

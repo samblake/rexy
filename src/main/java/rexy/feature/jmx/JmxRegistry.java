@@ -53,7 +53,9 @@ public abstract class JmxRegistry<T> {
 	
 	protected void registerMBean(String type, String name, T endpoint) throws JMException {
 		MBeanServer server = ManagementFactory.getPlatformMBeanServer();
-		ObjectName objectName = new ObjectName("Rexy:type=" + type + ",scope=" + name + ",name=" + getMBeanName());
+		
+		ObjectName objectName = new ObjectNameBuilder()
+				.withType(type).withScope(name).withName("preset - " + getMBeanName()).build();
 		server.registerMBean(endpoint, objectName);
 	}
 

@@ -50,10 +50,8 @@ public class RexyServer {
 	
 	/**
 	 * Starts the HTTP server.
-	 *
-	 * @throws IOException Thrown if the server cannot be started
 	 */
-	public void start() throws IOException {
+	public void start() {
 		server.start();
 	}
 }
