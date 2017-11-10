@@ -9,11 +9,8 @@ import javax.management.JMException;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import java.lang.management.ManagementFactory;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * A registry for MBeans of a particular type. It will register an MBean for an endpoint as well as
@@ -23,8 +20,8 @@ import java.util.regex.Pattern;
  */
 public abstract class JmxRegistry<T> {
 	private static final Logger logger = LogManager.getLogger(JmxRegistry.class);
-
-	private final Map<Pattern, T> repo = new HashMap<>();
+	
+	private final List<PathMatcher<T>> repo = new LinkedList<>();
 	
 	/**
 	 * Creates and registers an MBean for an endpoint.
@@ -38,7 +35,7 @@ public abstract class JmxRegistry<T> {
 	public T addEndpoint(Api api, Endpoint endpoint) throws JMException {
 		T mBean = createMBean(api, endpoint);
 		registerMBean(api.getName(), endpoint.getName(), mBean);
-		repo.put(createRegex(api, endpoint), mBean);
+		repo.add(PathMatcher.create(api, endpoint, mBean));
 		return mBean;
 	}
 	
@@ -65,18 +62,6 @@ public abstract class JmxRegistry<T> {
 	 * @return The MBean name
 	 */
 	protected abstract String getMBeanName();
-
-	private Pattern createRegex(Api api, Endpoint endpoint) {
-		Pattern pattern = Pattern.compile("\\{.+?\\}");
-		Matcher matcher = pattern.matcher(escape(endpoint.getEndpoint()));
-		String regex = "/" + api.getBaseUrl() + matcher.replaceAll(".+?");
-		return Pattern.compile(regex);
-	}
-	
-	private String escape(String endpoint) {
-		// TODO better escaping
-		return endpoint.replace("?", "\\?");
-	}
 	
 	/**
 	 * Finds the MBean associated with the given path.
@@ -88,18 +73,13 @@ public abstract class JmxRegistry<T> {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Finding endpoint for " + path);
 		}
-
-		for (Entry<Pattern, T> entry : repo.entrySet()) {
-			Pattern endpointMatcher = entry.getKey();
-			if (logger.isDebugEnabled()) {
-				logger.debug("Testing endpoint " + endpointMatcher);
-			}
-
-			if (endpointMatcher.matcher(path).matches()) {
+		
+		for (PathMatcher<T> matcher : repo) {
+			if (matcher.matches(path)) {
 				if (logger.isDebugEnabled()) {
-					logger.debug("Matched endpoint " + endpointMatcher);
+					logger.debug("Matched endpoint " + matcher.getPattern());
 				}
-				return entry.getValue();
+				return matcher.getmBean();
 			}
 		}
 
