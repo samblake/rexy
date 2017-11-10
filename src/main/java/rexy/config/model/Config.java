@@ -9,12 +9,34 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+/**
+ * <p>Models the base config:</p>
+ *
+ * <p>{@code
+ * {
+ * "port": "8081",
+ * "baseUrl": "/",
+ * "scanPackages": ["rexy.feature"]
+ * "features": {
+ * "mock": {
+ * ...
+ * },
+ * "proxy": {
+ * ...
+ * }
+ * },
+ * "apis": [
+ * ...
+ * ]
+ * }
+ * }</p>
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
 		"port",
 		"baseUrl",
-		"features",
 		"scanPackages",
+		"features",
 		"apis"
 })
 public class Config {

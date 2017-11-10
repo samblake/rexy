@@ -7,6 +7,19 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>Models the endpoint config:</p>
+ *
+ * <p>{@code
+ * {
+ * "name": "location",
+ * "endpoint": "/location/search/?query={query}",
+ * "responses": [
+ * ...
+ * ]
+ * }
+ * }</p>
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
 		"name",

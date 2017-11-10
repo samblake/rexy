@@ -7,6 +7,26 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.Map;
 
+/**
+ * <p>Models the response config:</p>
+ *
+ * <p>{@code
+ * {
+ * "name": "Successful",
+ * "httpStatus": 200,
+ * "headers": {
+ * "abc": "Test 1",
+ * "xyz": "Test 2"
+ * }
+ * "body": {
+ * "title": "London",
+ * "location_type": "City",
+ * "woeid": 44418,
+ * "latt_long": "51.506321,-0.12714"
+ * }
+ * }
+ * }</p>
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
 		"name",
@@ -31,7 +51,7 @@ public class Response {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
 	public int getHttpStatus() {
 		return httpStatus;
 	}
