@@ -16,8 +16,8 @@ import java.util.List;
  * {
  * "port": "8081",
  * "baseUrl": "/",
- * "scanPackages": ["rexy.feature"]
- * "features": {
+ * "scanPackages": ["rexy.module"]
+ * "modules": {
  * "mock": {
  * ...
  * },
@@ -36,7 +36,7 @@ import java.util.List;
 		"port",
 		"baseUrl",
 		"scanPackages",
-		"features",
+		"modules",
 		"apis"
 })
 public class Config {
@@ -47,8 +47,8 @@ public class Config {
 	private String baseUrl;
 	@JsonProperty("scanPackages")
 	private List<String> scanPackages = new ArrayList<>();
-	@JsonProperty("features")
-	private LinkedHashMap<String, JsonNode> features = new LinkedHashMap<>();
+	@JsonProperty("modules")
+	private LinkedHashMap<String, JsonNode> modules = new LinkedHashMap<>();
 	@JsonProperty("apis")
 	private List<Api> apis = new ArrayList<>();
 	
@@ -76,12 +76,12 @@ public class Config {
 		this.scanPackages = scanPackages;
 	}
 	
-	public LinkedHashMap<String, JsonNode> getFeatures() {
-		return features;
+	public LinkedHashMap<String, JsonNode> getModules() {
+		return modules;
 	}
 	
-	public void setFeatures(LinkedHashMap<String, JsonNode> features) {
-		this.features = features;
+	public void setModules(LinkedHashMap<String, JsonNode> modules) {
+		this.modules = modules;
 	}
 	
 	public List<Api> getApis() {

@@ -1,4 +1,4 @@
-package rexy.feature.jmx;
+package rexy.module.jmx;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

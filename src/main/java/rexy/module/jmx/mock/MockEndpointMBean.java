@@ -1,4 +1,4 @@
-package rexy.feature.jmx.mock;
+package rexy.module.jmx.mock;
 
 import java.util.Map;
 

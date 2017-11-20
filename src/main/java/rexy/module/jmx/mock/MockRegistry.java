@@ -1,10 +1,10 @@
-package rexy.feature.jmx.mock;
+package rexy.module.jmx.mock;
 
 import rexy.config.model.Api;
 import rexy.config.model.Endpoint;
 import rexy.config.model.Response;
-import rexy.feature.jmx.JmxRegistry;
-import rexy.feature.jmx.ObjectNameBuilder;
+import rexy.module.jmx.JmxRegistry;
+import rexy.module.jmx.ObjectNameBuilder;
 
 import javax.management.JMException;
 import javax.management.MBeanRegistrationException;

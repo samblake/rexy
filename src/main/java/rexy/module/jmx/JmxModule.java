@@ -1,4 +1,4 @@
-package rexy.feature.jmx;
+package rexy.module.jmx;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.sun.net.httpserver.HttpExchange;
@@ -6,43 +6,43 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
 import rexy.config.model.Endpoint;
-import rexy.feature.FeatureAdapter;
-import rexy.feature.FeatureInitialisationException;
+import rexy.module.ModuleAdapter;
+import rexy.module.ModuleInitialisationException;
 
 import javax.management.JMException;
 
 /**
- * A feature for registering MBeans against the endpoints of an API.
+ * A module for registering MBeans against the endpoints of an API.
  *
  * @param <T> The type of MBean
  */
-public abstract class JmxFeature<T> extends FeatureAdapter {
-	private static final Logger logger = LogManager.getLogger(JmxFeature.class);
+public abstract class JmxModule<T> extends ModuleAdapter {
+	private static final Logger logger = LogManager.getLogger(JmxModule.class);
 	
 	private JmxRegistry<T> registry;
 	
 	@Override
-	public void init(JsonNode config) throws FeatureInitialisationException {
+	public void init(JsonNode config) throws ModuleInitialisationException {
 		registry = createRegistry(config);
 	}
 	
 	/**
 	 * Gets the registry to store the MBean in.
 	 *
-	 * @param config The feature configuration
+	 * @param config The module configuration
 	 * @return The MBean registry
 	 */
 	protected abstract JmxRegistry<T> createRegistry(JsonNode config);
 	
 	@Override
-	public void initEndpoint(Api api) throws FeatureInitialisationException {
+	public void initEndpoint(Api api) throws ModuleInitialisationException {
 		for (Endpoint endpoint : api.getEndpoints()) {
 			try {
 				registry.addEndpoint(api, endpoint);
 			}
 			catch (JMException e) {
 				String message = "Could not create endpoint for " + api.getBaseUrl() + endpoint.getEndpoint();
-				throw new FeatureInitialisationException(this, message, e);
+				throw new ModuleInitialisationException(this, message, e);
 			}
 		}
 	}

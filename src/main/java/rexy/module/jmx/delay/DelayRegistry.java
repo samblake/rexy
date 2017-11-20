@@ -1,8 +1,8 @@
-package rexy.feature.jmx.delay;
+package rexy.module.jmx.delay;
 
 import rexy.config.model.Api;
 import rexy.config.model.Endpoint;
-import rexy.feature.jmx.JmxRegistry;
+import rexy.module.jmx.JmxRegistry;
 
 public final class DelayRegistry extends JmxRegistry<DelayEndpoint> {
 	

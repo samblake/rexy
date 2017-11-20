@@ -1,12 +1,12 @@
-package rexy.feature.jmx.mock;
+package rexy.module.jmx.mock;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.sun.net.httpserver.HttpExchange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
-import rexy.feature.jmx.JmxFeature;
-import rexy.feature.jmx.JmxRegistry;
+import rexy.module.jmx.JmxModule;
+import rexy.module.jmx.JmxRegistry;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -17,11 +17,11 @@ import static java.nio.charset.Charset.defaultCharset;
 import static rexy.http.Headers.HEADER_CONTENT_TYPE;
 
 /**
- * <p>A feature that intercepts a request and optionally returns a mock response.</p>
+ * <p>A module that intercepts a request and optionally returns a mock response.</p>
  *
  * <p>To configure a delay an API is created in the configuration. Each endpoint has an an MBean associated with
  * it under the name {@code Rexy/[API name]/[Endpoint name]/mock}. The MBean has an <i>intercept</i> property which
- * is set to <i>false</i> by default. When it is set to <i>true</i> no mock response is returned and the feature
+ * is set to <i>false</i> by default. When it is set to <i>true</i> no mock response is returned and the module
  * chain continues, when it is set to <i>true</i> a mock response is written and no further MBeans in the chain will
  * be called.</p>
  *
@@ -70,12 +70,12 @@ import static rexy.http.Headers.HEADER_CONTENT_TYPE;
  * is given the index of the response in the array is used instead. The http status, headers and body to
  * return can be specified in the response. The <i>body</i> value can be any unstructured JSON.</p>
  *
- * <p>The feature has a single configuration value - <i>interceptOnSet</i>. If this property is set to true
+ * <p>The module has a single configuration value - <i>interceptOnSet</i>. If this property is set to true
  * then, when the set operator is called on an example response, the mock bean will have it's <i>intercept</i>
  * value set to <i>true</i>.</p>
  */
-public class MockFeature extends JmxFeature<MockEndpoint> {
-	private static final Logger logger = LogManager.getLogger(MockFeature.class);
+public class MockModule extends JmxModule<MockEndpoint> {
+	private static final Logger logger = LogManager.getLogger(MockModule.class);
 	
 	private static final String CONFIG_INTERCEPT_ON_SET = "interceptOnSet";
 	

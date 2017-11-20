@@ -1,4 +1,4 @@
-package rexy.feature.proxy;
+package rexy.module.proxy;
 
 import com.sun.net.httpserver.HttpExchange;
 import org.apache.http.Header;
@@ -10,7 +10,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
-import rexy.feature.FeatureAdapter;
+import rexy.module.ModuleAdapter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,12 +19,12 @@ import java.nio.charset.Charset;
 import java.util.Scanner;
 
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
-import static rexy.feature.proxy.RequestFactory.createRequest;
 import static rexy.http.Headers.HEADER_CONTENT_TYPE;
+import static rexy.module.proxy.RequestFactory.createRequest;
 
 /**
- * <p>A feature that proxies a request to another URL. This will always write a response so will always be the
- * last feature in a chain.</p>
+ * <p>A module that proxies a request to another URL. This will always write a response so will always be the
+ * last module in a chain.</p>
  *
  * <p>To configure a proxy an API is created in the configuration. The {@code baseUrl} of the API corresponds
  * to the context root of the API on the Rexy server. The {@code proxy} value is the base URL that any request
@@ -51,8 +51,8 @@ import static rexy.http.Headers.HEADER_CONTENT_TYPE;
  * ]
  * }</p>
  */
-public class ProxyFeature extends FeatureAdapter {
-	private static final Logger logger = LogManager.getLogger(ProxyFeature.class);
+public class ProxyModule extends ModuleAdapter {
+	private static final Logger logger = LogManager.getLogger(ProxyModule.class);
 	
 	@Override
 	public boolean handleRequest(Api api, HttpExchange exchange) throws IOException {

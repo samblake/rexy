@@ -6,10 +6,10 @@ import org.apache.logging.log4j.Logger;
 import rexy.config.ConfigParser;
 import rexy.config.model.Config;
 import rexy.exception.RexyException;
-import rexy.feature.Feature;
-import rexy.feature.FeatureInitialisationException;
-import rexy.feature.FeatureScanner;
 import rexy.http.RexyServer;
+import rexy.module.Module;
+import rexy.module.ModuleInitialisationException;
+import rexy.module.ModuleScanner;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -51,9 +51,9 @@ public class Rexy {
 		logger.info("Starting Rexy");
 		try {
 			Config config = new ConfigParser(configPath).parse();
-			List<Feature> allFeatures = new FeatureScanner(config.getScanPackages()).scan();
-			List<Feature> enabledFeatures = initFeatures(config, allFeatures);
-			new RexyServer(config, enabledFeatures).start();
+			List<Module> allModules = new ModuleScanner(config.getScanPackages()).scan();
+			List<Module> enabledModules = initModules(config, allModules);
+			new RexyServer(config, enabledModules).start();
 			logger.info("Rexy started on port " + config.getPort());
 		}
 		catch (IOException | RexyException e) {
@@ -61,33 +61,33 @@ public class Rexy {
 		}
 	}
 	
-	private List<Feature> initFeatures(Config config, List<Feature> features) throws FeatureInitialisationException {
-		List<Feature> enabledFeatures = new LinkedList<>();
-		Set<Entry<String, JsonNode>> featureConfigs = config.getFeatures().entrySet();
-		for (Entry<String, JsonNode> featureConfig : featureConfigs) {
-			initFeature(features, enabledFeatures, featureConfig);
+	private List<Module> initModules(Config config, List<Module> modules) throws ModuleInitialisationException {
+		List<Module> enabledModules = new LinkedList<>();
+		Set<Entry<String, JsonNode>> moduleConfigs = config.getModules().entrySet();
+		for (Entry<String, JsonNode> moduleConfig : moduleConfigs) {
+			initModule(modules, enabledModules, moduleConfig);
 		}
 		
-		return enabledFeatures;
+		return enabledModules;
 	}
 	
-	private void initFeature(List<Feature> features, List<Feature> enabledFeatures, Entry<String, JsonNode> featureConfig)
-			throws FeatureInitialisationException {
-		String featureName = featureConfig.getKey();
-		for (Feature feature : features) {
-			if (feature.getName().equalsIgnoreCase(featureName)) {
-				JsonNode enabled = featureConfig.getValue().get("enabled");
+	private void initModule(List<Module> modules, List<Module> enabledModules, Entry<String, JsonNode> moduleConfig)
+			throws ModuleInitialisationException {
+		String moduleName = moduleConfig.getKey();
+		for (Module module : modules) {
+			if (module.getName().equalsIgnoreCase(moduleName)) {
+				JsonNode enabled = moduleConfig.getValue().get("enabled");
 				if (enabled != null && enabled.isBoolean() && enabled.booleanValue()) {
-					feature.init(featureConfig.getValue());
-					enabledFeatures.add(feature);
-					logger.info("Started feature: " + featureName);
+					module.init(moduleConfig.getValue());
+					enabledModules.add(module);
+					logger.info("Started module: " + moduleName);
 				}
 				else {
-					logger.info("Feature disabled: " + featureName);
+					logger.info("Module disabled: " + moduleName);
 				}
 				return;
 			}
 		}
-		throw new FeatureInitialisationException("Could not find feature " + featureName);
+		throw new ModuleInitialisationException("Could not find module " + moduleName);
 	}
 }

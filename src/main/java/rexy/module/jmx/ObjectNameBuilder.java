@@ -1,4 +1,4 @@
-package rexy.feature.jmx;
+package rexy.module.jmx;
 
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;

@@ -1,4 +1,4 @@
-package rexy.feature.jmx.delay;
+package rexy.module.jmx.delay;
 
 public interface DelayEndpointMBean {
 	

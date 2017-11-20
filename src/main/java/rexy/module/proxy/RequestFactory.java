@@ -1,4 +1,4 @@
-package rexy.feature.proxy;
+package rexy.module.proxy;
 
 import com.sun.net.httpserver.HttpExchange;
 import org.apache.http.client.methods.HttpDelete;
