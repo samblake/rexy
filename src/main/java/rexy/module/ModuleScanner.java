@@ -22,8 +22,8 @@ public class ModuleScanner {
 	private final List<String> scanPackages;
 	
 	/**
-	 * Creates a scanner that will scan the {@code rexy} classpath as well as any additional
-	 * classpaths supplied.
+	 * Creates a scanner that will scan the {@code rexy} package as well as any additional
+	 * packages supplied.
 	 */
 	public ModuleScanner(List<String> scanPackages) {
 		this.scanPackages = scanPackages;
