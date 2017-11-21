@@ -14,14 +14,13 @@ import java.util.Map;
  *
  * <p>{@code
  * {
- * "name": "metaweather",
- * "baseUrl": "api",
- * "contentType": "application/json",
- * "proxy": "http://www.metaweather.com/api",
- * "endpoints": [
- * ...
- * ]
- * }
+ *   "name": "metaweather",
+ *   "baseUrl": "api",
+ *   "contentType": "application/json",
+ *   "proxy": "http://www.metaweather.com/api",
+ *   "endpoints": [
+ *     ...
+ *   ]
  * }</p>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)

@@ -12,19 +12,18 @@ import java.util.Map;
  *
  * <p>{@code
  * {
- * "name": "Successful",
- * "httpStatus": 200,
- * "headers": {
- * "abc": "Test 1",
- * "xyz": "Test 2"
- * }
- * "body": {
- * "title": "London",
- * "location_type": "City",
- * "woeid": 44418,
- * "latt_long": "51.506321,-0.12714"
- * }
- * }
+ *   "name": "Successful",
+ *   "httpStatus": 200,
+ *   "headers": {
+ *     "abc": "Test 1",
+ *     "xyz": "Test 2"
+ *   }
+ *   "body": {
+ *     "title": "London",
+ *     "location_type": "City",
+ *     "woeid": 44418,
+ *     "latt_long": "51.506321,-0.12714"
+ *   }
  * }</p>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)

@@ -12,12 +12,11 @@ import java.util.List;
  *
  * <p>{@code
  * {
- * "name": "location",
- * "endpoint": "/location/search/?query={query}",
- * "responses": [
- * ...
- * ]
- * }
+ *   "name": "location",
+ *   "endpoint": "/location/search/?query={query}",
+ *   "responses": [
+ *     ...
+ *   ]
  * }</p>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)

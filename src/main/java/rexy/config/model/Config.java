@@ -14,20 +14,20 @@ import java.util.List;
  *
  * <p>{@code
  * {
- * "port": "8081",
- * "baseUrl": "/",
- * "scanPackages": ["rexy.module"]
- * "modules": {
- * "mock": {
- * ...
- * },
- * "proxy": {
- * ...
- * }
- * },
- * "apis": [
- * ...
- * ]
+ *   "port": "8081",
+ *   "baseUrl": "/",
+ *   "scanPackages": ["rexy.module"]
+ *   "modules": {
+ *     "mock": {
+ *       ...
+ *     },
+ *     "proxy": {
+ *       ...
+ *     }
+ *   },
+ *   "apis": [
+ *     ...
+ *   ]
  * }
  * }</p>
  */
