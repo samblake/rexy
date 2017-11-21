@@ -11,21 +11,16 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.client.methods.HttpUriRequest;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Set;
 
-import static java.util.Arrays.asList;
+import static rexy.http.Headers.STRIP_HEADERS;
 
 /**
  * Takes a {@link HttpExchange} and converts it into a {@link HttpUriRequest} that can be used to proxy
  * the request to another URL.
  */
 public final class RequestFactory {
-	
-	private static final Set<String> STRIP_HEADERS = new HashSet<>(asList("Host", "Connection", "TE",
-			"Transfer-Encoding", "Keep-Alive", "Proxy-Authorization", "Proxy-Authentication", "Trailer" , "Upgrade"));
 	
 	private RequestFactory() {
 	}
