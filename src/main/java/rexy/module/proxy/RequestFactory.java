@@ -92,5 +92,7 @@ public final class RequestFactory {
 		private UnknownMethodException(String method) {
 			super("Unknown http method: " + method);
 		}
+		
 	}
+	
 }

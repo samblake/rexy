@@ -44,8 +44,8 @@ public interface Module {
 	 * @param api      The API the request is for
 	 * @param exchange The HTTP Exchange that is precessing the request
 	 * @return True if the response has been written, false otherwise
-	 *
 	 * @throws IOException Thrown if the response could not be written
 	 */
 	boolean handleRequest(Api api, HttpExchange exchange) throws IOException;
+	
 }

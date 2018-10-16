@@ -17,4 +17,5 @@ public class DelayEndpoint implements DelayEndpointMBean {
 	public void setDelay(int delay) {
 		this.delay = delay;
 	}
+	
 }

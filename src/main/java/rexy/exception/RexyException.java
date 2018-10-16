@@ -12,4 +12,5 @@ public class RexyException extends Exception {
 	public RexyException(String message, Throwable cause) {
 		super(message, cause);
 	}
+	
 }

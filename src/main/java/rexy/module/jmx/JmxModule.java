@@ -38,7 +38,7 @@ public abstract class JmxModule<T> extends ModuleAdapter {
 	public void initEndpoint(Api api) throws ModuleInitialisationException {
 		for (Endpoint endpoint : api.getEndpoints()) {
 			try {
-				registry.addEndpoint(api, endpoint);
+				registry.addEndpoint(endpoint);
 			}
 			catch (JMException e) {
 				String message = "Could not create endpoint for " + api.getBaseUrl() + endpoint.getEndpoint();

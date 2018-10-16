@@ -105,4 +105,5 @@ public class ProxyModule extends ModuleAdapter {
 		}
 		return ISO_8859_1;
 	}
+	
 }

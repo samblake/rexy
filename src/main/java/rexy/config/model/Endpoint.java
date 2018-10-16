@@ -1,10 +1,10 @@
 package rexy.config.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,6 +17,7 @@ import java.util.List;
  *   "responses": [
  *     ...
  *   ]
+ * }
  * }</p>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -27,12 +28,22 @@ import java.util.List;
 })
 public class Endpoint {
 	
+	@JsonBackReference
+	private Api api;
 	@JsonProperty("name")
 	private String name;
 	@JsonProperty("endpoint")
 	private String endpoint;
 	@JsonProperty("responses")
-	private List<Response> responses = new ArrayList<>();
+	private List<Response> responses;
+	
+	public Api getApi() {
+		return api;
+	}
+	
+	public void setApi(Api api) {
+		this.api = api;
+	}
 	
 	public String getName() {
 		return name;
@@ -57,4 +68,5 @@ public class Endpoint {
 	public void setResponses(List<Response> responses) {
 		this.responses = responses;
 	}
+	
 }

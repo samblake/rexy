@@ -5,4 +5,5 @@ public interface DelayEndpointMBean {
 	int getDelay();
 	
 	void setDelay(int delay);
+	
 }

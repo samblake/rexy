@@ -24,6 +24,7 @@ import java.util.Map;
  *     "woeid": 44418,
  *     "latt_long": "51.506321,-0.12714"
  *   }
+ * }
  * }</p>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -74,4 +75,5 @@ public class Response {
 	public void setBody(JsonNode body) {
 		this.body = body;
 	}
+	
 }

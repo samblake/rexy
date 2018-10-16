@@ -15,11 +15,11 @@ public abstract class ModuleAdapter implements Module {
 	
 	private static final Pattern MODULE_PATTERN = Pattern.compile("Module");
 	
-	private final String NAME = MODULE_PATTERN.matcher(getClass().getSimpleName()).replaceAll("").toLowerCase();
+	private final String name = MODULE_PATTERN.matcher(getClass().getSimpleName()).replaceAll("").toLowerCase();
 	
 	@Override
 	public String getName() {
-		return NAME;
+		return name;
 	}
 	
 	@Override
@@ -34,4 +34,5 @@ public abstract class ModuleAdapter implements Module {
 	public boolean handleRequest(Api api, HttpExchange exchange) throws IOException {
 		return true;
 	}
+	
 }

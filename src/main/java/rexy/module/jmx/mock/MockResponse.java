@@ -49,4 +49,5 @@ public class MockResponse implements MockResponseMBean {
 			endpoint.setIntercept(true);
 		}
 	}
+	
 }

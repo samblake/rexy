@@ -14,4 +14,5 @@ public class ConfigException extends RexyException {
 	public ConfigException(String message, Throwable cause) {
 		super(message, cause);
 	}
+	
 }

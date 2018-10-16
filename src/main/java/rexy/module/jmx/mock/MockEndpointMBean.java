@@ -23,4 +23,5 @@ public interface MockEndpointMBean {
 	String getBody();
 	
 	void setBody(String body);
+
 }

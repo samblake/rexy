@@ -90,4 +90,5 @@ public class Rexy {
 		}
 		throw new ModuleInitialisationException("Could not find module " + moduleName);
 	}
+	
 }

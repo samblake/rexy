@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableSet;
 
 public class Headers {
 	public static final String HEADER_CONTENT_TYPE = "Content-Type";
@@ -18,7 +19,7 @@ public class Headers {
 	public static final String HEADER_TRAILER = "Trailer";
 	public static final String HEADER_UPGRADE = "Upgrade";
 	
-	public static final Set<String> STRIP_HEADERS = new HashSet<>(asList(
+	public static final Set<String> STRIP_HEADERS = unmodifiableSet(new HashSet<>(asList(
 			HEADER_HOST,
 			HEADER_CONNECTION,
 			HEADER_TE,
@@ -28,5 +29,6 @@ public class Headers {
 			HEADER_PROXY_AUTHENTICATION,
 			HEADER_TRAILER,
 			HEADER_UPGRADE
-	));
+	)));
+	
 }

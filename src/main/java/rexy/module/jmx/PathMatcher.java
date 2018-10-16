@@ -8,6 +8,10 @@ import rexy.config.model.Endpoint;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Associates an MBean with a pattern. Checks possible paths to test if they match the pattern.
+ * @param <T> The type of MBean
+ */
 public class PathMatcher<T> {
 	private static final Logger logger = LogManager.getLogger(JmxRegistry.class);
 	
@@ -19,10 +23,18 @@ public class PathMatcher<T> {
 		this.mBean = mBean;
 	}
 	
-	public static <T> PathMatcher<T> create(Api api, Endpoint endpoint, T mBean) {
+	/**
+	 * Creates a path matcher for an {@link Api} and {@link Endpoint}.
+	 *
+	 * @param <T>
+	 * @param endpoint The endpoint associated with the
+	 * @param mBean
+	 * @return
+	 */
+	public static <T> PathMatcher<T> create(Endpoint endpoint, T mBean) {
 		Pattern pattern = Pattern.compile("\\{.+?\\}");
 		Matcher matcher = pattern.matcher(escape(endpoint.getEndpoint()));
-		String regex = "/" + api.getBaseUrl() + matcher.replaceAll(".+?");
+		String regex = "/" + endpoint.getApi().getBaseUrl() + matcher.replaceAll(".+?");
 		return new PathMatcher<T>(Pattern.compile(regex), mBean);
 	}
 	
@@ -46,4 +58,5 @@ public class PathMatcher<T> {
 		
 		return (pattern.matcher(path).matches());
 	}
+	
 }

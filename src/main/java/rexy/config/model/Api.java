@@ -1,11 +1,10 @@
 package rexy.config.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +20,7 @@ import java.util.Map;
  *   "endpoints": [
  *     ...
  *   ]
+ * }
  * }</p>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -42,10 +42,11 @@ public class Api {
 	private String contentType;
 	@JsonProperty("proxy")
 	private String proxy;
+	@JsonManagedReference
 	@JsonProperty("endpoints")
-	private List<Endpoint> endpoints = new ArrayList<>();
+	private List<Endpoint> endpoints;
 	@JsonProperty("headers")
-	private Map<String, String> headers = new HashMap<>();
+	private Map<String, String> headers;
 	
 	public String getName() {
 		return name;
@@ -94,4 +95,5 @@ public class Api {
 	public void setHeaders(Map<String, String> headers) {
 		this.headers = headers;
 	}
+	
 }

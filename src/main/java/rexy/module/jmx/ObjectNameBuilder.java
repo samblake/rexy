@@ -54,24 +54,22 @@ public class ObjectNameBuilder {
 	}
 	
 	private String buildName() {
-		boolean initial = true;
-		StringBuilder objectName = new StringBuilder(base).append(":");
+		StringBuilder objectName = new StringBuilder(base).append(':');
+		int initialLength = objectName.length();
 		
 		if (type != null) {
 			objectName.append("type=").append(type);
-			initial = false;
 		}
 		
 		if (scope != null) {
-			if (!initial) {
-				objectName.append(",");
+			if (objectName.length() > initialLength) {
+				objectName.append(',');
 			}
 			objectName.append("scope=").append(scope);
-			initial = false;
 		}
 		
-		if (!initial) {
-			objectName.append(",");
+		if (objectName.length() > initialLength) {
+			objectName.append(',');
 		}
 		objectName.append("objectName=").append(name);
 		

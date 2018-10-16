@@ -4,7 +4,7 @@ import rexy.exception.RexyException;
 
 /**
  * An exception that is thrown when a module can not be initialised. If this is thrown the server will
- * fail to start
+ * fail to start.
  */
 public class ModuleInitialisationException extends RexyException {
 	
@@ -23,4 +23,5 @@ public class ModuleInitialisationException extends RexyException {
 	public ModuleInitialisationException(Module module, String message, Throwable cause) {
 		super("Could not initialise " + module.getName() + ':' + message, cause);
 	}
+	
 }

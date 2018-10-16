@@ -2,7 +2,6 @@ package rexy.module.jmx;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import rexy.config.model.Api;
 import rexy.config.model.Endpoint;
 
 import javax.management.JMException;
@@ -26,33 +25,35 @@ public abstract class JmxRegistry<T> {
 	/**
 	 * Creates and registers an MBean for an endpoint.
 	 *
-	 * @param api      The API the endpoint is for
-	 * @param endpoint The endpoint to register an MBean for
+	 * @param endpoint The endpoint to register an MBean against
 	 * @return The registered MBean
 	 *
 	 * @throws JMException Thrown if the MBean cannot be registered
 	 */
-	public T addEndpoint(Api api, Endpoint endpoint) throws JMException {
-		T mBean = createMBean(api, endpoint);
-		registerMBean(api.getName(), endpoint.getName(), mBean);
-		repo.add(PathMatcher.create(api, endpoint, mBean));
+	public T addEndpoint(Endpoint endpoint) throws JMException {
+		T mBean = createMBean(endpoint);
+		registerMBean(endpoint.getApi().getName(), endpoint.getName(), mBean);
+		repo.add(PathMatcher.create(endpoint, mBean));
 		return mBean;
 	}
 	
 	/**
 	 * Creates an MBean for an endpoint.
 	 *
-	 * @param api The API the endpoint is for
-	 * @param endpoint The endpoint to register an MBean for
+	 * @param endpoint The endpoint to register an MBean against
 	 * @return The created MBean
 	 */
-	protected abstract T createMBean(Api api, Endpoint endpoint);
+	protected abstract T createMBean(Endpoint endpoint);
 	
 	protected void registerMBean(String type, String name, T endpoint) throws JMException {
 		MBeanServer server = ManagementFactory.getPlatformMBeanServer();
 		
 		ObjectName objectName = new ObjectNameBuilder()
-				.withType(type).withScope(name).withName("preset - " + getMBeanName()).build();
+				.withType(type)
+				.withScope(name)
+				.withName("preset - " + getMBeanName())
+				.build();
+		
 		server.registerMBean(endpoint, objectName);
 	}
 

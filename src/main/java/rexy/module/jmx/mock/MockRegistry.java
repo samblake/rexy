@@ -1,6 +1,5 @@
 package rexy.module.jmx.mock;
 
-import rexy.config.model.Api;
 import rexy.config.model.Endpoint;
 import rexy.config.model.Response;
 import rexy.module.jmx.JmxRegistry;
@@ -24,21 +23,21 @@ public final class MockRegistry extends JmxRegistry<MockEndpoint> {
 	}
 	
 	@Override
-	public MockEndpoint addEndpoint(Api api, Endpoint endpoint) throws JMException {
-		MockEndpoint mockEndpoint = super.addEndpoint(api, endpoint);
+	public MockEndpoint addEndpoint(Endpoint endpoint) throws JMException {
+		MockEndpoint mockEndpoint = super.addEndpoint(endpoint);
 		int i = 0;
 		for (Response response : endpoint.getResponses()) {
 			String name = isEmpty(response.getName()) ? Integer.toString(i++) : response.getName();
 			MockResponse mockResponse = new MockResponse(mockEndpoint, response, interceptOnSet);
-			registerMBean(api.getName(), endpoint.getName(), mockResponse, name);
+			registerMBean(endpoint.getApi().getName(), endpoint.getName(), mockResponse, name);
 		}
 		return mockEndpoint;
 	}
 	
 	@Override
-	protected MockEndpoint createMBean(Api api, Endpoint endpoint) {
+	protected MockEndpoint createMBean(Endpoint endpoint) {
 		Response defaultResponse = endpoint.getResponses().iterator().next();
-		return new MockEndpoint(api.getContentType(), defaultResponse);
+		return new MockEndpoint(endpoint.getApi().getContentType(), defaultResponse);
 	}
 	
 	private void registerMBean(String type, String endpoint, MockResponse response, String name)
