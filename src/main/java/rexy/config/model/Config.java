@@ -56,8 +56,8 @@ public class Config {
 		this.port = port;
 		this.baseUrl = baseUrl;
 		this.scanPackages = scanPackages == null ? emptyList() : scanPackages;
-		this.modules = modules;
-		this.apis = apis;
+		this.modules = modules == null ? new LinkedHashMap<>() : modules;
+		this.apis = apis == null ? emptyList() : apis;
 	}
 	
 	public int getPort() {

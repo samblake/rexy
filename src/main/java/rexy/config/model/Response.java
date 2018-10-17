@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.Map;
 
+import static java.util.Collections.emptyMap;
+
 /**
  * <p>Models the response config:</p>
  *
@@ -40,7 +42,7 @@ public class Response {
 	@JsonProperty("httpStatus")
 	private int httpStatus;
 	@JsonProperty("headers")
-	private Map<String, String> headers;
+	private Map<String, String> headers = emptyMap();
 	@JsonProperty("body")
 	private JsonNode body;
 	

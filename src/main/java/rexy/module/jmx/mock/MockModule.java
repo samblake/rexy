@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpExchange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
+import rexy.module.ModuleInitialisationException;
 import rexy.module.jmx.JmxModule;
 import rexy.module.jmx.JmxRegistry;
 
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 import static java.nio.charset.Charset.defaultCharset;
+import static rexy.JsonNodes.booleanValue;
+import static rexy.JsonNodes.prettyPrint;
 import static rexy.http.Headers.HEADER_CONTENT_TYPE;
 
 /**
@@ -70,23 +73,28 @@ import static rexy.http.Headers.HEADER_CONTENT_TYPE;
  * is given the index of the response in the array is used instead. The http status, headers and body to
  * return can be specified in the response. The <i>body</i> value can be any unstructured JSON.</p>
  *
- * <p>The module has a single configuration value - <i>interceptOnSet</i>. If this property is set to true
- * then, when the set operator is called on an example response, the mock bean will have it's <i>intercept</i>
- * value set to <i>true</i>.</p>
+ * <p>The module has a true configuration values - <i>interceptOnSet</i> and <i>prettyPrint</i>. If
+ * interceptOnSet is set to true, when the set operator is called on an example response, the mock bean will
+ * have it's <i>intercept</i> value set to <i>true</i>. If prettyPrint is set to true then mocked responses
+ * will be pretty printed.</p>
  */
 public class MockModule extends JmxModule<MockEndpoint> {
 	private static final Logger logger = LogManager.getLogger(MockModule.class);
 	
 	private static final String CONFIG_INTERCEPT_ON_SET = "interceptOnSet";
+	private static final String CONFIG_PRETTY_PRINT = "prettyPrint";
+	
+	private boolean prettyPrint;
+	
+	@Override
+	public void init(JsonNode config) throws ModuleInitialisationException {
+		super.init(config);
+		prettyPrint = booleanValue(config, CONFIG_PRETTY_PRINT);
+	}
 	
 	@Override
 	protected JmxRegistry<MockEndpoint> createRegistry(JsonNode config) {
-		return new MockRegistry(isInterceptOnSet(config));
-	}
-	
-	private boolean isInterceptOnSet(JsonNode config) {
-		JsonNode jsonNode = config.get(CONFIG_INTERCEPT_ON_SET);
-		return jsonNode != null && jsonNode.isBoolean() && jsonNode.booleanValue();
+		return new MockRegistry(booleanValue(config, CONFIG_INTERCEPT_ON_SET));
 	}
 	
 	@Override
@@ -107,17 +115,12 @@ public class MockModule extends JmxModule<MockEndpoint> {
 	}
 	
 	private void sendResponse(HttpExchange exchange, Api api, MockEndpoint endpoint) throws IOException {
-		byte[] body = endpoint.getBody() == null ? null : endpoint.getBody().getBytes(defaultCharset());
+		byte[] body = getBody(endpoint);
 		int contentLength = body == null ? 0 : body.length;
 		int httpStatus = endpoint.getHttpStatus();
 		exchange.sendResponseHeaders(httpStatus, contentLength);
 		
-		List<String> contentType = exchange.getRequestHeaders().get(HEADER_CONTENT_TYPE);
-		if (contentType != null) {
-			for (String value : contentType) {
-				exchange.getResponseHeaders().add(HEADER_CONTENT_TYPE, value);
-			}
-		}
+		setContentType(exchange, api, endpoint);
 		
 		// TODO allow override from endpoint
 		for (Map.Entry<String, String> header : api.getHeaders().entrySet()) {
@@ -131,6 +134,32 @@ public class MockModule extends JmxModule<MockEndpoint> {
 		}
 		
 		exchange.close();
+	}
+	
+	private byte[] getBody(MockEndpoint endpoint) {
+		if (endpoint.getBody() == null) {
+			return null;
+		}
+		
+		String body = prettyPrint ? prettyPrint(endpoint.getBody()) : endpoint.getBody();
+		
+		// TODO Check for charset in headers
+		return body.getBytes(defaultCharset());
+	}
+	
+	private void setContentType(HttpExchange exchange, Api api, MockEndpoint endpoint) {
+		String contentType = endpoint.getContentType() == null ? api.getContentType() : api.getContentType();
+		if (contentType != null) {
+			exchange.getResponseHeaders().add(HEADER_CONTENT_TYPE, contentType);
+		}
+		else {
+			List<String> headers = exchange.getRequestHeaders().get(HEADER_CONTENT_TYPE);
+			if (headers != null) {
+				for (String value : headers) {
+					exchange.getResponseHeaders().add(HEADER_CONTENT_TYPE, value);
+				}
+			}
+		}
 	}
 	
 }

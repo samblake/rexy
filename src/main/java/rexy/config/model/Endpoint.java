@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 /**
  * <p>Models the endpoint config:</p>
  *
@@ -35,7 +37,7 @@ public class Endpoint {
 	@JsonProperty("endpoint")
 	private String endpoint;
 	@JsonProperty("responses")
-	private List<Response> responses;
+	private List<Response> responses = emptyList();
 	
 	public Api getApi() {
 		return api;

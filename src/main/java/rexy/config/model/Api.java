@@ -8,6 +8,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
+
 /**
  * <p>Models the API config:</p>
  *
@@ -44,9 +47,9 @@ public class Api {
 	private String proxy;
 	@JsonManagedReference
 	@JsonProperty("endpoints")
-	private List<Endpoint> endpoints;
+	private List<Endpoint> endpoints = emptyList();
 	@JsonProperty("headers")
-	private Map<String, String> headers;
+	private Map<String, String> headers = emptyMap();
 	
 	public String getName() {
 		return name;
