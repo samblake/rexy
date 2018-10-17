@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 /**
  * <p>Models the base config:</p>
  *
@@ -53,7 +55,7 @@ public class Config {
 	              @JsonProperty("apis") List<Api> apis) {
 		this.port = port;
 		this.baseUrl = baseUrl;
-		this.scanPackages = scanPackages;
+		this.scanPackages = scanPackages == null ? emptyList() : scanPackages;
 		this.modules = modules;
 		this.apis = apis;
 	}
