@@ -25,17 +25,12 @@ public class PathMatcher<T> {
 	
 	/**
 	 * Creates a path matcher for an {@link Api} and {@link Endpoint}.
-	 *
-	 * @param <T>
-	 * @param endpoint The endpoint associated with the
-	 * @param mBean
-	 * @return
 	 */
 	public static <T> PathMatcher<T> create(Endpoint endpoint, T mBean) {
 		Pattern pattern = Pattern.compile("\\{.+?\\}");
 		Matcher matcher = pattern.matcher(escape(endpoint.getEndpoint()));
 		String regex = "/" + endpoint.getApi().getBaseUrl() + matcher.replaceAll(".+?");
-		return new PathMatcher<T>(Pattern.compile(regex), mBean);
+		return new PathMatcher<>(Pattern.compile(regex), mBean);
 	}
 	
 	private static String escape(String endpoint) {
@@ -43,7 +38,7 @@ public class PathMatcher<T> {
 		return endpoint.replace("?", "\\?");
 	}
 	
-	public T getmBean() {
+	public T getMBean() {
 		return mBean;
 	}
 	
@@ -56,7 +51,7 @@ public class PathMatcher<T> {
 			logger.debug("Testing endpoint " + pattern);
 		}
 		
-		return (pattern.matcher(path).matches());
+		return pattern.matcher(path).matches();
 	}
 	
 }

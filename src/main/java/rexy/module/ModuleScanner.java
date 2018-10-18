@@ -56,7 +56,9 @@ public class ModuleScanner {
 	private static class ModuleCreator implements ImplementingClassMatchProcessor<Module> {
 		private final List<Module> modules;
 		
-		ModuleCreator(List<Module> modules) {this.modules = modules;}
+		private ModuleCreator(List<Module> modules) {
+			this.modules = modules;
+		}
 		
 		@Override
 		public void processMatch(Class<? extends Module> moduleClass) {

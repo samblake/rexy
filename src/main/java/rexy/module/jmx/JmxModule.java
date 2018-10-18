@@ -10,6 +10,7 @@ import rexy.module.ModuleAdapter;
 import rexy.module.ModuleInitialisationException;
 
 import javax.management.JMException;
+import java.util.Optional;
 
 /**
  * A module for registering MBeans against the endpoints of an API.
@@ -49,20 +50,18 @@ public abstract class JmxModule<T> extends ModuleAdapter {
 	
 	@Override
 	public boolean handleRequest(Api api, HttpExchange exchange) {
-		T mBean = findEndpointMBean(exchange);
+		Optional<T> mBean = findEndpointMBean(exchange);
 		
-		if (mBean != null) {
-			if (handleRequest(api, exchange, mBean)) {
-				return true;
-			}
+		if (mBean.isPresent()) {
+			return handleRequest(api, exchange, mBean.get());
 		}
 		else {
 			logger.warn("No match for " + exchange.getRequestURI().getPath());
+			return false;
 		}
-		return false;
 	}
 	
-	private T findEndpointMBean(HttpExchange exchange) {
+	private Optional<T> findEndpointMBean(HttpExchange exchange) {
 		String query = exchange.getRequestURI().getQuery();
 		String request = exchange.getRequestURI().getPath() + (query == null ? "" : '?' + query);
 		return registry.getMBean(request);

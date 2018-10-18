@@ -1,5 +1,6 @@
 package rexy.module.proxy;
 
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -74,8 +75,9 @@ public class ProxyModule extends ModuleAdapter {
 		int statusCode = response.getStatusLine().getStatusCode();
 		exchange.sendResponseHeaders(statusCode, contentLength);
 		
+		Headers responseHeaders = exchange.getResponseHeaders();
 		for (Header header : response.getAllHeaders()) {
-			exchange.getResponseHeaders().add(header.getName(), header.getValue());
+			responseHeaders.add(header.getName(), header.getValue());
 		}
 		
 		try (OutputStream os = exchange.getResponseBody()) {

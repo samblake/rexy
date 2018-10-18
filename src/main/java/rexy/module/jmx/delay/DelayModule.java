@@ -8,6 +8,7 @@ import rexy.config.model.Api;
 import rexy.module.jmx.JmxModule;
 import rexy.module.jmx.JmxRegistry;
 
+import static java.lang.Thread.sleep;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
@@ -50,7 +51,7 @@ public class DelayModule extends JmxModule<DelayEndpoint> {
 			logger.info("Delaying request for " + requestPath + " by " + mBean.getDelay() + " seconds");
 			
 			try {
-				Thread.sleep(SECONDS.toMillis(mBean.getDelay()));
+				sleep(SECONDS.toMillis(mBean.getDelay()));
 			}
 			catch (InterruptedException e) {
 				logger.error("Error delaying response for " + requestPath, e);

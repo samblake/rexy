@@ -10,6 +10,9 @@ import javax.management.ObjectName;
 import java.lang.management.ManagementFactory;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+
+import static java.util.Optional.empty;
 
 /**
  * A registry for MBeans of a particular type. It will register an MBean for an endpoint as well as
@@ -70,21 +73,23 @@ public abstract class JmxRegistry<T> {
 	 * @param path The path to find the MBean for
 	 * @return The MBean or null if one is not found
 	 */
-	public T getMBean(String path) {
+	public Optional<T> getMBean(String path) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Finding endpoint for " + path);
 		}
 		
-		for (PathMatcher<T> matcher : repo) {
-			if (matcher.matches(path)) {
-				if (logger.isDebugEnabled()) {
-					logger.debug("Matched endpoint " + matcher.getPattern());
-				}
-				return matcher.getmBean();
+		Optional<PathMatcher<T>> matcher = repo.stream()
+				.filter((m) -> m.matches(path))
+				.findFirst();
+		
+		if (matcher.isPresent()) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("Matched endpoint " + matcher.get().getPattern());
 			}
+			return matcher.map(PathMatcher::getMBean);
 		}
 
 		logger.warn("No matching endpoint for " + path);
-		return null;
+		return empty();
 	}
 }

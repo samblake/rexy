@@ -24,9 +24,9 @@ public class RexyServer {
 	/**
 	 * Creates a server and initialises the modules for each API.
 	 *
-	 * @param config   The configuration containing the port, base URL and APIs
+	 * @param config  The configuration containing the port, base URL and APIs
 	 * @param modules The modules to register with the endpoints
-	 * @throws IOException                    Thrown if the server cannot be created
+	 * @throws IOException                   Thrown if the server cannot be created
 	 * @throws ModuleInitialisationException Thrown if a module cannot be initialised
 	 */
 	public RexyServer(Config config, List<Module> modules) throws IOException, ModuleInitialisationException {
@@ -44,6 +44,7 @@ public class RexyServer {
 		for (Module module : modules) {
 			module.initEndpoint(api);
 		}
+		
 		server.createContext(apiEndpoint, new RexyHandler(api, modules));
 		logger.info("API endpoint created for " + apiEndpoint);
 	}

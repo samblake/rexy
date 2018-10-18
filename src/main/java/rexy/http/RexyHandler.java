@@ -21,7 +21,7 @@ public class RexyHandler implements HttpHandler {
 	/**
 	 * Creates a handler for an API endpoint.
 	 *
-	 * @param api      The API the endpoint is for
+	 * @param api     The API the endpoint is for
 	 * @param modules The modules that should be applied to the API
 	 */
 	public RexyHandler(Api api, List<Module> modules) {
