@@ -1,6 +1,5 @@
 package rexy.module.proxy;
 
-import com.sun.net.httpserver.HttpExchange;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
@@ -10,14 +9,21 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.client.methods.HttpUriRequest;
+import rexy.http.Method;
+import rexy.http.RexyHeader;
+import rexy.http.RexyRequest;
 
-import java.util.List;
-import java.util.Map.Entry;
-
-import static rexy.http.Headers.STRIP_HEADERS;
+import static rexy.http.Method.DELETE;
+import static rexy.http.Method.GET;
+import static rexy.http.Method.HEAD;
+import static rexy.http.Method.OPTIONS;
+import static rexy.http.Method.PATCH;
+import static rexy.http.Method.POST;
+import static rexy.http.Method.PUT;
+import static rexy.http.Method.TRACE;
 
 /**
- * Takes a {@link HttpExchange} and converts it into a {@link HttpUriRequest} that can be used to proxy
+ * Takes a {@link RexyRequest} and converts it into a {@link HttpUriRequest} that can be used to proxy
  * the request to another URL.
  */
 public final class RequestFactory {
@@ -28,28 +34,23 @@ public final class RequestFactory {
 	/**
 	 * Creates a request that forwards the request in the exchange to the base URL.
 	 *
-	 * @param baseUrl  The URL to forward the request to
-	 * @param exchange The exchange containing the request to forward
+	 * @param baseUrl The URL to forward the request to
+	 * @param request The exchange containing the request to forward
 	 * @return The proxy request
 	 */
-	public static HttpUriRequest createRequest(String baseUrl, HttpExchange exchange) {
-		String url = createUrl(baseUrl, exchange);
-		HttpUriRequest request = createRequest(exchange.getRequestMethod(), url);
+	public static HttpUriRequest createRequest(String baseUrl, RexyRequest request) {
+		String url = createUrl(baseUrl, request);
+		HttpUriRequest proxyRequest = createRequest(request.getMethod(), url);
 		
-		for (Entry<String, List<String>> header : exchange.getRequestHeaders().entrySet()) {
-			for (String value : header.getValue()) {
-				if (!STRIP_HEADERS.contains(header.getKey())) {
-					request.addHeader(header.getKey(), value);
-				}
-			}
-		}
+		request.getHeaders().stream().filter(RexyHeader::isProxyable)
+				.forEach(h -> proxyRequest.addHeader(h.getName(), h.getValue()));
 		
-		return request;
+		return proxyRequest;
 	}
 	
-	private static String createUrl(String baseUrl, HttpExchange exchange) {
-		String url = baseUrl + exchange.getRequestURI().getPath().replace(exchange.getHttpContext().getPath(), "");
-		return exchange.getRequestURI().getQuery() == null ? url : url + '?' + exchange.getRequestURI().getQuery();
+	private static String createUrl(String baseUrl, RexyRequest request) {
+		String url = baseUrl + request.getUri().replace(request.getContextPath(), "");
+		return request.getQueryString() == null ? url : url + '?' + request.getQueryString();
 	}
 	
 	/**
@@ -59,38 +60,38 @@ public final class RequestFactory {
 	 * @param url The URL of the request
 	 * @return The created request
 	 */
-	public static HttpUriRequest createRequest(String requestMethod, String url) {
-		if (requestMethod.equals(HttpGet.METHOD_NAME)) {
+	public static HttpUriRequest createRequest(Method requestMethod, String url) {
+		if (requestMethod == GET) {
 			return new HttpGet(url);
 		}
-		if (requestMethod.equals(HttpPost.METHOD_NAME)) {
+		if (requestMethod == POST) {
 			return new HttpPost(url);
 		}
-		if (requestMethod.equals(HttpPut.METHOD_NAME)) {
+		if (requestMethod == PUT) {
 			return new HttpPut(url);
 		}
-		if (requestMethod.equals(HttpDelete.METHOD_NAME)) {
+		if (requestMethod == DELETE) {
 			return new HttpDelete(url);
 		}
-		if (requestMethod.equals(HttpPatch.METHOD_NAME)) {
+		if (requestMethod == PATCH) {
 			return new HttpPatch(url);
 		}
-		if (requestMethod.equals(HttpHead.METHOD_NAME)) {
+		if (requestMethod == HEAD) {
 			return new HttpHead(url);
 		}
-		if (requestMethod.equals(HttpOptions.METHOD_NAME)) {
+		if (requestMethod == OPTIONS) {
 			return new HttpOptions(url);
 		}
-		if (requestMethod.equals(HttpTrace.METHOD_NAME)) {
+		if (requestMethod == TRACE) {
 			return new HttpTrace(url);
 		}
-		throw new UnknownMethodException(requestMethod);
+		throw new UnknownMethodException(requestMethod.name());
 	}
 	
 	private static final class UnknownMethodException extends RuntimeException {
 		
 		private UnknownMethodException(String method) {
-			super("Unknown http method: " + method);
+			super("Unknown HTTP method: " + method);
 		}
 		
 	}

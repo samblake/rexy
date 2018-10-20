@@ -1,23 +1,25 @@
 package rexy.module.jmx.mock;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.sun.net.httpserver.HttpExchange;
+import org.apache.http.entity.ContentType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
+import rexy.http.RexyHeader;
+import rexy.http.RexyRequest;
+import rexy.http.RexyResponse;
 import rexy.module.ModuleInitialisationException;
 import rexy.module.jmx.JmxModule;
 import rexy.module.jmx.JmxRegistry;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 import static java.nio.charset.Charset.defaultCharset;
-import static rexy.JsonNodes.booleanValue;
-import static rexy.JsonNodes.prettyPrint;
-import static rexy.http.Headers.HEADER_CONTENT_TYPE;
+import static java.util.Optional.empty;
+import static rexy.http.RexyHeader.HEADER_CONTENT_TYPE;
+import static rexy.utils.JsonNodes.booleanValue;
+import static rexy.utils.JsonNodes.prettyPrint;
 
 /**
  * <p>A module that intercepts a request and optionally returns a mock response.</p>
@@ -98,42 +100,24 @@ public class MockModule extends JmxModule<MockEndpoint> {
 	}
 	
 	@Override
-	protected boolean handleRequest(Api api, HttpExchange exchange, MockEndpoint mBean) {
+	protected Optional<RexyResponse> handleRequest(Api api, RexyRequest request, MockEndpoint mBean) {
 		if (mBean.isIntercept()) {
-			logger.info("Returning mock response for " + exchange.getRequestURI().getPath());
+			logger.info("Returning mock response for " + request.getUri());
 			
 			try {
-				sendResponse(exchange, api, mBean);
+				return Optional.of(createResponse(request, api, mBean));
 			}
 			catch (IOException e) {
-				logger.error("Error sending response for " + exchange.getRequestURI().getPath(), e);
+				logger.error("Error sending response for " + request.getUri(), e);
 			}
-			
-			return true;
 		}
-		return false;
+		return empty();
 	}
 	
-	private void sendResponse(HttpExchange exchange, Api api, MockEndpoint endpoint) throws IOException {
+	private RexyResponse createResponse(RexyRequest request, Api api, MockEndpoint endpoint) throws IOException {
 		byte[] body = getBody(endpoint);
-		int contentLength = body == null ? 0 : body.length;
-		int httpStatus = endpoint.getHttpStatus();
-		exchange.sendResponseHeaders(httpStatus, contentLength);
-		
-		setContentType(exchange, api, endpoint);
-		
-		// TODO allow override from endpoint
-		for (Map.Entry<String, String> header : api.getHeaders().entrySet()) {
-			exchange.getResponseHeaders().add(header.getKey(), header.getValue());
-		}
-		
-		if (body != null) {
-			try (OutputStream os = exchange.getResponseBody()) {
-				os.write(body);
-			}
-		}
-		
-		exchange.close();
+		ContentType contentType = ContentType.parse(getContentType(request, api, endpoint));
+		return new RexyResponse(endpoint.getHttpStatus(), api.getHeaders(), contentType.getMimeType(), body);
 	}
 	
 	private byte[] getBody(MockEndpoint endpoint) {
@@ -147,19 +131,11 @@ public class MockModule extends JmxModule<MockEndpoint> {
 		return body.getBytes(defaultCharset());
 	}
 	
-	private void setContentType(HttpExchange exchange, Api api, MockEndpoint endpoint) {
-		String contentType = endpoint.getContentType() == null ? api.getContentType() : api.getContentType();
-		if (contentType != null) {
-			exchange.getResponseHeaders().add(HEADER_CONTENT_TYPE, contentType);
-		}
-		else {
-			List<String> headers = exchange.getRequestHeaders().get(HEADER_CONTENT_TYPE);
-			if (headers != null) {
-				for (String value : headers) {
-					exchange.getResponseHeaders().add(HEADER_CONTENT_TYPE, value);
-				}
-			}
-		}
+	private String getContentType(RexyRequest request, Api api, MockEndpoint endpoint) {
+		String contentType = endpoint.getContentType() == null ? api.getContentType() : endpoint.getContentType();
+		return contentType != null ? contentType : request.getHeaders()
+				.stream().filter(h -> h.getName().equalsIgnoreCase(HEADER_CONTENT_TYPE))
+				.findFirst().map(RexyHeader::getValue).orElse(null);
 	}
 	
 }

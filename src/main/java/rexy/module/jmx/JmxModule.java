@@ -1,16 +1,19 @@
 package rexy.module.jmx;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.sun.net.httpserver.HttpExchange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
 import rexy.config.model.Endpoint;
+import rexy.http.RexyRequest;
+import rexy.http.RexyResponse;
 import rexy.module.ModuleAdapter;
 import rexy.module.ModuleInitialisationException;
 
 import javax.management.JMException;
 import java.util.Optional;
+
+import static java.util.Optional.empty;
 
 /**
  * A module for registering MBeans against the endpoints of an API.
@@ -49,21 +52,21 @@ public abstract class JmxModule<T> extends ModuleAdapter {
 	}
 	
 	@Override
-	public boolean handleRequest(Api api, HttpExchange exchange) {
-		Optional<T> mBean = findEndpointMBean(exchange);
+	public Optional<RexyResponse> handleRequest(Api api, RexyRequest request) {
+		Optional<T> mBean = findEndpointMBean(request);
 		
 		if (mBean.isPresent()) {
-			return handleRequest(api, exchange, mBean.get());
+			return handleRequest(api, request, mBean.get());
 		}
 		else {
-			logger.warn("No match for " + exchange.getRequestURI().getPath());
-			return false;
+			logger.warn("No match for " + request.getUri());
+			return empty();
 		}
 	}
 	
-	private Optional<T> findEndpointMBean(HttpExchange exchange) {
-		String query = exchange.getRequestURI().getQuery();
-		String request = exchange.getRequestURI().getPath() + (query == null ? "" : '?' + query);
+	private Optional<T> findEndpointMBean(RexyRequest exchange) {
+		String query = exchange.getQueryString();
+		String request = exchange.getUri() + (query == null ? "" : '?' + query);
 		return registry.getMBean(request);
 	}
 	
@@ -71,9 +74,10 @@ public abstract class JmxModule<T> extends ModuleAdapter {
 	 * Handles the request when an MBean can be found for the endpoint.
 	 *
 	 * @param api      The API the request is against
-	 * @param exchange The exchange containing the request
+	 * @param request  The request to process
 	 * @param mBean    The MBean associated with the request
 	 * @return True if the response has been written, false otherwise
 	 */
-	protected abstract boolean handleRequest(Api api, HttpExchange exchange, T mBean);
+	protected abstract Optional<RexyResponse> handleRequest(Api api, RexyRequest request, T mBean);
+	
 }

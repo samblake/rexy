@@ -34,6 +34,7 @@ public class ConfigParser {
 	 * @throws ConfigException Thrown if the configuration file cannot be found
 	 */
 	public Config parse() throws ConfigException {
+		logger.info("Reading config from " + path);
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			InputStream inputStream = getClass().getResourceAsStream('/' + path);

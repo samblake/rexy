@@ -42,23 +42,16 @@ import static java.util.Collections.emptyList;
 })
 public class Config {
 	
-	private final int port;
-	private final String baseUrl;
-	private final List<String> scanPackages;
-	private final LinkedHashMap<String, JsonNode> modules;
-	private final List<Api> apis;
-	
-	public Config(@JsonProperty("port") int port,
-	              @JsonProperty("baseUrl") String baseUrl,
-	              @JsonProperty("scanPackages") List<String> scanPackages,
-	              @JsonProperty("modules") LinkedHashMap<String, JsonNode> modules,
-	              @JsonProperty("apis") List<Api> apis) {
-		this.port = port;
-		this.baseUrl = baseUrl;
-		this.scanPackages = scanPackages == null ? emptyList() : scanPackages;
-		this.modules = modules == null ? new LinkedHashMap<>() : modules;
-		this.apis = apis == null ? emptyList() : apis;
-	}
+	@JsonProperty("port")
+	private int port;
+	@JsonProperty("baseUrl")
+	private String baseUrl;
+	@JsonProperty("scanPackages")
+	private List<String> scanPackages = emptyList();
+	@JsonProperty("modules")
+	private LinkedHashMap<String, JsonNode> modules = new LinkedHashMap<>();
+	@JsonProperty("apis")
+	private List<Api> apis = emptyList();
 	
 	public int getPort() {
 		return port;

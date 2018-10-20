@@ -16,6 +16,7 @@ import static java.util.Collections.emptyList;
  * {
  *   "name": "location",
  *   "endpoint": "/location/search/?query={query}",
+ *   "request": "GET"
  *   "responses": [
  *     ...
  *   ]
@@ -36,6 +37,8 @@ public class Endpoint {
 	private String name;
 	@JsonProperty("endpoint")
 	private String endpoint;
+	@JsonProperty("request")
+	private String request;
 	@JsonProperty("responses")
 	private List<Response> responses = emptyList();
 	
@@ -61,6 +64,10 @@ public class Endpoint {
 	
 	public void setEndpoint(String endpoint) {
 		this.endpoint = endpoint;
+	}
+	
+	public String getRequest() {
+		return request;
 	}
 	
 	public List<Response> getResponses() {

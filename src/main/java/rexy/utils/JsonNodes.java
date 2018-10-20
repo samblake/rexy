@@ -1,4 +1,4 @@
-package rexy;
+package rexy.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,8 +14,8 @@ public class JsonNodes {
 	private JsonNodes() {
 	}
 	
-	public static boolean booleanValue(JsonNode config, String name) {
-		JsonNode jsonNode = config.get(name);
+	public static boolean booleanValue(JsonNode node, String name) {
+		JsonNode jsonNode = node.get(name);
 		return jsonNode != null && jsonNode.isBoolean() && jsonNode.booleanValue();
 	}
 	

@@ -50,32 +50,16 @@ public class Response {
 		return name;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
 	public int getHttpStatus() {
 		return httpStatus;
-	}
-	
-	public void setHttpStatus(int httpStatus) {
-		this.httpStatus = httpStatus;
 	}
 	
 	public Map<String, String> getHeaders() {
 		return headers;
 	}
 	
-	public void setHeaders(Map<String, String> headers) {
-		this.headers = headers;
-	}
-	
 	public JsonNode getBody() {
 		return body;
-	}
-	
-	public void setBody(JsonNode body) {
-		this.body = body;
 	}
 	
 }

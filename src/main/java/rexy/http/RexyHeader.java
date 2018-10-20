@@ -1,12 +1,13 @@
 package rexy.http;
 
-import java.util.HashSet;
+import java.util.Map.Entry;
 import java.util.Set;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableSet;
+import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Stream.of;
 
-public class Headers {
+public class RexyHeader {
 	public static final String HEADER_CONTENT_TYPE = "Content-Type";
 	
 	public static final String HEADER_HOST = "Host";
@@ -20,7 +21,7 @@ public class Headers {
 	public static final String HEADER_UPGRADE = "Upgrade";
 	public static final String HEADER_CONTENT_LENGTH = "Content-length";
 	
-	public static final Set<String> STRIP_HEADERS = unmodifiableSet(new HashSet<>(asList(
+	private static final Set<String> STRIP_HEADERS = unmodifiableSet(of(
 			HEADER_HOST,
 			HEADER_CONNECTION,
 			HEADER_TE,
@@ -31,6 +32,30 @@ public class Headers {
 			HEADER_TRAILER,
 			HEADER_UPGRADE,
 			HEADER_CONTENT_LENGTH
-	)));
+	).map(String::toLowerCase).collect(toSet()));
+	
+	private final String name;
+	private final String value;
+	
+	public RexyHeader(String name, String value) {
+		this.name = name;
+		this.value = value;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public String getValue() {
+		return value;
+	}
+	
+	public static RexyHeader fromEntry(Entry<String, String> entry) {
+		return new RexyHeader(entry.getKey(), entry.getValue());
+	}
+	
+	public boolean isProxyable() {
+		return !STRIP_HEADERS.contains(name.toLowerCase());
+	}
 	
 }

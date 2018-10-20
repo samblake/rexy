@@ -55,48 +55,24 @@ public class Api {
 		return name;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
 	public String getBaseUrl() {
 		return baseUrl;
-	}
-	
-	public void setBaseUrl(String baseUrl) {
-		this.baseUrl = baseUrl;
 	}
 	
 	public String getContentType() {
 		return contentType;
 	}
 	
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
-	
 	public String getProxy() {
 		return proxy;
-	}
-	
-	public void setProxy(String proxy) {
-		this.proxy = proxy;
 	}
 	
 	public List<Endpoint> getEndpoints() {
 		return endpoints;
 	}
 	
-	public void setEndpoints(List<Endpoint> endpoints) {
-		this.endpoints = endpoints;
-	}
-	
 	public Map<String, String> getHeaders() {
 		return headers;
-	}
-	
-	public void setHeaders(Map<String, String> headers) {
-		this.headers = headers;
 	}
 	
 }

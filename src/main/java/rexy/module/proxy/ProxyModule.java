@@ -1,7 +1,5 @@
 package rexy.module.proxy;
 
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpExchange;
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -11,16 +9,22 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
+import rexy.http.RexyHeader;
+import rexy.http.RexyRequest;
+import rexy.http.RexyResponse;
 import rexy.module.ModuleAdapter;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
-import static rexy.http.Headers.HEADER_CONTENT_TYPE;
+import static java.util.stream.Collectors.toList;
+import static rexy.http.RexyHeader.HEADER_CONTENT_TYPE;
 import static rexy.module.proxy.RequestFactory.createRequest;
 
 /**
@@ -56,35 +60,27 @@ public class ProxyModule extends ModuleAdapter {
 	private static final Logger logger = LogManager.getLogger(ProxyModule.class);
 	
 	@Override
-	public boolean handleRequest(Api api, HttpExchange exchange) throws IOException {
-		logger.info("Proxying request for " + exchange.getRequestURI().getPath());
+	public Optional<RexyResponse> handleRequest(Api api, RexyRequest request) throws IOException {
+		logger.info("Proxying request for " + request.getUri());
 		
-		HttpUriRequest request = createRequest(api.getProxy(), exchange);
-		// TODO don't create client for every request, perhaps per API
+		HttpUriRequest proxyRequest = createRequest(api.getProxy(), request);
+		// TODO don't create clients for every request, perhaps per API
 		try (CloseableHttpClient client = HttpClients.createDefault()) {
-			writeResponse(exchange, client.execute(request));
+			return Optional.of(createResponse(request, client.execute(proxyRequest)));
 		}
-		
-		return true;
 	}
 	
-	private void writeResponse(HttpExchange exchange, CloseableHttpResponse response) throws IOException {
+	private RexyResponse createResponse(RexyRequest request, CloseableHttpResponse response)
+			throws IOException {
+		
 		byte[] body = getBody(response);
 		int contentLength = body.length;
-		
 		int statusCode = response.getStatusLine().getStatusCode();
-		exchange.sendResponseHeaders(statusCode, contentLength);
 		
-		Headers responseHeaders = exchange.getResponseHeaders();
-		for (Header header : response.getAllHeaders()) {
-			responseHeaders.add(header.getName(), header.getValue());
-		}
+		List<RexyHeader> headers = Arrays.stream(response.getAllHeaders())
+				.map(h -> new RexyHeader(h.getName(), h.getValue())).collect(toList());
 		
-		try (OutputStream os = exchange.getResponseBody()) {
-			os.write(body);
-		}
-		
-		exchange.close();
+		return new RexyResponse(statusCode, headers, getMimeType(response), body);
 	}
 	
 	private byte[] getBody(CloseableHttpResponse response) throws IOException {
@@ -106,6 +102,17 @@ public class ProxyModule extends ModuleAdapter {
 			}
 		}
 		return ISO_8859_1;
+	}
+	
+	private String getMimeType(CloseableHttpResponse response) {
+		Header[] contentType = response.getHeaders(HEADER_CONTENT_TYPE);
+		for (Header header : contentType) {
+			String mimeType = ContentType.parse(header.getValue()).getMimeType();
+			if (mimeType != null) {
+				return mimeType;
+			}
+		}
+		return null;
 	}
 	
 }

@@ -53,7 +53,7 @@ public class ModuleScanner {
 	 * Processes a {@link Module module} class. Checks to see if it's a concrete class and, if it is,
 	 * call it's no-args constructor and adds it to the list of modules.
 	 */
-	private static class ModuleCreator implements ImplementingClassMatchProcessor<Module> {
+	private static final class ModuleCreator implements ImplementingClassMatchProcessor<Module> {
 		private final List<Module> modules;
 		
 		private ModuleCreator(List<Module> modules) {

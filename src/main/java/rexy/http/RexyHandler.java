@@ -1,19 +1,20 @@
 package rexy.http;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import rexy.config.model.Api;
 import rexy.module.Module;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+
+import static java.util.Optional.empty;
 
 /**
- * A {@link HttpHandler HTTP handler} for {@link Api API} endpoints with the modules that should be applied
+ * A handler for {@link Api API} endpoints with the modules that should be applied
  * to the API. The handler will loop through the modules and apply them in order until one of them writes a
  * response.
  */
-public class RexyHandler implements HttpHandler {
+public class RexyHandler {
 	
 	private final Api api;
 	private final List<Module> modules;
@@ -29,13 +30,14 @@ public class RexyHandler implements HttpHandler {
 		this.modules = modules;
 	}
 	
-	@Override
-	public void handle(HttpExchange exchange) throws IOException {
+	public Optional<RexyResponse> handle(RexyRequest request) throws IOException {
 		for (Module module : modules) {
-			if (module.handleRequest(api, exchange)) {
-				return;
+			Optional<RexyResponse> response = module.handleRequest(api, request);
+			if (response.isPresent()) {
+				return response;
 			}
 		}
+		return empty();
 	}
 	
 }

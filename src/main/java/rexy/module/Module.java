@@ -1,10 +1,12 @@
 package rexy.module;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.sun.net.httpserver.HttpExchange;
 import rexy.config.model.Api;
+import rexy.http.RexyRequest;
+import rexy.http.RexyResponse;
 
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * A module defines configurable logic that can be applied to an endpoint. A module may or may not
@@ -37,15 +39,14 @@ public interface Module {
 	void initEndpoint(Api api) throws ModuleInitialisationException;
 	
 	/**
-	 * Handlers a HTTP request against the context the API is registered against. If the module
-	 * writes the response then true should be returned meaning the request has been handled and no
-	 * other modules will be called.
+	 * Handles a HTTP request against the context the API is registered against. If the request is processed
+	 * and the response should be written then one should be returned. If this is the case no other modules will
+	 * be called.
 	 *
-	 * @param api      The API the request is for
-	 * @param exchange The HTTP Exchange that is precessing the request
-	 * @return True if the response has been written, false otherwise
-	 * @throws IOException Thrown if the response could not be written
+	 * @param api     The API the request is for
+	 * @param request The request to process
+	 * @return        The response if one should be written, empty otherwise
 	 */
-	boolean handleRequest(Api api, HttpExchange exchange) throws IOException;
+	Optional<RexyResponse> handleRequest(Api api, RexyRequest request) throws IOException;
 	
 }

@@ -1,11 +1,15 @@
 package rexy.module;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.sun.net.httpserver.HttpExchange;
 import rexy.config.model.Api;
+import rexy.http.RexyRequest;
+import rexy.http.RexyResponse;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.regex.Pattern;
+
+import static java.util.Optional.empty;
 
 /**
  * A module implementation that performs no logic. The name is bassed on the class name with 'Module'
@@ -31,8 +35,8 @@ public abstract class ModuleAdapter implements Module {
 	}
 	
 	@Override
-	public boolean handleRequest(Api api, HttpExchange exchange) throws IOException {
-		return true;
+	public Optional<RexyResponse> handleRequest(Api api, RexyRequest session) throws IOException {
+		return empty();
 	}
 	
 }
