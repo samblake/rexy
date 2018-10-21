@@ -18,8 +18,8 @@ import java.util.Optional;
 import static java.nio.charset.Charset.defaultCharset;
 import static java.util.Optional.empty;
 import static rexy.http.RexyHeader.HEADER_CONTENT_TYPE;
-import static rexy.utils.JsonNodes.booleanValue;
-import static rexy.utils.JsonNodes.prettyPrint;
+import static rexy.utils.Json.booleanValue;
+import static rexy.utils.Json.prettyPrint;
 
 /**
  * <p>A module that intercepts a request and optionally returns a mock response.</p>
