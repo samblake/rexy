@@ -8,15 +8,25 @@ import rexy.module.jmx.mock.MockModule;
 
 import java.io.IOException;
 
-public class JsonNodes {
+public class Json {
 	private static final Logger logger = LogManager.getLogger(MockModule.class);
 	
-	private JsonNodes() {
+	private Json() {
 	}
 	
 	public static boolean booleanValue(JsonNode node, String name) {
-		JsonNode jsonNode = node.get(name);
-		return jsonNode != null && jsonNode.isBoolean() && jsonNode.booleanValue();
+		JsonNode jsonValue = node.get(name);
+		return jsonValue != null && jsonValue.isBoolean() && jsonValue.booleanValue();
+	}
+	
+	public static Integer intValue(JsonNode node, String name, int def) {
+		JsonNode jsonValue = node.get(name);
+		return jsonValue != null && jsonValue.isInt() ? jsonValue.intValue() : def;
+	}
+	
+	public static String stringValue(JsonNode node, String name, String def) {
+		JsonNode jsonValue = node.get(name);
+		return jsonValue != null && jsonValue.isTextual() ? jsonValue.textValue() : def;
 	}
 	
 	public static String prettyPrint(String json) {

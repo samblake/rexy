@@ -16,27 +16,60 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
+import static java.util.Collections.emptyList;
 import static rexy.http.RexyResponse.errorResponse;
 import static rexy.utils.Paths.join;
 
 public class RexyServer extends NanoHTTPD {
 	private static final Logger logger = LogManager.getLogger(RexyServer.class);
 	
-	private final Map<String, RexyHandler> routes = new HashMap<>();
+	protected final Map<String, RexyHandler> routes = new HashMap<>();
+	protected final String baseUrl;
+	private final List<Module> modules;
 	
 	/**
 	 * Creates a server and initialises the modules for each API.
 	 *
-	 * @param config  The configuration containing the port, base URL and APIs
-	 * @param modules The modules to register with the endpoints
+	 * @param config The Rexy config
+	 * @param modules The enabled modules
 	 */
 	public RexyServer(Config config, List<Module> modules) {
-		super(config.getPort());
-		for (Api api : config.getApis()) {
-			String apiEndpoint = join(config.getBaseUrl(), api.getBaseUrl());
-			routes.put(apiEndpoint, new RexyHandler(api, modules));
-			logger.info("API endpoint created for " + apiEndpoint);
+		this(config.getPort(), config.getBaseUrl(), modules, config.getApis());
+	}
+	
+	/**
+	 * Creates a server. APIs should be initialised by calling {@link #initApi(Api)}.
+	 *
+	 * @param port The port to run the server on
+	 * @param baseUrl The base URL of the service
+	 * @param modules The enabled modules
+	 */
+	public RexyServer(int port, String baseUrl, List<Module> modules) {
+		this(port, baseUrl, modules, emptyList());
+	}
+	
+	/**
+	 * Creates a server and initialises the modules for each API.
+	 *
+	 * @param port The port to run the server on
+	 * @param baseUrl The base URL of the service
+	 * @param modules The enabled modules
+	 * @param apis The API registered with Rexy
+	 */
+	public RexyServer(int port, String baseUrl, List<Module> modules, List<Api> apis) {
+		super(port);
+		this.baseUrl = baseUrl;
+		this.modules = modules;
+		
+		for (Api api : apis) {
+			initApi(api);
 		}
+	}
+	
+	public void initApi(Api api) {
+		String apiEndpoint = join(baseUrl, api.getBaseUrl());
+		routes.put(apiEndpoint, new RexyHandler(api, modules));
+		logger.info("API endpoint created for " + apiEndpoint);
 	}
 	
 	@Override

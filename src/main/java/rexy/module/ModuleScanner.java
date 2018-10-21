@@ -11,6 +11,7 @@ import java.util.List;
 
 import static java.lang.reflect.Modifier.isAbstract;
 import static java.lang.reflect.Modifier.isInterface;
+import static java.lang.reflect.Modifier.isPrivate;
 
 /**
  * Scans certain packages on the classpath to find modules. The {@code rexy} classpath will always be
@@ -62,7 +63,7 @@ public class ModuleScanner {
 		
 		@Override
 		public void processMatch(Class<? extends Module> moduleClass) {
-			if (!isAbstract(moduleClass.getModifiers()) && !isInterface(moduleClass.getModifiers())) {
+			if (shouldInitialiseModule(moduleClass)) {
 				logger.debug("Found module: " + moduleClass.getCanonicalName());
 				try {
 					Constructor<? extends Module> constructor = moduleClass.getConstructor();
@@ -73,6 +74,12 @@ public class ModuleScanner {
 					logger.error("Could not create " + moduleClass.getCanonicalName(), e);
 				}
 			}
+		}
+		
+		private boolean shouldInitialiseModule(Class<? extends Module> moduleClass) {
+			return !isAbstract(moduleClass.getModifiers())
+					&& !isInterface(moduleClass.getModifiers())
+					&& !isPrivate(moduleClass.getModifiers());
 		}
 	}
 	

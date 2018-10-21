@@ -30,6 +30,10 @@ public class RexyHandler {
 		this.modules = modules;
 	}
 	
+	public Api getApi() {
+		return api;
+	}
+	
 	public Optional<RexyResponse> handle(RexyRequest request) throws IOException {
 		for (Module module : modules) {
 			Optional<RexyResponse> response = module.handleRequest(api, request);

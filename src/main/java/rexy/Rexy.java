@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import static rexy.utils.JsonNodes.booleanValue;
+import static rexy.utils.Json.booleanValue;
 
 /**
  * A lightweight REST mock/proxy framework.
