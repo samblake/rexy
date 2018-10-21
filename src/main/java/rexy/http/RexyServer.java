@@ -97,7 +97,7 @@ public class RexyServer extends NanoHTTPD {
 		}
 	}
 	
-	private Response createRespone(RexyResponse rexyResponse) {
+	protected Response createRespone(RexyResponse rexyResponse) {
 		int responseLength = rexyResponse.getBody().length;
 		ByteArrayInputStream input = new ByteArrayInputStream(rexyResponse.getBody());
 		Status status = Status.lookup(rexyResponse.getStatusCode());

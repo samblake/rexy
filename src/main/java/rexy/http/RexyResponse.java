@@ -22,8 +22,8 @@ public class RexyResponse {
 		this.body = body;
 	}
 	
-	public RexyResponse(int httpStatus, Map<String, String> headers, String mimeType, byte[] body) {
-		this(httpStatus, fromMap(headers), mimeType, body);
+	public RexyResponse(int statusCode, Map<String, String> headers, String mimeType, byte[] body) {
+		this(statusCode, fromMap(headers), mimeType, body);
 	}
 	
 	private static List<RexyHeader> fromMap(Map<String, String> headers) {
