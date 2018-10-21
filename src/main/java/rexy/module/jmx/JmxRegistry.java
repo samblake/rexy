@@ -54,7 +54,7 @@ public abstract class JmxRegistry<T> {
 		ObjectName objectName = new ObjectNameBuilder()
 				.withType(type)
 				.withScope(name)
-				.withName("preset - " + getMBeanName())
+				.withName(getMBeanName())
 				.build();
 		
 		server.registerMBean(endpoint, objectName);

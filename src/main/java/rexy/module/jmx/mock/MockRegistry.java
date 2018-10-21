@@ -29,7 +29,7 @@ public final class MockRegistry extends JmxRegistry<MockEndpoint> {
 		for (Response response : endpoint.getResponses()) {
 			String name = isEmpty(response.getName()) ? Integer.toString(i++) : response.getName();
 			MockResponse mockResponse = new MockResponse(mockEndpoint, response, interceptOnSet);
-			registerMBean(endpoint.getApi().getName(), endpoint.getName(), mockResponse, name);
+			registerMBean(endpoint.getApi().getName(), endpoint.getName(), mockResponse, "Preset - " + name);
 		}
 		return mockEndpoint;
 	}
@@ -45,7 +45,7 @@ public final class MockRegistry extends JmxRegistry<MockEndpoint> {
 		MBeanServer server = ManagementFactory.getPlatformMBeanServer();
 		
 		ObjectName objectName = new ObjectNameBuilder()
-				.withType(type).withScope(endpoint).withName("preset - " + name).build();
+				.withType(type).withScope(endpoint).withName(name).build();
 		server.registerMBean(response, objectName);
 	}
 	
