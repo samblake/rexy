@@ -35,7 +35,7 @@ public abstract class ModuleAdapter implements Module {
 	}
 	
 	@Override
-	public Optional<RexyResponse> handleRequest(Api api, RexyRequest session) throws IOException {
+	public Optional<RexyResponse> handleRequest(Api api, RexyRequest request) throws IOException {
 		return empty();
 	}
 	
