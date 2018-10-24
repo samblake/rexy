@@ -12,6 +12,7 @@ public class ObjectNameBuilder {
 	private final String base;
 	private String type;
 	private String scope;
+	private String component;
 	private String name;
 	
 	public ObjectNameBuilder() {
@@ -29,6 +30,11 @@ public class ObjectNameBuilder {
 	
 	public ObjectNameBuilder withScope(String scope) {
 		this.scope = scope;
+		return this;
+	}
+	
+	public ObjectNameBuilder withComponent(String component) {
+		this.component = component;
 		return this;
 	}
 	
@@ -68,10 +74,17 @@ public class ObjectNameBuilder {
 			objectName.append("scope=").append(scope);
 		}
 		
+		if (component != null) {
+			if (objectName.length() > initialLength) {
+				objectName.append(',');
+			}
+			objectName.append("component=").append(component);
+		}
+		
 		if (objectName.length() > initialLength) {
 			objectName.append(',');
 		}
-		objectName.append("objectName=").append(name);
+		objectName.append("name=").append(name);
 		
 		return objectName.toString();
 	}
