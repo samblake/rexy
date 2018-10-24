@@ -64,10 +64,10 @@ public abstract class JmxModule<T> extends ModuleAdapter {
 		}
 	}
 	
-	private Optional<T> findEndpointMBean(RexyRequest exchange) {
-		String query = exchange.getQueryString();
-		String request = exchange.getUri() + (query == null ? "" : '?' + query);
-		return registry.getMBean(request);
+	private Optional<T> findEndpointMBean(RexyRequest request) {
+		String query = request.getQueryString();
+		String path = request.getUri() + (query == null ? "" : '?' + query);
+		return registry.getMBean(request.getMethod(), path);
 	}
 	
 	/**

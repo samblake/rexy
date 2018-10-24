@@ -15,8 +15,8 @@ import static java.util.Collections.emptyList;
  * <p>{@code
  * {
  *   "name": "location",
+ *   "method": "GET",
  *   "endpoint": "/location/search/?query={query}",
- *   "request": "GET"
  *   "responses": [
  *     ...
  *   ]
@@ -26,6 +26,7 @@ import static java.util.Collections.emptyList;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
 		"name",
+		"method",
 		"endpoint",
 		"responses"
 })
@@ -35,6 +36,8 @@ public class Endpoint {
 	private Api api;
 	@JsonProperty("name")
 	private String name;
+	@JsonProperty("method")
+	private String method;
 	@JsonProperty("endpoint")
 	private String endpoint;
 	@JsonProperty("responses")
@@ -54,6 +57,10 @@ public class Endpoint {
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getMethod() {
+		return method;
 	}
 	
 	public String getEndpoint() {

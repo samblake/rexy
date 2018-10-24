@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
 import rexy.config.model.Endpoint;
+import rexy.http.Method;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,13 +13,15 @@ import java.util.regex.Pattern;
  * Associates an MBean with a pattern. Checks possible paths to test if they match the pattern.
  * @param <T> The type of MBean
  */
-public class PathMatcher<T> {
+public class RequestMatcher<T> {
 	private static final Logger logger = LogManager.getLogger(JmxRegistry.class);
 	
+	private final Method method;
 	private final Pattern pattern;
 	private final T mBean;
 	
-	private PathMatcher(Pattern pattern, T mBean) {
+	private RequestMatcher(Method method, Pattern pattern, T mBean) {
+		this.method = method;
 		this.pattern = pattern;
 		this.mBean = mBean;
 	}
@@ -26,11 +29,12 @@ public class PathMatcher<T> {
 	/**
 	 * Creates a path matcher for an {@link Api} and {@link Endpoint}.
 	 */
-	public static <T> PathMatcher<T> create(Endpoint endpoint, T mBean) {
+	public static <T> RequestMatcher<T> create(Endpoint endpoint, T mBean) {
+		Method method = Method.from(endpoint.getMethod());
 		Pattern pattern = Pattern.compile("\\{.+?\\}");
 		Matcher matcher = pattern.matcher(escape(endpoint.getEndpoint()));
 		String regex = "/" + endpoint.getApi().getBaseUrl() + matcher.replaceAll(".+?");
-		return new PathMatcher<>(Pattern.compile(regex), mBean);
+		return new RequestMatcher<>(method, Pattern.compile(regex), mBean);
 	}
 	
 	private static String escape(String endpoint) {
@@ -46,12 +50,12 @@ public class PathMatcher<T> {
 		return pattern;
 	}
 	
-	public boolean matches(String path) {
+	public boolean matches(Method method, String path) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Testing endpoint " + pattern);
 		}
 		
-		return pattern.matcher(path).matches();
+		return this.method == method && pattern.matcher(path).matches();
 	}
 	
 }

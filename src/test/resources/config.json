@@ -21,6 +21,7 @@
       "endpoints": [
         {
           "name": "location",
+          "method": "GET",
           "endpoint": "location/search/?query={query}",
           "responses": [
             {

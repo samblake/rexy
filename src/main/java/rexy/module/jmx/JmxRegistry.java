@@ -3,6 +3,7 @@ package rexy.module.jmx;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.model.Endpoint;
+import rexy.http.Method;
 
 import javax.management.JMException;
 import javax.management.MBeanServer;
@@ -23,7 +24,7 @@ import static java.util.Optional.empty;
 public abstract class JmxRegistry<T> {
 	private static final Logger logger = LogManager.getLogger(JmxRegistry.class);
 	
-	private final List<PathMatcher<T>> repo = new LinkedList<>();
+	private final List<RequestMatcher<T>> repo = new LinkedList<>();
 	
 	/**
 	 * Creates and registers an MBean for an endpoint.
@@ -36,7 +37,7 @@ public abstract class JmxRegistry<T> {
 	public T addEndpoint(Endpoint endpoint) throws JMException {
 		T mBean = createMBean(endpoint);
 		registerMBean(endpoint.getApi().getName(), endpoint.getName(), mBean);
-		repo.add(PathMatcher.create(endpoint, mBean));
+		repo.add(RequestMatcher.create(endpoint, mBean));
 		return mBean;
 	}
 	
@@ -70,23 +71,24 @@ public abstract class JmxRegistry<T> {
 	/**
 	 * Finds the MBean associated with the given path.
 	 *
+	 * @param method The HTTP method find the MBean for
 	 * @param path The path to find the MBean for
-	 * @return The MBean or null if one is not found
+	 * @return The MBean or empty if one is not found
 	 */
-	public Optional<T> getMBean(String path) {
+	public Optional<T> getMBean(Method method, String path) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Finding endpoint for " + path);
 		}
 		
-		Optional<PathMatcher<T>> matcher = repo.stream()
-				.filter((m) -> m.matches(path))
+		Optional<RequestMatcher<T>> matcher = repo.stream()
+				.filter((m) -> m.matches(method, path))
 				.findFirst();
 		
 		if (matcher.isPresent()) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Matched endpoint " + matcher.get().getPattern());
 			}
-			return matcher.map(PathMatcher::getMBean);
+			return matcher.map(RequestMatcher::getMBean);
 		}
 
 		logger.warn("No matching endpoint for " + path);
