@@ -19,4 +19,5 @@ public class ConfigTest {
 		Config value = mapper.readValue(inputStream, Config.class);
 		assertThat(value, notNullValue());
 	}
+	
 }

@@ -32,8 +32,8 @@ import static java.util.Collections.emptyMap;
 		"baseUrl",
 		"contentType",
 		"proxy",
-		"endpoints",
-		"headers"
+		"headers",
+		"endpoints"
 })
 public class Api {
 	
@@ -45,11 +45,11 @@ public class Api {
 	private String contentType;
 	@JsonProperty("proxy")
 	private String proxy;
+	@JsonProperty("headers")
+	private Map<String, String> headers = emptyMap();
 	@JsonManagedReference
 	@JsonProperty("endpoints")
 	private List<Endpoint> endpoints = emptyList();
-	@JsonProperty("headers")
-	private Map<String, String> headers = emptyMap();
 	
 	public String getName() {
 		return name;
@@ -67,12 +67,12 @@ public class Api {
 		return proxy;
 	}
 	
-	public List<Endpoint> getEndpoints() {
-		return endpoints;
-	}
-	
 	public Map<String, String> getHeaders() {
 		return headers;
+	}
+	
+	public List<Endpoint> getEndpoints() {
+		return endpoints;
 	}
 	
 }

@@ -33,6 +33,7 @@ import static java.util.Collections.emptyMap;
 @JsonPropertyOrder({
 		"name",
 		"httpStatus",
+		"headers",
 		"body"
 })
 public class Response {
