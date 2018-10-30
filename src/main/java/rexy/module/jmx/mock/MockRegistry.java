@@ -45,7 +45,7 @@ public final class MockRegistry extends JmxRegistry<MockEndpoint> {
 		MBeanServer server = ManagementFactory.getPlatformMBeanServer();
 		
 		ObjectName objectName = new ObjectNameBuilder()
-				.withType(type).withScope(endpoint).withComponent("preset").withName(name).build();
+				.withApi(type).withEndpoint(endpoint).withComponent("preset").withName(name).build();
 		server.registerMBean(response, objectName);
 	}
 	

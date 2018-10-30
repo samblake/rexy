@@ -53,8 +53,8 @@ public abstract class JmxRegistry<T> {
 		MBeanServer server = ManagementFactory.getPlatformMBeanServer();
 		
 		ObjectName objectName = new ObjectNameBuilder()
-				.withType(type)
-				.withScope(name)
+				.withApi(type)
+				.withEndpoint(name)
 				.withName(getMBeanName())
 				.build();
 		

@@ -5,13 +5,13 @@ import javax.management.ObjectName;
 
 /**
  * Builds an object name for an MBean. At least the base value and name must be supplied.
- * Both <i>type</i> and <i>scope</i> are optional.
+ * Both <i>api</i> and <i>endpoint</i> are optional.
  */
 public class ObjectNameBuilder {
 	
 	private final String base;
-	private String type;
-	private String scope;
+	private String api;
+	private String endpoint;
 	private String component;
 	private String name;
 	
@@ -23,13 +23,13 @@ public class ObjectNameBuilder {
 		this.base = base;
 	}
 	
-	public ObjectNameBuilder withType(String type) {
-		this.type = type;
+	public ObjectNameBuilder withApi(String api) {
+		this.api = api;
 		return this;
 	}
 	
-	public ObjectNameBuilder withScope(String scope) {
-		this.scope = scope;
+	public ObjectNameBuilder withEndpoint(String endpoint) {
+		this.endpoint = endpoint;
 		return this;
 	}
 	
@@ -63,15 +63,15 @@ public class ObjectNameBuilder {
 		StringBuilder objectName = new StringBuilder(base).append(':');
 		int initialLength = objectName.length();
 		
-		if (type != null) {
-			objectName.append("type=").append(type);
+		if (api != null) {
+			objectName.append("api=").append(api);
 		}
 		
-		if (scope != null) {
+		if (endpoint != null) {
 			if (objectName.length() > initialLength) {
 				objectName.append(',');
 			}
-			objectName.append("scope=").append(scope);
+			objectName.append("endpoint=").append(endpoint);
 		}
 		
 		if (component != null) {
