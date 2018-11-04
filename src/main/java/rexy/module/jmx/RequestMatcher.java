@@ -30,7 +30,7 @@ public class RequestMatcher<T> {
 	 * Creates a path matcher for an {@link Api} and {@link Endpoint}.
 	 */
 	public static <T> RequestMatcher<T> create(Endpoint endpoint, T mBean) {
-		Method method = Method.from(endpoint.getMethod());
+		Method method = endpoint.getMethod() == null ? Method.GET : endpoint.getMethod();
 		Pattern pattern = Pattern.compile("\\{.+?\\}");
 		Matcher matcher = pattern.matcher(escape(endpoint.getEndpoint()));
 		String regex = "/" + endpoint.getApi().getBaseUrl() + matcher.replaceAll(".+?");

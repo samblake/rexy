@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import rexy.http.Method;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class Endpoint {
 	@JsonProperty("name")
 	private String name;
 	@JsonProperty("method")
-	private String method;
+	private Method method;
 	@JsonProperty("endpoint")
 	private String endpoint;
 	@JsonProperty("responses")
@@ -59,7 +60,7 @@ public class Endpoint {
 		this.name = name;
 	}
 	
-	public String getMethod() {
+	public Method getMethod() {
 		return method;
 	}
 	

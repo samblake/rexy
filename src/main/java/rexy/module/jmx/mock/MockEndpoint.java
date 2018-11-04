@@ -17,11 +17,11 @@ public class MockEndpoint implements MockEndpointMBean {
 	}
 	
 	public MockEndpoint(String contentType, int httpStatus, Map<String, String> headers, String body) {
-		this.intercept = false;
 		this.httpStatus = httpStatus;
 		this.contentType = contentType;
 		this.headers = headers;
 		this.body = body;
+		this.intercept = false;
 	}
 	
 	@Override
