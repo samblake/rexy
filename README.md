@@ -1,2 +1,2 @@
-# rexy
-A lightweight REST mock/proxy server
+# Rexy
+A lightweight REST mock/proxy server.
