@@ -3,8 +3,11 @@ package rexy.http;
 import fi.iki.elonen.NanoHTTPD.IHTTPSession;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 public class NanoRequest implements RexyRequest {
 	
@@ -39,6 +42,12 @@ public class NanoRequest implements RexyRequest {
 	@Override
 	public Method getMethod() {
 		return Method.valueOf(session.getMethod().name());
+	}
+	
+	@Override
+	public Map<String, String> getParameters() {
+		return session.getParameters().entrySet().stream()
+				.collect(toMap(Entry::getKey, entry -> entry.getValue().stream().findFirst().get()));
 	}
 	
 }

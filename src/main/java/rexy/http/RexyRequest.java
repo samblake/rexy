@@ -1,6 +1,7 @@
 package rexy.http;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RexyRequest {
 	
@@ -14,4 +15,5 @@ public interface RexyRequest {
 	
 	Method getMethod();
 	
+	Map<String, String> getParameters();
 }

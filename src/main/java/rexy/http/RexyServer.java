@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
+import static fi.iki.elonen.NanoHTTPD.Method.POST;
+import static fi.iki.elonen.NanoHTTPD.Method.PUT;
 import static java.util.Collections.emptyList;
 import static rexy.http.RexyResponse.errorResponse;
 import static rexy.utils.Paths.join;
@@ -87,11 +89,16 @@ public class RexyServer extends NanoHTTPD {
 	
 	private RexyResponse performRequest(IHTTPSession session, String route, RexyHandler handler) {
 		try {
+			if (session.getMethod() == POST || session.getMethod() == PUT) {
+				// If we don't parse the body form parameters are not made available
+				session.parseBody(new HashMap<>());
+			}
+			
 			return handler.handle(new NanoRequest(session, route))
 					.orElseGet(() -> errorResponse(501,
 							"No API endpoint registered for %s %s", session.getUri(), session.getMethod()));
 		}
-		catch (IOException e) {
+		catch (IOException | ResponseException e) {
 			logger.error("Error processing request", e);
 			return errorResponse(500, "Error processing request");
 		}
