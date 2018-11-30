@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.ConfigParser;
+import rexy.config.RexyConfig;
 import rexy.config.model.Api;
-import rexy.config.model.Config;
 import rexy.exception.RexyException;
 import rexy.http.RexyServer;
 import rexy.module.Module;
@@ -53,7 +53,7 @@ public class Rexy {
 	public void start() {
 		logger.info("Starting Rexy");
 		try {
-			Config config = new ConfigParser(configPath).parse();
+			RexyConfig config = new ConfigParser(configPath).parse();
 			List<Module> allModules = new ModuleScanner(config.getScanPackages()).scan();
 			List<Module> enabledModules = initModules(config, allModules);
 			
@@ -65,7 +65,7 @@ public class Rexy {
 		}
 	}
 	
-	private List<Module> initModules(Config config, List<Module> modules) throws ModuleInitialisationException {
+	private List<Module> initModules(RexyConfig config, List<Module> modules) throws ModuleInitialisationException {
 		List<Module> enabledModules = new LinkedList<>();
 		Set<Entry<String, JsonNode>> moduleConfigs = config.getModules().entrySet();
 		for (Entry<String, JsonNode> moduleConfig : moduleConfigs) {

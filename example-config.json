@@ -50,5 +50,8 @@
         }
       ]
     }
+  ],
+  "imports": [
+    "example-import.json"
   ]
 }

@@ -4,8 +4,8 @@ import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.NanoHTTPD.Response.Status;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import rexy.config.RexyConfig;
 import rexy.config.model.Api;
-import rexy.config.model.Config;
 import rexy.module.Module;
 
 import java.io.ByteArrayInputStream;
@@ -35,7 +35,7 @@ public class RexyServer extends NanoHTTPD {
 	 * @param config The Rexy config
 	 * @param modules The enabled modules
 	 */
-	public RexyServer(Config config, List<Module> modules) {
+	public RexyServer(RexyConfig config, List<Module> modules) {
 		this(config.getPort(), config.getBaseUrl(), modules, config.getApis());
 	}
 	

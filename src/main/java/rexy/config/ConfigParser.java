@@ -3,11 +3,14 @@ package rexy.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import rexy.config.model.Api;
 import rexy.config.model.Config;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Parses the JSON configuration. The path can either be relative to the classpath or an absolute path on
@@ -17,6 +20,7 @@ public class ConfigParser {
 	private static final Logger logger = LogManager.getLogger(ConfigParser.class);
 
 	private final String path;
+	private final ObjectMapper mapper;
 	
 	/**
 	 * Creates a configuration parser for the file at the supplied path.
@@ -25,25 +29,38 @@ public class ConfigParser {
 	 */
 	public ConfigParser(String path) {
 		this.path = path;
+		this.mapper = new ObjectMapper();
 	}
 	
 	/**
-	 * Parses the JSON configuration.
+	 * Parses the JSON configuration. Imported APIs will be parsed and populated.
 	 *
-	 * @return The model representation of the config
-	 * @throws ConfigException Thrown if the configuration file cannot be found
+	 * @return The fully populated config
+	 * @throws ConfigException Thrown if the configuration or any imported files cannot be found
 	 */
-	public Config parse() throws ConfigException {
-		logger.info("Reading config from " + path);
+	public RexyConfig parse() throws ConfigException {
+		Config config = parse(Config.class, path);
+		
+		List<Api> importedApis = new LinkedList<>();
+		for (String importPath : config.getImports()) {
+			importedApis.add(parse(Api.class, importPath));
+		}
+		
+		RexyConfig apiConfig = new ApiConfig(config, importedApis);
+		// TODO validate (duplicate APIs, paths, etc.)
+		return apiConfig;
+	}
+	
+	private <T> T parse(Class<T> jacksonClass, String path) throws ConfigException {
+		logger.info("Reading " + jacksonClass.getSimpleName() + " from " + path);
 		try {
-			ObjectMapper mapper = new ObjectMapper();
 			InputStream inputStream = getClass().getResourceAsStream('/' + path);
 			if (inputStream != null) {
-				return mapper.readValue(inputStream, Config.class);
+				return mapper.readValue(inputStream, jacksonClass);
 			}
 			
-			logger.debug("Config not found on classpath, looking for absolute file");
-			return mapper.readValue(new File(path), Config.class);
+			logger.debug(jacksonClass.getSimpleName() + " not found on classpath, looking for absolute file");
+			return mapper.readValue(new File(path), jacksonClass);
 		}
 		catch (IOException e) {
 			throw new ConfigException("Could not read " + path, e);
