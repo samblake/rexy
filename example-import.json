@@ -12,10 +12,6 @@
         {
           "name": "Successful",
           "httpStatus": 200,
-          "headers": {
-            "abc": "Test 1",
-            "xyz": "Test 2"
-          },
           "body": {
             "title": "London",
             "location_type": "City",

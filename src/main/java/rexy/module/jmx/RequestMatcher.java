@@ -13,8 +13,10 @@ import java.util.regex.Pattern;
  * Associates an MBean with a pattern. Checks possible paths to test if they match the pattern.
  * @param <T> The type of MBean
  */
-public class RequestMatcher<T> {
+public final class RequestMatcher<T> {
 	private static final Logger logger = LogManager.getLogger(JmxRegistry.class);
+	
+	private static final Pattern PATTERN = Pattern.compile("\\{.+?}");
 	
 	private final Method method;
 	private final Pattern pattern;
@@ -31,9 +33,8 @@ public class RequestMatcher<T> {
 	 */
 	public static <T> RequestMatcher<T> create(Endpoint endpoint, T mBean) {
 		Method method = endpoint.getMethod() == null ? Method.GET : endpoint.getMethod();
-		Pattern pattern = Pattern.compile("\\{.+?\\}");
-		Matcher matcher = pattern.matcher(escape(endpoint.getEndpoint()));
-		String regex = "/" + endpoint.getApi().getBaseUrl() + matcher.replaceAll(".+?");
+		Matcher matcher = PATTERN.matcher(escape(endpoint.getEndpoint()));
+		String regex = '/' + endpoint.getApi().getBaseUrl() + matcher.replaceAll(".+?");
 		return new RequestMatcher<>(method, Pattern.compile(regex), mBean);
 	}
 	
