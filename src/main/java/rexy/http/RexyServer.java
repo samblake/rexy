@@ -8,8 +8,8 @@ import rexy.config.RexyConfig;
 import rexy.config.model.Api;
 import rexy.module.RexyModule;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,10 +105,10 @@ public class RexyServer extends NanoHTTPD {
 	}
 	
 	protected Response createRespone(RexyResponse rexyResponse) {
-		int responseLength = rexyResponse.getBody().length;
-		ByteArrayInputStream input = new ByteArrayInputStream(rexyResponse.getBody());
+		int responseLength = rexyResponse.getResponseLength();
+		InputStream body = rexyResponse.getBody();
 		Status status = Status.lookup(rexyResponse.getStatusCode());
-		Response response = newFixedLengthResponse(status, rexyResponse.getMimeType(), input, responseLength);
+		Response response = newFixedLengthResponse(status, rexyResponse.getMimeType(), body, responseLength);
 		rexyResponse.getHeaders().forEach(h -> response.addHeader(h.getName(), h.getValue()));
 		return response;
 	}

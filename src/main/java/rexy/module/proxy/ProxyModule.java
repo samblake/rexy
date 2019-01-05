@@ -74,7 +74,6 @@ public class ProxyModule extends ModuleAdapter {
 			throws IOException {
 		
 		byte[] body = getBody(response);
-		int contentLength = body.length;
 		int statusCode = response.getStatusLine().getStatusCode();
 		
 		List<RexyHeader> headers = Arrays.stream(response.getAllHeaders())

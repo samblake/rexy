@@ -54,9 +54,10 @@ public class ConfigParser {
 	private <T> T parse(Class<T> jacksonClass, String path) throws ConfigException {
 		logger.info("Reading " + jacksonClass.getSimpleName() + " from " + path);
 		try {
-			InputStream inputStream = getClass().getResourceAsStream('/' + path);
-			if (inputStream != null) {
-				return mapper.readValue(inputStream, jacksonClass);
+			try (InputStream inputStream = getClass().getResourceAsStream('/' + path)) {
+				if (inputStream != null) {
+					return mapper.readValue(inputStream, jacksonClass);
+				}
 			}
 			
 			logger.debug(jacksonClass.getSimpleName() + " not found on classpath, looking for absolute file");
