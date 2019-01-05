@@ -6,7 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.RexyConfig;
 import rexy.config.model.Api;
-import rexy.module.Module;
+import rexy.module.RexyModule;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -27,7 +27,7 @@ public class RexyServer extends NanoHTTPD {
 	
 	protected final Map<String, RexyHandler> routes = new HashMap<>();
 	protected final String baseUrl;
-	private final List<Module> modules;
+	private final List<RexyModule> modules;
 	
 	/**
 	 * Creates a server and initialises the modules for each API.
@@ -35,7 +35,7 @@ public class RexyServer extends NanoHTTPD {
 	 * @param config The Rexy config
 	 * @param modules The enabled modules
 	 */
-	public RexyServer(RexyConfig config, List<Module> modules) {
+	public RexyServer(RexyConfig config, List<RexyModule> modules) {
 		this(config.getPort(), config.getBaseUrl(), modules, config.getApis());
 	}
 	
@@ -46,7 +46,7 @@ public class RexyServer extends NanoHTTPD {
 	 * @param baseUrl The base URL of the service
 	 * @param modules The enabled modules
 	 */
-	public RexyServer(int port, String baseUrl, List<Module> modules) {
+	public RexyServer(int port, String baseUrl, List<RexyModule> modules) {
 		this(port, baseUrl, modules, emptyList());
 	}
 	
@@ -58,7 +58,7 @@ public class RexyServer extends NanoHTTPD {
 	 * @param modules The enabled modules
 	 * @param apis The API registered with Rexy
 	 */
-	public RexyServer(int port, String baseUrl, List<Module> modules, List<Api> apis) {
+	public RexyServer(int port, String baseUrl, List<RexyModule> modules, List<Api> apis) {
 		super(port);
 		this.baseUrl = baseUrl;
 		this.modules = modules;

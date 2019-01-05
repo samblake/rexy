@@ -8,12 +8,12 @@ import rexy.config.RexyConfig;
 import rexy.config.model.Api;
 import rexy.exception.RexyException;
 import rexy.http.RexyServer;
-import rexy.module.Module;
 import rexy.module.ModuleInitialisationException;
 import rexy.module.ModuleScanner;
+import rexy.module.RexyModule;
 
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -54,8 +54,8 @@ public class Rexy {
 		logger.info("Starting Rexy");
 		try {
 			RexyConfig config = new ConfigParser(configPath).parse();
-			List<Module> allModules = new ModuleScanner(config.getScanPackages()).scan();
-			List<Module> enabledModules = initModules(config, allModules);
+			List<RexyModule> allModules = new ModuleScanner(config.getScanPackages()).scan();
+			List<RexyModule> enabledModules = initModules(config, allModules);
 			
 			new RexyServer(config, enabledModules).start();
 			logger.info("Rexy started on port " + config.getPort());
@@ -65,8 +65,8 @@ public class Rexy {
 		}
 	}
 	
-	private List<Module> initModules(RexyConfig config, List<Module> modules) throws ModuleInitialisationException {
-		List<Module> enabledModules = new LinkedList<>();
+	private List<RexyModule> initModules(RexyConfig config, List<RexyModule> modules) throws ModuleInitialisationException {
+		List<RexyModule> enabledModules = new ArrayList<>();
 		Set<Entry<String, JsonNode>> moduleConfigs = config.getModules().entrySet();
 		for (Entry<String, JsonNode> moduleConfig : moduleConfigs) {
 			enabledModules.addAll(initModule(modules, moduleConfig, config.getApis()));
@@ -74,16 +74,16 @@ public class Rexy {
 		return enabledModules;
 	}
 	
-	private List<Module> initModule(List<Module> modules, Entry<String, JsonNode> moduleConfig, List<Api> apis)
+	private List<RexyModule> initModule(List<RexyModule> modules, Entry<String, JsonNode> moduleConfig, List<Api> apis)
 			throws ModuleInitialisationException {
 		
-		List<Module> enabledModules = new LinkedList<>();
+		List<RexyModule> enabledModules = new ArrayList<>();
 		
 		String moduleName = moduleConfig.getKey();
-		Module module = modules.stream().filter(m -> m.getName().equals(moduleName)).findFirst()
+		RexyModule module = modules.stream().filter(m -> m.getName().equals(moduleName)).findFirst()
 				.orElseThrow(() -> new ModuleInitialisationException("Could not find module " + moduleName));
 		
-		if (booleanValue(moduleConfig.getValue(), ("enabled"))) {
+		if (booleanValue(moduleConfig.getValue(), "enabled")) {
 			module.init(moduleConfig.getValue());
 			
 			for (Api api : apis) {
@@ -94,7 +94,7 @@ public class Rexy {
 			logger.info("Started module: " + moduleName);
 		}
 		else {
-			logger.info("Module disabled: " + moduleName);
+			logger.info("RexyModule disabled: " + moduleName);
 		}
 		
 		return enabledModules;

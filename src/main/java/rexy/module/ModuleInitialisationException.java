@@ -8,7 +8,7 @@ import rexy.exception.RexyException;
  */
 public class ModuleInitialisationException extends RexyException {
 	
-	public ModuleInitialisationException(Module module) {
+	public ModuleInitialisationException(RexyModule module) {
 		this("Could not initialise " + module.getName());
 	}
 	
@@ -16,11 +16,11 @@ public class ModuleInitialisationException extends RexyException {
 		super(message);
 	}
 	
-	public ModuleInitialisationException(Module module, Throwable cause) {
+	public ModuleInitialisationException(RexyModule module, Throwable cause) {
 		super("Could not initialise " + module.getName(), cause);
 	}
 	
-	public ModuleInitialisationException(Module module, String message, Throwable cause) {
+	public ModuleInitialisationException(RexyModule module, String message, Throwable cause) {
 		super("Could not initialise " + module.getName() + ':' + message, cause);
 	}
 	

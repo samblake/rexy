@@ -9,9 +9,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.reflect.Modifier.isAbstract;
-import static java.lang.reflect.Modifier.isInterface;
-import static java.lang.reflect.Modifier.isPrivate;
+import static java.lang.reflect.Modifier.*;
 
 /**
  * Scans certain packages on the classpath to find modules. The {@code rexy} classpath will always be
@@ -31,12 +29,12 @@ public class ModuleScanner {
 	}
 	
 	/**
-	 * Scans the classspath for any concrete classes that implement {@link Module modules}.
+	 * Scans the classspath for any concrete classes that implement {@link RexyModule modules}.
 	 *
 	 * @return The modules found with their no-args constructors called.
 	 */
-	public List<Module> scan() {
-		List<Module> modules = new ArrayList<>();
+	public List<RexyModule> scan() {
+		List<RexyModule> modules = new ArrayList<>();
 		scan(modules, getClass().getPackage().getName());
 		for (String scanPackage : scanPackages) {
 			scan(modules, scanPackage);
@@ -44,29 +42,29 @@ public class ModuleScanner {
 		return modules;
 	}
 	
-	private void scan(List<Module> modules, String scanPackage) {
+	private void scan(List<RexyModule> modules, String scanPackage) {
 		new FastClasspathScanner(scanPackage)
-				.matchClassesImplementing(Module.class, new ModuleCreator(modules))
+				.matchClassesImplementing(RexyModule.class, new ModuleCreator(modules))
 				.scan();
 	}
 	
 	/**
-	 * Processes a {@link Module module} class. Checks to see if it's a concrete class and, if it is,
+	 * Processes a {@link RexyModule module} class. Checks to see if it's a concrete class and, if it is,
 	 * call it's no-args constructor and adds it to the list of modules.
 	 */
-	private static final class ModuleCreator implements ImplementingClassMatchProcessor<Module> {
-		private final List<Module> modules;
+	private static final class ModuleCreator implements ImplementingClassMatchProcessor<RexyModule> {
+		private final List<RexyModule> modules;
 		
-		private ModuleCreator(List<Module> modules) {
+		private ModuleCreator(List<RexyModule> modules) {
 			this.modules = modules;
 		}
 		
 		@Override
-		public void processMatch(Class<? extends Module> moduleClass) {
+		public void processMatch(Class<? extends RexyModule> moduleClass) {
 			if (shouldInitialiseModule(moduleClass)) {
 				logger.debug("Found module: " + moduleClass.getCanonicalName());
 				try {
-					Constructor<? extends Module> constructor = moduleClass.getConstructor();
+					Constructor<? extends RexyModule> constructor = moduleClass.getConstructor();
 					constructor.setAccessible(true);
 					modules.add(constructor.newInstance());
 				}
@@ -76,7 +74,7 @@ public class ModuleScanner {
 			}
 		}
 		
-		private boolean shouldInitialiseModule(Class<? extends Module> moduleClass) {
+		private boolean shouldInitialiseModule(Class<? extends RexyModule> moduleClass) {
 			return !isAbstract(moduleClass.getModifiers())
 					&& !isInterface(moduleClass.getModifiers())
 					&& !isPrivate(moduleClass.getModifiers());

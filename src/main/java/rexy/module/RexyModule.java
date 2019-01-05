@@ -12,7 +12,7 @@ import java.util.Optional;
  * A module defines configurable logic that can be applied to an endpoint. A module may or may not
  * write a response. A module must have a public no-args constructor.
  */
-public interface Module {
+public interface RexyModule {
 	
 	/**
 	 * Returns the name of the module. This must match the name of the module supplied in the

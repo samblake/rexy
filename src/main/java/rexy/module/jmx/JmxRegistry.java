@@ -9,7 +9,7 @@ import javax.management.JMException;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import java.lang.management.ManagementFactory;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +24,7 @@ import static java.util.Optional.empty;
 public abstract class JmxRegistry<T> {
 	private static final Logger logger = LogManager.getLogger(JmxRegistry.class);
 	
-	private final List<RequestMatcher<T>> repo = new LinkedList<>();
+	private final List<RequestMatcher<T>> repo = new ArrayList<>();
 	
 	/**
 	 * Creates and registers an MBean for an endpoint.

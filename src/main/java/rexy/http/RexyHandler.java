@@ -1,7 +1,7 @@
 package rexy.http;
 
 import rexy.config.model.Api;
-import rexy.module.Module;
+import rexy.module.RexyModule;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,7 +17,7 @@ import static java.util.Optional.empty;
 public class RexyHandler {
 	
 	private final Api api;
-	private final List<Module> modules;
+	private final List<RexyModule> modules;
 	
 	/**
 	 * Creates a handler for an API endpoint.
@@ -25,7 +25,7 @@ public class RexyHandler {
 	 * @param api     The API the endpoint is for
 	 * @param modules The modules that should be applied to the API
 	 */
-	public RexyHandler(Api api, List<Module> modules) {
+	public RexyHandler(Api api, List<RexyModule> modules) {
 		this.api = api;
 		this.modules = modules;
 	}
@@ -35,7 +35,7 @@ public class RexyHandler {
 	}
 	
 	public Optional<RexyResponse> handle(RexyRequest request) throws IOException {
-		for (Module module : modules) {
+		for (RexyModule module : modules) {
 			Optional<RexyResponse> response = module.handleRequest(api, request);
 			if (response.isPresent()) {
 				return response;

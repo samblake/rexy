@@ -12,10 +12,10 @@ import java.util.regex.Pattern;
 import static java.util.Optional.empty;
 
 /**
- * A module implementation that performs no logic. The name is bassed on the class name with 'Module'
+ * A module implementation that performs no logic. The name is bassed on the class name with 'RexyModule'
  * removed, converted to lowercase.
  */
-public abstract class ModuleAdapter implements Module {
+public abstract class ModuleAdapter implements RexyModule {
 	
 	private static final Pattern MODULE_PATTERN = Pattern.compile("Module");
 	

@@ -9,7 +9,7 @@ import rexy.config.model.Config;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,8 +40,8 @@ public class ConfigParser {
 	 */
 	public RexyConfig parse() throws ConfigException {
 		Config config = parse(Config.class, path);
-		
-		List<Api> importedApis = new LinkedList<>();
+
+		List<Api> importedApis = new ArrayList<>();
 		for (String importPath : config.getImports()) {
 			importedApis.add(parse(Api.class, importPath));
 		}
