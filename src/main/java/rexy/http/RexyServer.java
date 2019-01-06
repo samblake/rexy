@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.RexyConfig;
 import rexy.config.model.Api;
+import rexy.http.response.RexyResponse;
 import rexy.module.RexyModule;
 
 import java.io.IOException;
@@ -19,7 +20,7 @@ import java.util.Optional;
 import static fi.iki.elonen.NanoHTTPD.Method.POST;
 import static fi.iki.elonen.NanoHTTPD.Method.PUT;
 import static java.util.Collections.emptyList;
-import static rexy.http.RexyResponse.errorResponse;
+import static rexy.http.response.BasicRexyResponse.errorResponse;
 import static rexy.utils.Paths.join;
 
 public class RexyServer extends NanoHTTPD {
@@ -94,9 +95,10 @@ public class RexyServer extends NanoHTTPD {
 				session.parseBody(new HashMap<>());
 			}
 			
-			return handler.handle(new NanoRequest(session, route))
-					.orElseGet(() -> errorResponse(501,
-							"No API endpoint registered for %s %s", session.getUri(), session.getMethod()));
+			NanoRequest request = new NanoRequest(session, route);
+			
+			return handler.handle(request).orElseGet(() -> errorResponse(501,
+					"No API endpoint registered for %s %s", session.getUri(), session.getMethod()));
 		}
 		catch (IOException | ResponseException e) {
 			logger.error("Error processing request", e);
@@ -109,7 +111,7 @@ public class RexyServer extends NanoHTTPD {
 		InputStream body = rexyResponse.getBody();
 		Status status = Status.lookup(rexyResponse.getStatusCode());
 		Response response = newFixedLengthResponse(status, rexyResponse.getMimeType(), body, responseLength);
-		rexyResponse.getHeaders().forEach(h -> response.addHeader(h.getName(), h.getValue()));
+		rexyResponse.getHeaders().forEach(header -> response.addHeader(header.getName(), header.getValue()));
 		return response;
 	}
 	

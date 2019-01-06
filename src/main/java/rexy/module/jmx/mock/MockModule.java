@@ -7,7 +7,8 @@ import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
 import rexy.http.RexyHeader;
 import rexy.http.RexyRequest;
-import rexy.http.RexyResponse;
+import rexy.http.response.BasicRexyResponse;
+import rexy.http.response.RexyResponse;
 import rexy.module.ModuleInitialisationException;
 import rexy.module.jmx.JmxModule;
 import rexy.module.jmx.JmxRegistry;
@@ -117,7 +118,7 @@ public class MockModule extends JmxModule<MockEndpoint> {
 	private RexyResponse createResponse(RexyRequest request, Api api, MockEndpoint endpoint) throws IOException {
 		byte[] body = getBody(endpoint);
 		ContentType contentType = ContentType.parse(getContentType(request, api, endpoint));
-		return new RexyResponse(endpoint.getHttpStatus(), api.getHeaders(), contentType.getMimeType(), body);
+		return new BasicRexyResponse(endpoint.getHttpStatus(), api.getHeaders(), contentType.getMimeType(), body);
 	}
 	
 	private byte[] getBody(MockEndpoint endpoint) {

@@ -43,7 +43,7 @@ public final class RequestFactory {
 		HttpUriRequest proxyRequest = createRequest(request.getMethod(), url);
 		
 		request.getHeaders().stream().filter(RexyHeader::isProxyable)
-				.forEach(h -> proxyRequest.addHeader(h.getName(), h.getValue()));
+				.forEach(header -> proxyRequest.addHeader(header.getName(), header.getValue()));
 		
 		return proxyRequest;
 	}

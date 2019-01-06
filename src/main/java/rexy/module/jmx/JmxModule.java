@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
 import rexy.config.model.Endpoint;
 import rexy.http.RexyRequest;
-import rexy.http.RexyResponse;
+import rexy.http.response.RexyResponse;
 import rexy.module.ModuleAdapter;
 import rexy.module.ModuleInitialisationException;
 
@@ -76,7 +76,7 @@ public abstract class JmxModule<T> extends ModuleAdapter {
 	 * @param api      The API the request is against
 	 * @param request  The request to process
 	 * @param mBean    The MBean associated with the request
-	 * @return True if the response has been written, false otherwise
+	 * @return An Optional containing the response if it has bee created or an empty Optional otherwise
 	 */
 	protected abstract Optional<RexyResponse> handleRequest(Api api, RexyRequest request, T mBean);
 	

@@ -11,7 +11,8 @@ import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
 import rexy.http.RexyHeader;
 import rexy.http.RexyRequest;
-import rexy.http.RexyResponse;
+import rexy.http.response.BasicRexyResponse;
+import rexy.http.response.RexyResponse;
 import rexy.module.ModuleAdapter;
 
 import java.io.IOException;
@@ -79,7 +80,7 @@ public class ProxyModule extends ModuleAdapter {
 		List<RexyHeader> headers = Arrays.stream(response.getAllHeaders())
 				.map(h -> new RexyHeader(h.getName(), h.getValue())).collect(toList());
 		
-		return new RexyResponse(statusCode, headers, getMimeType(response), body);
+		return new BasicRexyResponse(statusCode, headers, getMimeType(response), body);
 	}
 	
 	private byte[] getBody(CloseableHttpResponse response) throws IOException {

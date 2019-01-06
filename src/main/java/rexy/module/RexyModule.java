@@ -3,7 +3,8 @@ package rexy.module;
 import com.fasterxml.jackson.databind.JsonNode;
 import rexy.config.model.Api;
 import rexy.http.RexyRequest;
-import rexy.http.RexyResponse;
+import rexy.http.response.BasicRexyResponse;
+import rexy.http.response.RexyResponse;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -48,5 +49,15 @@ public interface RexyModule {
 	 * @return        The response if one should be written, empty otherwise
 	 */
 	Optional<RexyResponse> handleRequest(Api api, RexyRequest request) throws IOException;
+	
+	/**
+	 * Processes a {@link BasicRexyResponse} request against the context the API is registered against.
+	 *
+	 * @param api      The API the request is for
+	 * @param request  The request that created the response
+	 * @param response The response to preocess
+	 * @return         The processed response
+	 */
+	RexyResponse processResponse(Api api, RexyRequest request, RexyResponse response);
 	
 }

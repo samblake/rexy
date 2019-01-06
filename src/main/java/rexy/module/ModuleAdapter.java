@@ -3,7 +3,7 @@ package rexy.module;
 import com.fasterxml.jackson.databind.JsonNode;
 import rexy.config.model.Api;
 import rexy.http.RexyRequest;
-import rexy.http.RexyResponse;
+import rexy.http.response.RexyResponse;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -37,6 +37,11 @@ public abstract class ModuleAdapter implements RexyModule {
 	@Override
 	public Optional<RexyResponse> handleRequest(Api api, RexyRequest request) throws IOException {
 		return empty();
+	}
+	
+	@Override
+	public RexyResponse processResponse(Api api, RexyRequest request, RexyResponse response) {
+		return response;
 	}
 	
 }
