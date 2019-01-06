@@ -1,6 +1,7 @@
 package rexy.http;
 
 import fi.iki.elonen.NanoHTTPD.IHTTPSession;
+import rexy.http.request.RexyRequest;
 
 import java.util.List;
 import java.util.Map;

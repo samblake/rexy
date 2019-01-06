@@ -1,17 +1,16 @@
 package rexy.utils;
 
-import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.joining;
+import java.util.regex.Pattern;
 
 public class Paths {
+	
+	private static final Pattern SHASH = Pattern.compile("//");
 	
 	private Paths() {
 	}
 	
 	public static String join(String... partialPaths) {
-		return stream(partialPaths)
-				.collect(joining("/"))
-				.replaceAll("//", "/");
+		return SHASH.matcher(String.join("/", partialPaths)).replaceAll("/");
 	}
 
 }

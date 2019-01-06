@@ -150,6 +150,11 @@
             <artifactId>fast-classpath-scanner</artifactId>
             <version>2.21</version>
         </dependency>
+        <dependency>
+            <groupId>com.codepoetics</groupId>
+            <artifactId>ambivalence</artifactId>
+            <version>0.2</version>
+        </dependency>
 
         <!-- Testing-->
         <dependency>

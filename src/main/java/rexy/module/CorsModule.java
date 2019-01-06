@@ -1,5 +1,6 @@
 package rexy.module;
 
+import com.codepoetics.ambivalence.Either;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,7 +8,7 @@ import rexy.Rexy;
 import rexy.config.model.Api;
 import rexy.http.Method;
 import rexy.http.RexyHeader;
-import rexy.http.RexyRequest;
+import rexy.http.request.RexyRequest;
 import rexy.http.response.RexyResponse;
 import rexy.http.response.RexyResponseDelegate;
 
@@ -16,10 +17,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
+import static com.codepoetics.ambivalence.Either.ofRight;
 import static java.util.Arrays.stream;
-import static java.util.Optional.of;
 import static java.util.stream.Collectors.joining;
 import static rexy.http.Method.OPTIONS;
 import static rexy.http.RexyHeader.ACCESS_CONTROL_ALLOW_HEADERS;
@@ -61,15 +61,15 @@ public class CorsModule extends ModuleAdapter {
 	}
 	
 	@Override
-	public Optional<RexyResponse> handleRequest(Api api, RexyRequest request) throws IOException {
+	public Either<RexyRequest, RexyResponse> handleRequest(Api api, RexyRequest request) throws IOException {
 		if (request.getMethod() == OPTIONS) {
-			return createPreflightResponse(request);
+			return ofRight(createPreflightResponse(request));
 		}
 		
 		return super.handleRequest(api, request);
 	}
 	
-	private Optional<RexyResponse> createPreflightResponse(RexyRequest request) {
+	private RexyResponse createPreflightResponse(RexyRequest request) {
 		logger.info("Generating preflight response");
 		
 		List<RexyHeader> headers = new ArrayList<>();
@@ -81,7 +81,7 @@ public class CorsModule extends ModuleAdapter {
 				.map(header -> new RexyHeader(ACCESS_CONTROL_ALLOW_HEADERS, header.getValue()))
 				.ifPresent(headers::add);
 		
-		return of(emptyResponse(200, headers));
+		return emptyResponse(200, headers);
 	}
 	
 	@Override

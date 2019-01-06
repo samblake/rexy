@@ -1,15 +1,15 @@
 package rexy.module;
 
+import com.codepoetics.ambivalence.Either;
 import com.fasterxml.jackson.databind.JsonNode;
 import rexy.config.model.Api;
-import rexy.http.RexyRequest;
+import rexy.http.request.RexyRequest;
 import rexy.http.response.RexyResponse;
 
 import java.io.IOException;
-import java.util.Optional;
 import java.util.regex.Pattern;
 
-import static java.util.Optional.empty;
+import static com.codepoetics.ambivalence.Either.ofLeft;
 
 /**
  * A module implementation that performs no logic. The name is bassed on the class name with 'RexyModule'
@@ -35,8 +35,8 @@ public abstract class ModuleAdapter implements RexyModule {
 	}
 	
 	@Override
-	public Optional<RexyResponse> handleRequest(Api api, RexyRequest request) throws IOException {
-		return empty();
+	public Either<RexyRequest, RexyResponse> handleRequest(Api api, RexyRequest request) throws IOException {
+		return ofLeft(request);
 	}
 	
 	@Override

@@ -1,19 +1,18 @@
 package rexy.module.jmx;
 
+import com.codepoetics.ambivalence.Either;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
 import rexy.config.model.Endpoint;
-import rexy.http.RexyRequest;
+import rexy.http.request.RexyRequest;
 import rexy.http.response.RexyResponse;
 import rexy.module.ModuleAdapter;
 import rexy.module.ModuleInitialisationException;
 
 import javax.management.JMException;
 import java.util.Optional;
-
-import static java.util.Optional.empty;
 
 /**
  * A module for registering MBeans against the endpoints of an API.
@@ -52,7 +51,7 @@ public abstract class JmxModule<T> extends ModuleAdapter {
 	}
 	
 	@Override
-	public Optional<RexyResponse> handleRequest(Api api, RexyRequest request) {
+	public Either<RexyRequest, RexyResponse> handleRequest(Api api, RexyRequest request) {
 		Optional<T> mBean = findEndpointMBean(request);
 		
 		if (mBean.isPresent()) {
@@ -60,7 +59,7 @@ public abstract class JmxModule<T> extends ModuleAdapter {
 		}
 		else {
 			logger.warn("No match for " + request.getUri());
-			return empty();
+			return Either.ofLeft(request);
 		}
 	}
 	
@@ -78,6 +77,6 @@ public abstract class JmxModule<T> extends ModuleAdapter {
 	 * @param mBean    The MBean associated with the request
 	 * @return An Optional containing the response if it has bee created or an empty Optional otherwise
 	 */
-	protected abstract Optional<RexyResponse> handleRequest(Api api, RexyRequest request, T mBean);
+	protected abstract Either<RexyRequest, RexyResponse> handleRequest(Api api, RexyRequest request, T mBean);
 	
 }

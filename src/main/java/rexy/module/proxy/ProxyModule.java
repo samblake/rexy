@@ -1,5 +1,6 @@
 package rexy.module.proxy;
 
+import com.codepoetics.ambivalence.Either;
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -10,7 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
 import rexy.http.RexyHeader;
-import rexy.http.RexyRequest;
+import rexy.http.request.RexyRequest;
 import rexy.http.response.BasicRexyResponse;
 import rexy.http.response.RexyResponse;
 import rexy.module.ModuleAdapter;
@@ -20,9 +21,9 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
 
+import static com.codepoetics.ambivalence.Either.ofRight;
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import static java.util.stream.Collectors.toList;
 import static rexy.http.RexyHeader.HEADER_CONTENT_TYPE;
@@ -61,13 +62,13 @@ public class ProxyModule extends ModuleAdapter {
 	private static final Logger logger = LogManager.getLogger(ProxyModule.class);
 	
 	@Override
-	public Optional<RexyResponse> handleRequest(Api api, RexyRequest request) throws IOException {
+	public Either<RexyRequest, RexyResponse> handleRequest(Api api, RexyRequest request) throws IOException {
 		logger.info("Proxying request for " + request.getUri());
 		
 		HttpUriRequest proxyRequest = createRequest(api.getProxy(), request);
 		// TODO don't create clients for every request, perhaps per API
 		try (CloseableHttpClient client = HttpClients.createDefault()) {
-			return Optional.of(createResponse(request, client.execute(proxyRequest)));
+			return ofRight(createResponse(request, client.execute(proxyRequest)));
 		}
 	}
 	

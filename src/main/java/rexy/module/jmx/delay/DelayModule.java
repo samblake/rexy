@@ -1,18 +1,17 @@
 package rexy.module.jmx.delay;
 
+import com.codepoetics.ambivalence.Either;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
-import rexy.http.RexyRequest;
+import rexy.http.request.RexyRequest;
 import rexy.http.response.RexyResponse;
 import rexy.module.jmx.JmxModule;
 import rexy.module.jmx.JmxRegistry;
 
-import java.util.Optional;
-
+import static com.codepoetics.ambivalence.Either.ofLeft;
 import static java.lang.Thread.sleep;
-import static java.util.Optional.empty;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
@@ -49,7 +48,7 @@ public class DelayModule extends JmxModule<DelayEndpoint> {
 	}
 	
 	@Override
-	protected Optional<RexyResponse> handleRequest(Api api, RexyRequest request, DelayEndpoint mBean) {
+	protected Either<RexyRequest, RexyResponse> handleRequest(Api api, RexyRequest request, DelayEndpoint mBean) {
 		if (mBean.getDelay() > 0) {
 			String requestPath = request.getUri();
 			logger.info("Delaying request for " + requestPath + " by " + mBean.getDelay() + " seconds");
@@ -61,7 +60,8 @@ public class DelayModule extends JmxModule<DelayEndpoint> {
 				logger.error("Error delaying response for " + requestPath, e);
 			}
 		}
-		return empty();
+		
+		return ofLeft(request);
 	}
 	
 }

@@ -11,7 +11,7 @@ import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.client.methods.HttpUriRequest;
 import rexy.http.Method;
 import rexy.http.RexyHeader;
-import rexy.http.RexyRequest;
+import rexy.http.request.RexyRequest;
 
 import static rexy.http.Method.DELETE;
 import static rexy.http.Method.GET;

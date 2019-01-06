@@ -1,12 +1,13 @@
 package rexy.http;
 
+import com.codepoetics.ambivalence.Either;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.Rexy;
 import rexy.config.model.Api;
+import rexy.http.request.RexyRequest;
 import rexy.http.response.RexyResponse;
 import rexy.module.RexyModule;
-import rexy.module.proxy.ProxyModule;
 
 import java.io.IOException;
 import java.util.List;
@@ -45,11 +46,16 @@ public class RexyHandler {
 	public Optional<RexyResponse> handle(RexyRequest request) throws IOException {
 		logger.info("Handling request: " + request.getMethod() + ' ' + request.getUri());
 		
+		// TODO Create some sort of chain so we don't need to re-assign
+		RexyRequest currentRequest = request;
 		ListIterator<RexyModule> iterator = modules.listIterator();
 		while (iterator.hasNext()) {
-			Optional<RexyResponse> response = iterator.next().handleRequest(api, request);
-			if (response.isPresent()) {
-				return processResponse(request, iterator, response.get());
+			Either<RexyRequest, RexyResponse> result = iterator.next().handleRequest(api, currentRequest);
+			if (result.isRight()) {
+				return processResponse(currentRequest, iterator, result.right().toOptional().get());
+			}
+			else {
+				currentRequest = result.left().orElse(currentRequest);
 			}
 		}
 		
@@ -59,21 +65,12 @@ public class RexyHandler {
 	private Optional<RexyResponse> processResponse(RexyRequest request,
 			ListIterator<RexyModule> iterator, RexyResponse response) {
 		
-		RexyResponse rexyResponse = response;
+		RexyResponse currentResponse = response;
 		while (iterator.hasPrevious()) {
-			rexyResponse = iterator.previous().processResponse(api, request, rexyResponse);
+			currentResponse = iterator.previous().processResponse(api, request, currentResponse);
 		}
 		
-		return of(rexyResponse);
-	}
-	
-	public Optional<RexyResponse> proxy(RexyRequest request) throws IOException {
-		
-		Optional<RexyModule> proxy = modules.stream()
-				.filter(module -> module instanceof ProxyModule)
-				.findAny();
-		
-		return proxy.isPresent() ? proxy.get().handleRequest(api, request) : empty();
+		return of(currentResponse);
 	}
 	
 }

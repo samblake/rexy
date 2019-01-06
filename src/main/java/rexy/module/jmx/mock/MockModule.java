@@ -1,12 +1,13 @@
 package rexy.module.jmx.mock;
 
+import com.codepoetics.ambivalence.Either;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.http.entity.ContentType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
 import rexy.http.RexyHeader;
-import rexy.http.RexyRequest;
+import rexy.http.request.RexyRequest;
 import rexy.http.response.BasicRexyResponse;
 import rexy.http.response.RexyResponse;
 import rexy.module.ModuleInitialisationException;
@@ -14,10 +15,10 @@ import rexy.module.jmx.JmxModule;
 import rexy.module.jmx.JmxRegistry;
 
 import java.io.IOException;
-import java.util.Optional;
 
+import static com.codepoetics.ambivalence.Either.ofLeft;
+import static com.codepoetics.ambivalence.Either.ofRight;
 import static java.nio.charset.Charset.defaultCharset;
-import static java.util.Optional.empty;
 import static rexy.http.RexyHeader.HEADER_CONTENT_TYPE;
 import static rexy.utils.Json.booleanValue;
 import static rexy.utils.Json.prettyPrint;
@@ -101,18 +102,19 @@ public class MockModule extends JmxModule<MockEndpoint> {
 	}
 	
 	@Override
-	protected Optional<RexyResponse> handleRequest(Api api, RexyRequest request, MockEndpoint mBean) {
+	protected Either<RexyRequest, RexyResponse> handleRequest(Api api, RexyRequest request, MockEndpoint mBean) {
 		if (mBean.isIntercept()) {
 			logger.info("Returning mock response for " + request.getUri());
 			
 			try {
-				return Optional.of(createResponse(request, api, mBean));
+				return ofRight(createResponse(request, api, mBean));
 			}
 			catch (IOException e) {
 				logger.error("Error sending response for " + request.getUri(), e);
 			}
 		}
-		return empty();
+		
+		return ofLeft(request);
 	}
 	
 	private RexyResponse createResponse(RexyRequest request, Api api, MockEndpoint endpoint) throws IOException {
