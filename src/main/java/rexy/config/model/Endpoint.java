@@ -61,7 +61,7 @@ public class Endpoint {
 	}
 	
 	public Method getMethod() {
-		return method;
+		return method == null ? Method.GET : method;
 	}
 	
 	public String getEndpoint() {
