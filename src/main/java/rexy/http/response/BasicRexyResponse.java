@@ -28,7 +28,7 @@ public class BasicRexyResponse implements RexyResponse {
 		this.statusCode = statusCode;
 		this.mimeType = mimeType;
 		this.headers = RexyHeader.toMap(headers);
-		this.body = body.clone();
+		this.body = body == null ? EMPTY_BODY : body.clone();
 	}
 
 	public BasicRexyResponse(int statusCode, Map<String, String> headers, String mimeType, byte[] body) {

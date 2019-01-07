@@ -4,12 +4,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import rexy.module.jmx.mock.MockModule;
 
 import java.io.IOException;
 
 public class Json {
-	private static final Logger logger = LogManager.getLogger(MockModule.class);
+	private static final Logger logger = LogManager.getLogger(Json.class);
 	
 	private Json() {
 	}
@@ -30,6 +29,10 @@ public class Json {
 	}
 	
 	public static String prettyPrint(String json) {
+		if (json == null) {
+			return json;
+		}
+		
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			JsonNode jsonNode = mapper.readValue(json, JsonNode.class);

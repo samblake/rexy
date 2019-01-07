@@ -6,8 +6,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.Map;
+import java.util.Optional;
 
 import static java.util.Collections.emptyMap;
+import static java.util.Optional.ofNullable;
 
 /**
  * <p>Models the response config:</p>
@@ -59,8 +61,8 @@ public class Response {
 		return headers;
 	}
 	
-	public JsonNode getBody() {
-		return body;
+	public Optional<JsonNode> getBody() {
+		return ofNullable(body);
 	}
 	
 }

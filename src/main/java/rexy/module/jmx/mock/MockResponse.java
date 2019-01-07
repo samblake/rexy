@@ -1,5 +1,6 @@
 package rexy.module.jmx.mock;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import rexy.config.model.Response;
 
 import java.util.Map;
@@ -13,7 +14,8 @@ public class MockResponse implements MockResponseMBean {
 	private final boolean interceptOnSet;
 	
 	public MockResponse(MockEndpoint endpoint, Response body, boolean interceptOnSet) {
-		this(endpoint, body.getHttpStatus(), body.getHeaders(), body.getBody().toString(), interceptOnSet);
+		this(endpoint, body.getHttpStatus(), body.getHeaders(),
+				body.getBody().map(JsonNode::toString).orElse(null), interceptOnSet);
 	}
 	
 	public MockResponse(MockEndpoint endpoint, int httpStatus, Map<String, String> headers, String body, boolean interceptOnSet) {

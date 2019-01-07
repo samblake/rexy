@@ -1,5 +1,6 @@
 package rexy.module.jmx.mock;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import rexy.config.model.Response;
 
 import java.util.Map;
@@ -13,7 +14,8 @@ public class MockEndpoint implements MockEndpointMBean {
 	private Map<String, String> headers;
 	
 	public MockEndpoint(String contentType, Response response) {
-		this(contentType, response.getHttpStatus(), response.getHeaders(), response.getBody().toString());
+		this(contentType, response.getHttpStatus(), response.getHeaders(),
+				response.getBody().map(JsonNode::toString).orElse(null));
 	}
 	
 	public MockEndpoint(String contentType, int httpStatus, Map<String, String> headers, String body) {
