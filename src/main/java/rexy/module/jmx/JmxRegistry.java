@@ -4,6 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.model.Endpoint;
 import rexy.http.Method;
+import rexy.module.jmx.matcher.MatcherFactory;
+import rexy.module.jmx.matcher.RequestMatcher;
 
 import javax.management.JMException;
 import javax.management.MBeanServer;
@@ -37,7 +39,7 @@ public abstract class JmxRegistry<T> {
 	public T addEndpoint(Endpoint endpoint) throws JMException {
 		T mBean = createMBean(endpoint);
 		registerMBean(endpoint.getApi().getName(), endpoint.getName(), mBean);
-		repo.add(RequestMatcher.create(endpoint, mBean));
+		repo.add(MatcherFactory.create(endpoint, mBean));
 		return mBean;
 	}
 	
@@ -49,12 +51,15 @@ public abstract class JmxRegistry<T> {
 	 */
 	protected abstract T createMBean(Endpoint endpoint);
 	
-	protected void registerMBean(String type, String name, T endpoint) throws JMException {
+	/**
+	 * Registers an MBean with the MBean server.
+	 */
+	protected void registerMBean(String apiName, String endpointName, T endpoint) throws JMException {
 		MBeanServer server = ManagementFactory.getPlatformMBeanServer();
 		
 		ObjectName objectName = new ObjectNameBuilder()
-				.withApi(type)
-				.withEndpoint(name)
+				.withApi(apiName)
+				.withEndpoint(endpointName)
 				.withName(getMBeanName())
 				.build();
 		
@@ -86,7 +91,7 @@ public abstract class JmxRegistry<T> {
 		
 		if (matcher.isPresent()) {
 			if (logger.isDebugEnabled()) {
-				logger.debug("Matched endpoint " + matcher.get().getPattern());
+				logger.debug("Matched endpoint " + matcher);
 			}
 			return matcher.map(RequestMatcher::getMBean);
 		}
