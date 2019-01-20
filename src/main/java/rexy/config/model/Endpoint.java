@@ -13,7 +13,7 @@ import static java.util.Collections.emptyList;
 /**
  * <p>Models the endpoint config:</p>
  *
- * <p>{@code
+ * <pre>{@code
  * {
  *   "name": "location",
  *   "method": "GET",
@@ -22,7 +22,7 @@ import static java.util.Collections.emptyList;
  *     ...
  *   ]
  * }
- * }</p>
+ * }</pre>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

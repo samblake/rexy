@@ -7,18 +7,35 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
- * The configuration required for running Rexy proper.
+ * The configuration required for running Rexy.
  */
 public interface RexyConfig {
 	
+	/**
+	 * The port that Rexy should listen on.
+	 */
 	int getPort();
 	
-	String getBaseUrl();
+	/**
+	 * The base path Rexy runs under. Defaults to <pre>{@code /}</pre>.
+	 */
+	String getBasePath();
 	
+	/**
+	 * The packages that should be scanned for {@link rexy.module.RexyModule modules}.
+	 */
 	List<String> getScanPackages();
 	
+	/**
+	 * A map of module name to module specific configurations. All module configurations have, as a minimum,
+	 * an {@code enabled} element. All other values are defined by the module itself. Modules are disabled
+	 * by default and must be explicitaly set to be enabled.
+	 */
 	LinkedHashMap<String, JsonNode> getModules();
 	
+	/**
+	 * Configuration details of the APIs that Rexy will handle.
+	 */
 	List<Api> getApis();
 	
 }

@@ -5,6 +5,9 @@ import rexy.config.model.Response;
 
 import java.util.Map;
 
+/**
+ * The mock endpoint implementation for the {@link MockModule}.
+ */
 public class MockEndpoint implements MockEndpointMBean {
 	
 	private boolean intercept;

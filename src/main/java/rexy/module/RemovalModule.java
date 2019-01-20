@@ -23,6 +23,31 @@ import static rexy.http.RexyHeader.ACCESS_CONTROL_REQUEST_HEADERS;
 import static rexy.http.RexyHeader.X_REQUESTED_WTH;
 import static rexy.utils.Json.stringValue;
 
+/**
+ * A module that removes a header from requests.
+ *
+ * <pre>{@code
+ * "removal": {
+ *   "enabled": true,
+ *   "headerName": "X-Requested-With"
+ * }
+ * }</pre>
+ *
+ * <table summary="Configuration details">
+ *     <tr>
+ *         <th>Name</th>
+ *         <th>Description</th>
+ *         <th>Type</th>
+ *         <th>Default</th>
+ *     </tr>
+ *     <tr>
+ *         <td>headerName</td>
+ *         <td>The name of the header to removed.</td>
+ *         <td>string</td>
+ *         <td>X-Requested-With</td>
+ *     </tr>
+ * </table>
+ */
 public class RemovalModule extends ModuleAdapter {
 	private static final Logger logger = LogManager.getLogger(RemovalModule.class);
 	

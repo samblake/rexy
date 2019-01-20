@@ -23,6 +23,9 @@ import static java.util.Collections.emptyList;
 import static rexy.http.response.BasicRexyResponse.errorResponse;
 import static rexy.utils.Paths.join;
 
+/**
+ * The Rexy HTTP server. Listens for incoming requests and routes them to handlers for each API.
+ */
 public class RexyServer extends NanoHTTPD {
 	private static final Logger logger = LogManager.getLogger(RexyServer.class);
 	
@@ -37,7 +40,7 @@ public class RexyServer extends NanoHTTPD {
 	 * @param modules The enabled modules
 	 */
 	public RexyServer(RexyConfig config, List<RexyModule> modules) {
-		this(config.getPort(), config.getBaseUrl(), modules, config.getApis());
+		this(config.getPort(), config.getBasePath(), modules, config.getApis());
 	}
 	
 	/**

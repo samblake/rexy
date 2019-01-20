@@ -14,6 +14,9 @@ import java.lang.management.ManagementFactory;
 
 import static org.apache.commons.lang.StringUtils.isEmpty;
 
+/**
+ * A registry for {@link MockEndpoint mock endpoints}.
+ */
 public final class MockRegistry extends JmxRegistry<MockEndpoint> {
 	
 	private final boolean interceptOnSet;

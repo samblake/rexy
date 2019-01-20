@@ -18,9 +18,8 @@ import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
 /**
- * A handler for {@link Api API} endpoints with the modules that should be applied
- * to the API. The handler will loop through the modules and apply them in order until one of them writes a
- * response.
+ * A handler for {@link Api API} endpoints with the modules that should be applied to the API. The handler
+ * will loop through the modules and apply them in order until one of them writes a response.
  */
 public class RexyHandler {
 	private static final Logger logger = LogManager.getLogger(Rexy.class);
@@ -43,6 +42,17 @@ public class RexyHandler {
 		return api;
 	}
 	
+	/**
+	 * Processes the request, creating a response. Each module processes the request in order until a response is
+	 * created in which case no further modules will process the request. Once the response is created each module
+	 * that processed the request will process the response in reverse order. Basically it goes up the chain until
+	 * a response is created then it stops and goes down the chain.
+	 *
+	 * @param request The request to process
+	 * @return An optional containing a {@link RexyResponse} if a response was created by one of the modules
+	 *         or an empty optional if no response was created
+	 * @throws IOException Thrown if the request could not be handled
+	 */
 	public Optional<RexyResponse> handle(RexyRequest request) throws IOException {
 		logger.info("Handling request: " + request.getMethod() + ' ' + request.getUri());
 		

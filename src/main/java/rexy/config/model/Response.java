@@ -14,7 +14,7 @@ import static java.util.Optional.ofNullable;
 /**
  * <p>Models the response config:</p>
  *
- * <p>{@code
+ * <pre>{@code
  * {
  *   "name": "Successful",
  *   "httpStatus": 200,
@@ -29,7 +29,7 @@ import static java.util.Optional.ofNullable;
  *     "latt_long": "51.506321,-0.12714"
  *   }
  * }
- * }</p>
+ * }</pre>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

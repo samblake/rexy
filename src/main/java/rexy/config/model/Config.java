@@ -13,7 +13,7 @@ import static java.util.Collections.emptyList;
 /**
  * <p>Models the base config:</p>
  *
- * <p>{@code
+ * <pre>{@code
  * {
  *   "port": "8081",
  *   "baseUrl": "/",
@@ -33,10 +33,7 @@ import static java.util.Collections.emptyList;
  *     ...
  *   ]
  * }
- * }</p>
- *
- * <p>In addition to the {@link rexy.config.RexyConfig standard config} it also includes paths to JSON files
- * to allow importing of externally defined APIs.</p>
+ * }</pre>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -68,8 +65,8 @@ public class Config implements rexy.config.RexyConfig {
 	}
 	
 	@Override
-	public String getBaseUrl() {
-		return baseUrl;
+	public String getBasePath() {
+		return baseUrl == null ? "/" : baseUrl;
 	}
 	
 	@Override

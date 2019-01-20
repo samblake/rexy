@@ -23,8 +23,8 @@ public abstract class DelegatingConfig implements RexyConfig {
 	}
 	
 	@Override
-	public String getBaseUrl() {
-		return delegate.getBaseUrl();
+	public String getBasePath() {
+		return delegate.getBasePath();
 	}
 	
 	@Override

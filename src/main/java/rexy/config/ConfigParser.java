@@ -46,9 +46,8 @@ public class ConfigParser {
 			importedApis.add(parse(Api.class, importPath));
 		}
 		
-		RexyConfig apiConfig = new ApiConfig(config, importedApis);
 		// TODO validate (duplicate APIs, paths, etc.)
-		return apiConfig;
+		return new ApiConfig(config, importedApis);
 	}
 	
 	private <T> T parse(Class<T> jacksonClass, String path) throws ConfigException {

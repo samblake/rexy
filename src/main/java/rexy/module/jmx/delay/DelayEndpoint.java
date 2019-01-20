@@ -1,5 +1,8 @@
 package rexy.module.jmx.delay;
 
+/**
+ * The delay endpoint implementation for the {@link DelayModule}.
+ */
 public class DelayEndpoint implements DelayEndpointMBean {
 	
 	private int delay;

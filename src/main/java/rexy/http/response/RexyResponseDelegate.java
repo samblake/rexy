@@ -6,11 +6,14 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
 
+/**
+ * Delegates all method calls to the delegate.
+ */
 public abstract class RexyResponseDelegate implements RexyResponse {
 
 	private final RexyResponse delegate;
 	
-	public RexyResponseDelegate(RexyResponse delegate) {
+	protected RexyResponseDelegate(RexyResponse delegate) {
 		this.delegate = delegate;
 	}
 	

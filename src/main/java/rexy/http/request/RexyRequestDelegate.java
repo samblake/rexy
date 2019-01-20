@@ -6,11 +6,14 @@ import rexy.http.RexyHeader;
 import java.util.List;
 import java.util.Map;
 
-public class RexyRequestDelegate implements RexyRequest {
+/**
+ * Delegates all method calls to the delegate.
+ */
+public abstract class RexyRequestDelegate implements RexyRequest {
 	
 	private final RexyRequest delegate;
 	
-	public RexyRequestDelegate(RexyRequest delegate) {
+	protected RexyRequestDelegate(RexyRequest delegate) {
 		this.delegate = delegate;
 	}
 	

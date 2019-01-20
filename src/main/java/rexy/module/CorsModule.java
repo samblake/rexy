@@ -33,8 +33,46 @@ import static rexy.utils.Json.stringValue;
 import static rexy.utils.Streams.flattern;
 
 /**
- * Generates a preflight response for OPTIONS requests. Adds/overrides the Access-Control-Allow-Headers header
- * to the response of all other requests.
+ * <p>A module that generates a preflight response for OPTIONS requests and adds/overrides the
+ * {@code Access-Control-Allow-Headers} header to the response of all other requests The module
+ * can be triggered conditionally based on a specified header value. The configuration is:</p>
+ *
+ * <pre>{@code
+ * "cors": {
+ *   "enabled": true,
+ *   "allowOrigin": "*",
+ *   "headerName": "X-Requested-With",
+ *   "headerValue": "Wexy"
+ * }
+ * }</pre>
+ *
+ * <table summary="Configuration details">
+ *     <tr>
+ *         <th>Name</th>
+ *         <th>Description</th>
+ *         <th>Type</th>
+ *         <th>Default</th>
+ *     </tr>
+ *     <tr>
+ *         <td>allowOrigin</td>
+ *         <td>The allowOrigin header value.</td>
+ *         <td>string</td>
+ *         <td>*</td>
+ *     </tr>
+ *     <tr>
+ *         <td>headerName</td>
+ *         <td>The name of the header that should be used to conditionally trigger the module.</td>
+ *         <td>string</td>
+ *         <td>X-Requested-With</td>
+ *     </tr>
+ *     <tr>
+ *         <td>headerValue</td>
+ *         <td>The value of the header that should be used to conditionally trigger the module. If no value
+ *         is set then the module will trigger for all requests.</td>
+ *         <td>string</td>
+ *         <td><i>null</i></td>
+ *     </tr>
+ * </table>
  *
  * @see <a href="https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request">MDN</a>
  */

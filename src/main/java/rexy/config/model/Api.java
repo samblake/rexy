@@ -14,17 +14,20 @@ import static java.util.Collections.emptyMap;
 /**
  * <p>Models the API config:</p>
  *
- * <p>{@code
+ * <pre>{@code
  * {
  *   "name": "metaweather",
  *   "baseUrl": "api",
  *   "contentType": "application/json",
  *   "proxy": "http://www.metaweather.com/api",
+ *   "headers": {
+ *     "Accept-Charset": "utf-8"
+ *   },
  *   "endpoints": [
  *     ...
  *   ]
  * }
- * }</p>
+ * }</pre>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

@@ -10,6 +10,9 @@ import java.util.Map.Entry;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
+/**
+ * An adapter for a {@link NanoRequest} onto the generic {@link RexyRequest}.
+ */
 public class NanoRequest implements RexyRequest {
 	
 	private final IHTTPSession session;

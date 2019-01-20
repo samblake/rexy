@@ -29,8 +29,7 @@
               "name": "Successful",
               "httpStatus": 200,
               "headers": {
-                "abc": "Test 1",
-                "xyz": "Test 2"
+                "Accept-Charset": "utf-8"
               },
               "body": {
                 "title": "London",

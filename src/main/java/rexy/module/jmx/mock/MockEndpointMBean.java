@@ -2,8 +2,14 @@ package rexy.module.jmx.mock;
 
 import java.util.Map;
 
+/**
+ * The mock endpoint MBean for the {@link MockModule}.
+ */
 public interface MockEndpointMBean {
 	
+	/**
+	 * If the the request should be intercepted and the mock response returned.
+	 */
 	boolean isIntercept();
 	
 	void setIntercept(boolean intercept);

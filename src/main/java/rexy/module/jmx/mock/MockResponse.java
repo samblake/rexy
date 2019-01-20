@@ -5,6 +5,9 @@ import rexy.config.model.Response;
 
 import java.util.Map;
 
+/**
+ * The preset mock response implementation.
+ */
 public class MockResponse implements MockResponseMBean {
 	
 	private final MockEndpoint endpoint;
