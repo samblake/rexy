@@ -15,7 +15,7 @@ import static java.util.stream.Stream.of;
 import static rexy.utils.Streams.collectionMerger;
 
 /**
- * Modules HTTP headers withing Rexy.
+ * Models HTTP headers within Rexy.
  */
 public class RexyHeader {
 	public static final String HEADER_CONTENT_TYPE = "Content-Type";
