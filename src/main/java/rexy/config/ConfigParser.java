@@ -3,6 +3,7 @@ package rexy.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.graalvm.compiler.core.common.SuppressFBWarnings;
 import rexy.config.model.Api;
 import rexy.config.model.Config;
 
@@ -50,6 +51,14 @@ public class ConfigParser {
 		return new ApiConfig(config, importedApis);
 	}
 	
+	@SuppressFBWarnings(
+			value = {
+					"NP_LOAD_OF_KNOWN_NULL_VALUE",
+					"RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE",
+					"RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE"
+			},
+			justification = "Seems to be a false positive - https://github.com/spotbugs/spotbugs/issues/1338"
+	)
 	private <T> T parse(Class<T> jacksonClass, String path) throws ConfigException {
 		logger.info("Reading " + jacksonClass.getSimpleName() + " from " + path);
 		try {
