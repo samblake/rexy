@@ -37,34 +37,34 @@ import static rexy.utils.Json.prettyPrint;
  *
  * <p>{@code
  * "apis": [
- *   {
- *     "name": "metaweather",
- *     "baseUrl": "api/",
- *     "contentType": "application/json",
- *     "proxy": "http://www.metaweather.com/api",
- *     "endpoints": [{
- *       "name": "location",
- *       "endpoint": "/location/search/?query={query}",
- *       "responses": [{
- *           "name": "Successful",
- *           "httpStatus": 200,
- *           "body": {
- *             "title": "London",
- *             "location_type": "City",
- *             "woeid": 44418,
- *             "latt_long": "51.506321,-0.12714"
- *           }
- *         },
- *         {
- *           "name": "Invalid",
- *           "httpStatus": 401,
- *           "body": {
- *             "error": "invalid request"
- *           }
- *         }
- *       ]
- *     }]
- *   }
+ * {
+ * "name": "metaweather",
+ * "baseUrl": "api/",
+ * "contentType": "application/json",
+ * "proxy": "http://www.metaweather.com/api",
+ * "endpoints": [{
+ * "name": "location",
+ * "endpoint": "/location/search/?query={query}",
+ * "responses": [{
+ * "name": "Successful",
+ * "httpStatus": 200,
+ * "body": {
+ * "title": "London",
+ * "location_type": "City",
+ * "woeid": 44418,
+ * "latt_long": "51.506321,-0.12714"
+ * }
+ * },
+ * {
+ * "name": "Invalid",
+ * "httpStatus": 401,
+ * "body": {
+ * "error": "invalid request"
+ * }
+ * }
+ * ]
+ * }]
+ * }
  * ]
  * }</p>
  *
@@ -119,10 +119,14 @@ public class MockModule extends JmxModule<MockEndpoint> {
 			return null;
 		}
 		
-		String body = prettyPrint ? prettyPrint(endpoint.getBody()) : endpoint.getBody();
+		String body = shouldPrettyPrintJson(endpoint) ? prettyPrint(endpoint.getBody()) : endpoint.getBody();
 		
 		// TODO Check for charset in headers
 		return body.getBytes(defaultCharset());
+	}
+	
+	private boolean shouldPrettyPrintJson(MockEndpoint endpoint) {
+		return prettyPrint && endpoint.getContentType() != null && endpoint.getContentType().contains("json");
 	}
 	
 	private String getContentType(RexyRequest request, Api api, MockEndpoint endpoint) {
