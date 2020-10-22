@@ -31,12 +31,7 @@
               "headers": {
                 "Accept-Charset": "utf-8"
               },
-              "body": {
-                "title": "London",
-                "location_type": "City",
-                "woeid": 44418,
-                "latt_long": "51.506321,-0.12714"
-              }
+              "body": "example-body.json"
             },
             {
               "name": "Invalid",

@@ -1,30 +1,79 @@
 {
-  "name": "metaweather2",
-  "baseUrl": "mw2",
+  "name": "chuck norris",
+  "baseUrl": "chucknorris",
   "contentType": "application/json",
-  "proxy": "http://www.metaweather.com/api",
+  "proxy": "https://api.chucknorris.io",
   "endpoints": [
     {
-      "name": "location",
+      "name": "joke",
+      "endpoint": "/jokes/random",
       "method": "GET",
-      "endpoint": "/location/search/?query={query}",
       "responses": [
         {
           "name": "Successful",
           "httpStatus": 200,
           "body": {
-            "title": "London",
-            "location_type": "City",
-            "woeid": 44418,
-            "latt_long": "51.506321,-0.12714"
+            "icon_url": "https://assets.chucknorris.host/img/avatar/chuck-norris.png",
+            "id": "g6Tk9tCFQpeqqxY2Rh-sTw",
+            "url": "https://api.chucknorris.io/jokes/g6Tk9tCFQpeqqxY2Rh-sTw",
+            "value": "Phobias are afraid of Chuck Norris."
+          }
+        }
+      ]
+    },
+    {
+      "name": "category joke",
+      "endpoint": "/jokes/random?category={category}",
+      "method": "GET",
+      "responses": [
+        {
+          "name": "Successful",
+          "httpStatus": 200,
+          "body":{
+            "category": [
+              "dev"
+            ],
+            "icon_url": "https://assets.chucknorris.host/img/avatar/chuck-norris.png",
+            "id": "nmlts0sqrwifigqta-rv_g",
+            "url": "https://api.chucknorris.io/jokes/nmlts0sqrwifigqta-rv_g",
+            "value": "Chuck Norris's log statements are always at the FATAL level."
           }
         },
         {
-          "name": "Invalid",
-          "httpStatus": 401,
-          "body": {
-            "error": "invalid request"
+          "name": "Error",
+          "httpStatus": 404,
+          "headers": {
+            "content-type": "text/html; charset=UTF-8"
           }
+        }
+      ]
+    },
+    {
+      "name": "categories",
+      "endpoint": "/jokes/categories",
+      "method": "GET",
+      "responses": [
+        {
+          "name": "Successful",
+          "httpStatus": 200,
+          "body": [
+            "explicit",
+            "dev",
+            "movie",
+            "food",
+            "celebrity",
+            "science",
+            "sport",
+            "political",
+            "religion",
+            "animal",
+            "history",
+            "music",
+            "travel",
+            "career",
+            "money",
+            "fashion"
+          ]
         }
       ]
     }

@@ -1,14 +1,26 @@
 package rexy.module.jmx.mock;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.apache.log4j.Logger;
+import rexy.config.ConfigException;
 import rexy.config.model.Response;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * The mock endpoint implementation for the {@link MockModule}.
  */
 public class MockEndpoint implements MockEndpointMBean {
+	private static final Logger logger = Logger.getLogger(MockEndpoint.class);
 	
 	private boolean intercept;
 	private String contentType;
@@ -17,8 +29,7 @@ public class MockEndpoint implements MockEndpointMBean {
 	private Map<String, String> headers;
 	
 	public MockEndpoint(String contentType, Response response) {
-		this(contentType, response.getHttpStatus(), response.getHeaders(),
-				response.getBody().map(JsonNode::toString).orElse(null));
+		this(contentType, response.getHttpStatus(), response.getHeaders(), getBody(response));
 	}
 	
 	public MockEndpoint(String contentType, int httpStatus, Map<String, String> headers, String body) {
@@ -77,6 +88,48 @@ public class MockEndpoint implements MockEndpointMBean {
 	@Override
 	public void setBody(String body) {
 		this.body = body;
+	}
+	
+	private static String getBody(Response response) {
+		return response.getBody().map(MockEndpoint::findBody).orElse(null);
+	}
+	
+	private static String findBody(JsonNode node) {
+		try {
+			return node.isTextual() ? parse(node.asText()) : node.toPrettyString();
+		}
+		catch (ConfigException e) {
+			// FIXME improve error handling, the whole method probably need moving out of here
+			throw new RuntimeException("Could not load config", e);
+		}
+	}
+	
+	private static String parse(String path) throws ConfigException {
+		logger.info("Attempting to read body from " + path);
+		try {
+			try (InputStream inputStream = MockEndpoint.class.getResourceAsStream('/' + path)) {
+				if (inputStream != null) {
+					try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, UTF_8))) {
+						return reader.lines().collect(Collectors.joining("\n"));
+					}
+				}
+			}
+			
+			logger.debug(path + " not found on classpath, looking for absolute file");
+			File file = new File(path);
+			if (file.exists()) {
+				try (BufferedReader reader = new BufferedReader(
+						new InputStreamReader(new FileInputStream(file), UTF_8))) {
+					return reader.lines().collect(Collectors.joining("\n"));
+				}
+			}
+			
+			logger.debug(path + " absolute file not found, using string value");
+			return path;
+		}
+		catch (IOException e) {
+			throw new ConfigException("Could not read " + path, e);
+		}
 	}
 	
 }
