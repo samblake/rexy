@@ -2,6 +2,7 @@ package rexy.module;
 
 import com.codepoetics.ambivalence.Either;
 import com.fasterxml.jackson.databind.JsonNode;
+import rexy.Rexy.RexyDetails;
 import rexy.config.model.Api;
 import rexy.http.request.RexyRequest;
 import rexy.http.response.BasicRexyResponse;
@@ -26,10 +27,11 @@ public interface RexyModule {
 	/**
 	 * Initialises the module with the config supplied for the module.
 	 *
+	 * @param rexyDetails Detail of the Rexy server itself
 	 * @param config The module configuration
 	 * @throws ModuleInitialisationException Thrown if the module cannot be initialised
 	 */
-	void init(JsonNode config) throws ModuleInitialisationException;
+	void init(RexyDetails rexyDetails, JsonNode config) throws ModuleInitialisationException;
 	
 	/**
 	 * Initialises in the module for a specific @{@link Api API}. This will be called after the {@code init} method.

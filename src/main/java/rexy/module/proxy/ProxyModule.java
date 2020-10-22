@@ -64,19 +64,21 @@ import static rexy.utils.Requests.toHeaders;
 public class ProxyModule extends ModuleAdapter {
 	private static final Logger logger = LogManager.getLogger(ProxyModule.class);
 	
+	private static final int NO_CONTENT = 204;
+	
 	@Override
 	public Either<RexyRequest, RexyResponse> handleRequest(Api api, RexyRequest request) throws IOException {
 		logger.info("Proxying request for " + request.getUri());
 		
 		if (api.getProxy() == null) {
 			ContentType contentType = ContentType.parse(getContentType(request, api));
-			return ofRight(emptyResponse(500, contentType.getMimeType(), toHeaders(api.getHeaders())));
+			return ofRight(emptyResponse(NO_CONTENT, contentType.getMimeType(), toHeaders(api.getHeaders())));
 		}
 		else {
 			HttpUriRequest proxyRequest = createRequest(api.getProxy(), request);
 			// TODO don't create clients for every request, perhaps per API
 			try (CloseableHttpClient client = HttpClients.createDefault()) {
-				return ofRight(createResponse(request, client.execute(proxyRequest)));
+				return ofRight(createResponse(client.execute(proxyRequest)));
 			}
 		}
 	}
@@ -85,9 +87,7 @@ public class ProxyModule extends ModuleAdapter {
 		return api.getContentType() != null ? api.getContentType() : Requests.getContentType(request);
 	}
 	
-	private RexyResponse createResponse(RexyRequest request, CloseableHttpResponse response)
-			throws IOException {
-		
+	private RexyResponse createResponse(CloseableHttpResponse response) throws IOException {
 		byte[] body = getBody(response);
 		int statusCode = response.getStatusLine().getStatusCode();
 		

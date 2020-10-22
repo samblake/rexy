@@ -4,6 +4,7 @@ import com.codepoetics.ambivalence.Either;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import rexy.Rexy.RexyDetails;
 import rexy.config.model.Api;
 import rexy.http.RexyHeader;
 import rexy.http.request.RexyRequest;
@@ -58,7 +59,7 @@ public class RemovalModule extends ModuleAdapter {
 	private String headerName;
 	
 	@Override
-	public void init(JsonNode config) {
+	public void init(RexyDetails rexyDetails, JsonNode config) {
 		headerName = stringValue(config, CONFIG_HEADER_NAME, X_REQUESTED_WTH);
 	}
 	

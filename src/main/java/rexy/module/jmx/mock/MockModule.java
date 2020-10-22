@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.http.entity.ContentType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import rexy.Rexy.RexyDetails;
 import rexy.config.model.Api;
 import rexy.http.request.RexyRequest;
 import rexy.http.response.BasicRexyResponse;
@@ -12,13 +13,18 @@ import rexy.http.response.RexyResponse;
 import rexy.module.ModuleInitialisationException;
 import rexy.module.jmx.JmxModule;
 import rexy.module.jmx.JmxRegistry;
+import rexy.utils.Json;
 import rexy.utils.Requests;
+import rexy.utils.Xml;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.codepoetics.ambivalence.Either.ofLeft;
 import static com.codepoetics.ambivalence.Either.ofRight;
 import static java.nio.charset.Charset.defaultCharset;
+import static rexy.http.RexyHeader.HEADER_CONTENT_TYPE;
 import static rexy.utils.Json.booleanValue;
-import static rexy.utils.Json.prettyPrint;
 
 /**
  * <p>A module that intercepts a request and optionally returns a mock response.</p>
@@ -88,8 +94,8 @@ public class MockModule extends JmxModule<MockEndpoint> {
 	private boolean prettyPrint;
 	
 	@Override
-	public void init(JsonNode config) throws ModuleInitialisationException {
-		super.init(config);
+	public void init(RexyDetails rexyDetails, JsonNode config) throws ModuleInitialisationException {
+		super.init(rexyDetails, config);
 		prettyPrint = booleanValue(config, CONFIG_PRETTY_PRINT);
 	}
 	
@@ -109,24 +115,33 @@ public class MockModule extends JmxModule<MockEndpoint> {
 	}
 	
 	private RexyResponse createResponse(RexyRequest request, Api api, MockEndpoint endpoint) {
-		byte[] body = getBody(endpoint);
 		ContentType contentType = ContentType.parse(getContentType(request, api, endpoint));
+		byte[] body = getBody(endpoint, contentType);
 		return new BasicRexyResponse(endpoint.getHttpStatus(), api.getHeaders(), contentType.getMimeType(), body);
 	}
 	
-	private byte[] getBody(MockEndpoint endpoint) {
+	private byte[] getBody(MockEndpoint endpoint, ContentType contentType) {
 		if (endpoint.getBody() == null) {
 			return null;
 		}
 		
-		String body = shouldPrettyPrintJson(endpoint) ? prettyPrint(endpoint.getBody()) : endpoint.getBody();
+		String body = getFormattedBody(endpoint, contentType);
 		
 		// TODO Check for charset in headers
 		return body.getBytes(defaultCharset());
 	}
 	
-	private boolean shouldPrettyPrintJson(MockEndpoint endpoint) {
-		return prettyPrint && endpoint.getContentType() != null && endpoint.getContentType().contains("json");
+	private String getFormattedBody(MockEndpoint endpoint, ContentType contentType) {
+		if (prettyPrint && contentType != null) {
+			String mimeType = contentType.getMimeType().toLowerCase();
+			if (mimeType.contains("json")) {
+				return Json.prettyPrint(endpoint.getBody());
+			}
+			if (mimeType.contains("xml")) {
+				return Xml.prettyPrint(endpoint.getBody());
+			}
+		}
+		return endpoint.getBody();
 	}
 	
 	private String getContentType(RexyRequest request, Api api, MockEndpoint endpoint) {

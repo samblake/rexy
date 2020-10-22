@@ -2,6 +2,7 @@ package rexy.module;
 
 import com.codepoetics.ambivalence.Either;
 import com.fasterxml.jackson.databind.JsonNode;
+import rexy.Rexy.RexyDetails;
 import rexy.config.model.Api;
 import rexy.http.request.RexyRequest;
 import rexy.http.response.RexyResponse;
@@ -27,7 +28,7 @@ public abstract class ModuleAdapter implements RexyModule {
 	}
 	
 	@Override
-	public void init(JsonNode config) throws ModuleInitialisationException {
+	public void init(RexyDetails rexyDetails, JsonNode config) throws ModuleInitialisationException {
 	}
 	
 	@Override

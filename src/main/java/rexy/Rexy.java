@@ -1,5 +1,6 @@
 package rexy;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -66,16 +67,18 @@ public class Rexy {
 	}
 	
 	private List<RexyModule> initModules(RexyConfig config, List<RexyModule> modules) throws ModuleInitialisationException {
+		RexyDetails rexyDetails = new RexyDetails(config.getPort(), config.getBasePath());
+		
 		List<RexyModule> enabledModules = new ArrayList<>();
-		Set<Entry<String, JsonNode>> moduleConfigs = config.getModules().entrySet();
-		for (Entry<String, JsonNode> moduleConfig : moduleConfigs) {
-			enabledModules.addAll(initModule(modules, moduleConfig, config.getApis()));
+		for (Entry<String, JsonNode> moduleConfig : config.getModules().entrySet()) {
+			enabledModules.addAll(initModule(rexyDetails, modules, moduleConfig, config.getApis()));
 		}
+		
 		return enabledModules;
 	}
 	
-	private List<RexyModule> initModule(List<RexyModule> modules, Entry<String, JsonNode> moduleConfig, List<Api> apis)
-			throws ModuleInitialisationException {
+	private List<RexyModule> initModule(RexyDetails rexyDetails, List<RexyModule> modules,
+			Entry<String, JsonNode> moduleConfig, List<Api> apis) throws ModuleInitialisationException {
 		
 		List<RexyModule> enabledModules = new ArrayList<>();
 		
@@ -84,7 +87,7 @@ public class Rexy {
 				.orElseThrow(() -> new ModuleInitialisationException("Could not find module " + moduleName));
 		
 		if (booleanValue(moduleConfig.getValue(), "enabled")) {
-			module.init(moduleConfig.getValue());
+			module.init(rexyDetails, moduleConfig.getValue());
 			
 			for (Api api : apis) {
 				module.initEndpoint(api);
@@ -98,6 +101,25 @@ public class Rexy {
 		}
 		
 		return enabledModules;
+	}
+	
+	public static class RexyDetails {
+		private final int port;
+		private final String baseUrl;
+		
+		public RexyDetails(int port, String baseUrl) {
+			this.port = port;
+			this.baseUrl = baseUrl;
+		}
+		
+		public int getPort() {
+			return port;
+		}
+		
+		public String getBaseUrl() {
+			return baseUrl;
+		}
+		
 	}
 	
 }

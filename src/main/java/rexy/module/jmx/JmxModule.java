@@ -4,6 +4,7 @@ import com.codepoetics.ambivalence.Either;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import rexy.Rexy.RexyDetails;
 import rexy.config.model.Api;
 import rexy.config.model.Endpoint;
 import rexy.http.request.RexyRequest;
@@ -25,7 +26,7 @@ public abstract class JmxModule<T> extends ModuleAdapter {
 	private JmxRegistry<T> registry;
 	
 	@Override
-	public void init(JsonNode config) throws ModuleInitialisationException {
+	public void init(RexyDetails rexyDetails, JsonNode config) throws ModuleInitialisationException {
 		registry = createRegistry(config);
 	}
 	

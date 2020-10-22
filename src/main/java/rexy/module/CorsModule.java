@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.Rexy;
+import rexy.Rexy.RexyDetails;
 import rexy.config.model.Api;
 import rexy.http.Method;
 import rexy.http.RexyHeader;
@@ -92,7 +93,7 @@ public class CorsModule extends ModuleAdapter {
 	private String headerValue;
 	
 	@Override
-	public void init(JsonNode config) {
+	public void init(RexyDetails rexyDetails, JsonNode config) {
 		allowOrigin = stringValue(config, CONFIG_ALLOW_ORIGIN, ALLOW_ALL);
 		headerName = stringValue(config, CONFIG_HEADER_NAME, X_REQUESTED_WTH);
 		headerValue = stringValue(config, CONFIG_HEADER_VALUE, null);
