@@ -1,6 +1,7 @@
 package rexy.module.jmx.mock;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.log4j.Logger;
 import rexy.config.ConfigException;
 import rexy.config.model.Response;
@@ -104,6 +105,14 @@ public class MockEndpoint implements MockEndpointMBean {
 		}
 	}
 	
+	@SuppressFBWarnings(
+			value = {
+					"NP_LOAD_OF_KNOWN_NULL_VALUE",
+					"RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE",
+					"RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE"
+			},
+			justification = "Seems to be a false positive - https://github.com/spotbugs/spotbugs/issues/1338"
+	)
 	private static String parse(String path) throws ConfigException {
 		logger.info("Attempting to read body from " + path);
 		try {
