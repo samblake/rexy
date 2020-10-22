@@ -15,6 +15,7 @@ import rexy.http.request.RexyRequest;
 import rexy.http.response.BasicRexyResponse;
 import rexy.http.response.RexyResponse;
 import rexy.module.ModuleAdapter;
+import rexy.utils.Requests;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +28,9 @@ import static com.codepoetics.ambivalence.Either.ofRight;
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import static java.util.stream.Collectors.toList;
 import static rexy.http.RexyHeader.HEADER_CONTENT_TYPE;
+import static rexy.http.response.BasicRexyResponse.emptyResponse;
 import static rexy.module.proxy.RequestFactory.createRequest;
+import static rexy.utils.Requests.toHeaders;
 
 /**
  * <p>A module that proxies a request to another URL. This will always write a response so will always be the
@@ -65,11 +68,21 @@ public class ProxyModule extends ModuleAdapter {
 	public Either<RexyRequest, RexyResponse> handleRequest(Api api, RexyRequest request) throws IOException {
 		logger.info("Proxying request for " + request.getUri());
 		
-		HttpUriRequest proxyRequest = createRequest(api.getProxy(), request);
-		// TODO don't create clients for every request, perhaps per API
-		try (CloseableHttpClient client = HttpClients.createDefault()) {
-			return ofRight(createResponse(request, client.execute(proxyRequest)));
+		if (api.getProxy() == null) {
+			ContentType contentType = ContentType.parse(getContentType(request, api));
+			return ofRight(emptyResponse(500, contentType.getMimeType(), toHeaders(api.getHeaders())));
 		}
+		else {
+			HttpUriRequest proxyRequest = createRequest(api.getProxy(), request);
+			// TODO don't create clients for every request, perhaps per API
+			try (CloseableHttpClient client = HttpClients.createDefault()) {
+				return ofRight(createResponse(request, client.execute(proxyRequest)));
+			}
+		}
+	}
+	
+	private String getContentType(RexyRequest request, Api api) {
+		return api.getContentType() != null ? api.getContentType() : Requests.getContentType(request);
 	}
 	
 	private RexyResponse createResponse(RexyRequest request, CloseableHttpResponse response)

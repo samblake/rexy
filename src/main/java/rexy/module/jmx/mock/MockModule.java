@@ -6,20 +6,17 @@ import org.apache.http.entity.ContentType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rexy.config.model.Api;
-import rexy.http.RexyHeader;
 import rexy.http.request.RexyRequest;
 import rexy.http.response.BasicRexyResponse;
 import rexy.http.response.RexyResponse;
 import rexy.module.ModuleInitialisationException;
 import rexy.module.jmx.JmxModule;
 import rexy.module.jmx.JmxRegistry;
-
-import java.io.IOException;
+import rexy.utils.Requests;
 
 import static com.codepoetics.ambivalence.Either.ofLeft;
 import static com.codepoetics.ambivalence.Either.ofRight;
 import static java.nio.charset.Charset.defaultCharset;
-import static rexy.http.RexyHeader.HEADER_CONTENT_TYPE;
 import static rexy.utils.Json.booleanValue;
 import static rexy.utils.Json.prettyPrint;
 
@@ -105,19 +102,13 @@ public class MockModule extends JmxModule<MockEndpoint> {
 	protected Either<RexyRequest, RexyResponse> handleRequest(Api api, RexyRequest request, MockEndpoint mBean) {
 		if (mBean.isIntercept()) {
 			logger.info("Returning mock response for " + request.getUri());
-			
-			try {
-				return ofRight(createResponse(request, api, mBean));
-			}
-			catch (IOException e) {
-				logger.error("Error sending response for " + request.getUri(), e);
-			}
+			return ofRight(createResponse(request, api, mBean));
 		}
 		
 		return ofLeft(request);
 	}
 	
-	private RexyResponse createResponse(RexyRequest request, Api api, MockEndpoint endpoint) throws IOException {
+	private RexyResponse createResponse(RexyRequest request, Api api, MockEndpoint endpoint) {
 		byte[] body = getBody(endpoint);
 		ContentType contentType = ContentType.parse(getContentType(request, api, endpoint));
 		return new BasicRexyResponse(endpoint.getHttpStatus(), api.getHeaders(), contentType.getMimeType(), body);
@@ -136,9 +127,7 @@ public class MockModule extends JmxModule<MockEndpoint> {
 	
 	private String getContentType(RexyRequest request, Api api, MockEndpoint endpoint) {
 		String contentType = endpoint.getContentType() == null ? api.getContentType() : endpoint.getContentType();
-		return contentType != null ? contentType : request.getHeaders()
-				.stream().filter(h -> h.getName().equalsIgnoreCase(HEADER_CONTENT_TYPE))
-				.findFirst().map(RexyHeader::getValue).orElse(null);
+		return contentType != null ? contentType : Requests.getContentType(request);
 	}
 	
 }
