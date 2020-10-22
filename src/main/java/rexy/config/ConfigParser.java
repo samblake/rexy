@@ -1,9 +1,9 @@
 package rexy.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.graalvm.compiler.core.common.SuppressFBWarnings;
 import rexy.config.model.Api;
 import rexy.config.model.Config;
 
