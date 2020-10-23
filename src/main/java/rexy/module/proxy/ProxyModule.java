@@ -71,6 +71,7 @@ public class ProxyModule extends ModuleAdapter {
 		logger.info("Proxying request for " + request.getUri());
 		
 		if (api.getProxy() == null) {
+			logger.warn("Unable to fulfil request, no proxy defined for " + api.getName());
 			ContentType contentType = ContentType.parse(getContentType(request, api));
 			return ofRight(emptyResponse(BAD_GATEWAY, contentType.getMimeType(), toHeaders(api.getHeaders())));
 		}
