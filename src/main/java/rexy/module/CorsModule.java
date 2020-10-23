@@ -96,7 +96,7 @@ public class CorsModule extends ModuleAdapter {
 	public void init(RexyDetails rexyDetails, JsonNode config) {
 		allowOrigin = stringValue(config, CONFIG_ALLOW_ORIGIN, ALLOW_ALL);
 		headerName = stringValue(config, CONFIG_HEADER_NAME, X_REQUESTED_WTH);
-		headerValue = stringValue(config, CONFIG_HEADER_VALUE, null);
+		headerValue = stringValue(config, CONFIG_HEADER_VALUE);
 	}
 	
 	@Override

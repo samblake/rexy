@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.function.Supplier;
 
 public class Json {
 	private static final Logger logger = LogManager.getLogger(Json.class);
@@ -23,9 +24,18 @@ public class Json {
 		return jsonValue != null && jsonValue.isInt() ? jsonValue.intValue() : def;
 	}
 	
+	public static String stringValue(JsonNode node, String name) {
+		return stringValue(node, name, (String)null);
+	}
+	
 	public static String stringValue(JsonNode node, String name, String def) {
 		JsonNode jsonValue = node.get(name);
 		return jsonValue != null && jsonValue.isTextual() ? jsonValue.textValue() : def;
+	}
+	
+	public static String stringValue(JsonNode node, String name, Supplier<String> def) {
+		JsonNode jsonValue = node.get(name);
+		return jsonValue != null && jsonValue.isTextual() ? jsonValue.textValue() : def.get();
 	}
 	
 	public static String prettyPrint(String json) {
