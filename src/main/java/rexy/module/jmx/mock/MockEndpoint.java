@@ -29,16 +29,18 @@ public class MockEndpoint implements MockEndpointMBean {
 	private String body;
 	private Map<String, String> headers;
 	
-	public MockEndpoint(String contentType, Response response) {
-		this(contentType, response.getHttpStatus(), response.getHeaders(), getBody(response));
+	public MockEndpoint(String contentType, Response response, boolean intercept) {
+		this(contentType, response.getHttpStatus(), response.getHeaders(), getBody(response), intercept);
 	}
 	
-	public MockEndpoint(String contentType, int httpStatus, Map<String, String> headers, String body) {
+	public MockEndpoint(String contentType, int httpStatus,
+			Map<String, String> headers, String body, boolean intercept) {
+		
 		this.httpStatus = httpStatus;
 		this.contentType = contentType;
 		this.headers = headers;
 		this.body = body;
-		this.intercept = false;
+		this.intercept = intercept;
 	}
 	
 	@Override

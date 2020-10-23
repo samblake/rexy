@@ -40,7 +40,9 @@ public final class MockRegistry extends JmxRegistry<MockEndpoint> {
 	@Override
 	protected MockEndpoint createMBean(Endpoint endpoint) {
 		Response defaultResponse = endpoint.getResponses().iterator().next();
-		return new MockEndpoint(endpoint.getApi().getContentType(), defaultResponse);
+		String contentType = endpoint.getApi().getContentType();
+		boolean intercept = endpoint.getApi().getProxy() == null;
+		return new MockEndpoint(contentType, defaultResponse, intercept);
 	}
 	
 	private void registerMBean(String type, String endpoint, MockResponse response, String name)
