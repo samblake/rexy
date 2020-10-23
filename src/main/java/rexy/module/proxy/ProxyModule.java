@@ -64,7 +64,7 @@ import static rexy.utils.Requests.toHeaders;
 public class ProxyModule extends ModuleAdapter {
 	private static final Logger logger = LogManager.getLogger(ProxyModule.class);
 	
-	private static final int NO_CONTENT = 204;
+	private static final int BAD_GATEWAY = 502;
 	
 	@Override
 	public Either<RexyRequest, RexyResponse> handleRequest(Api api, RexyRequest request) throws IOException {
@@ -72,7 +72,7 @@ public class ProxyModule extends ModuleAdapter {
 		
 		if (api.getProxy() == null) {
 			ContentType contentType = ContentType.parse(getContentType(request, api));
-			return ofRight(emptyResponse(NO_CONTENT, contentType.getMimeType(), toHeaders(api.getHeaders())));
+			return ofRight(emptyResponse(BAD_GATEWAY, contentType.getMimeType(), toHeaders(api.getHeaders())));
 		}
 		else {
 			HttpUriRequest proxyRequest = createRequest(api.getProxy(), request);
