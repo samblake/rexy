@@ -29,6 +29,7 @@ import static java.util.Collections.emptyList;
 		"name",
 		"method",
 		"endpoint",
+		"filter",
 		"responses"
 })
 public class Endpoint {
@@ -41,6 +42,8 @@ public class Endpoint {
 	private Method method;
 	@JsonProperty("endpoint")
 	private String endpoint;
+	@JsonProperty("filter")
+	private Filter filter;
 	@JsonProperty("responses")
 	private List<Response> responses = emptyList();
 	
@@ -70,6 +73,14 @@ public class Endpoint {
 	
 	public void setEndpoint(String endpoint) {
 		this.endpoint = endpoint;
+	}
+	
+	public Filter getFilter() {
+		return filter;
+	}
+	
+	public void setFilter(Filter filter) {
+		this.filter = filter;
 	}
 	
 	public List<Response> getResponses() {

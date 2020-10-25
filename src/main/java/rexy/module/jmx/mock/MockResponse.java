@@ -5,6 +5,8 @@ import rexy.config.model.Response;
 
 import java.util.Map;
 
+import static rexy.utils.Bodies.findBody;
+
 /**
  * The preset mock response implementation.
  */
@@ -16,9 +18,8 @@ public class MockResponse implements MockResponseMBean {
 	private final String body;
 	private final boolean interceptOnSet;
 	
-	public MockResponse(MockEndpoint endpoint, Response body, boolean interceptOnSet) {
-		this(endpoint, body.getHttpStatus(), body.getHeaders(),
-				body.getBody().map(JsonNode::toString).orElse(null), interceptOnSet);
+	public MockResponse(MockEndpoint endpoint, Response response, boolean interceptOnSet) {
+		this(endpoint, response.getHttpStatus(), response.getHeaders(), findBody(response), interceptOnSet);
 	}
 	
 	public MockResponse(MockEndpoint endpoint, int httpStatus, Map<String, String> headers, String body, boolean interceptOnSet) {
