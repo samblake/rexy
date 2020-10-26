@@ -42,7 +42,7 @@ public final class MockRegistry extends JmxRegistry<MockEndpoint> {
 	private MockResponse createMockResponse(MockEndpoint mockEndpoint, Response response) {
 		int httpStatus = response.getHttpStatus();
 		Map<String, String> headers = response.getHeaders();
-		String body = findBody(response);
+		String body = findBody(response); // FIXME move this out to startup
 		return new MockResponse(mockEndpoint, httpStatus, headers, body, interceptOnSet);
 	}
 	
@@ -53,7 +53,7 @@ public final class MockRegistry extends JmxRegistry<MockEndpoint> {
 		String contentType = endpoint.getApi().getContentType();
 		int httpStatus = defaultResponse.getHttpStatus();
 		Map<String, String> headers = defaultResponse.getHeaders();
-		String body = findBody(defaultResponse);
+		String body = findBody(defaultResponse); // FIXME move this out to startup
 		boolean intercept = endpoint.getApi().getProxy() == null;
 		
 		return new MockEndpoint(contentType, httpStatus, headers, body, intercept);

@@ -23,6 +23,10 @@
           "name": "location",
           "method": "GET",
           "endpoint": "location/search/?query={query}",
+          "filter": {
+            "type": "text",
+            "query": "abc=123"
+          },
           "responses": [
             {
               "httpStatus": 200,
