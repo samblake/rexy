@@ -18,7 +18,7 @@ import java.util.Optional;
 import static java.util.Optional.empty;
 
 /**
- * A registry for MBeans of a particular type. It will register an MBean for an endpoint as well as
+ * A registry for MBeans of a particular type. It is used to register an MBean for an endpoint as well as
  * retrieve the MBean for a request.
  *
  * @param <T> The type of MBean to store

@@ -11,8 +11,10 @@ import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import javax.management.OperationsException;
 import java.lang.management.ManagementFactory;
+import java.util.Map;
 
 import static org.apache.commons.lang.StringUtils.isEmpty;
+import static rexy.utils.Bodies.findBody;
 
 /**
  * A registry for {@link MockEndpoint mock endpoints}.
@@ -31,18 +33,30 @@ public final class MockRegistry extends JmxRegistry<MockEndpoint> {
 		int i = 0;
 		for (Response response : endpoint.getResponses()) {
 			String name = isEmpty(response.getName()) ? Integer.toString(i++) : response.getName();
-			MockResponse mockResponse = new MockResponse(mockEndpoint, response, interceptOnSet);
+			MockResponse mockResponse = createMockResponse(mockEndpoint, response);
 			registerMBean(endpoint.getApi().getName(), endpoint.getName(), mockResponse, name);
 		}
 		return mockEndpoint;
 	}
 	
+	private MockResponse createMockResponse(MockEndpoint mockEndpoint, Response response) {
+		int httpStatus = response.getHttpStatus();
+		Map<String, String> headers = response.getHeaders();
+		String body = findBody(response);
+		return new MockResponse(mockEndpoint, httpStatus, headers, body, interceptOnSet);
+	}
+	
 	@Override
 	protected MockEndpoint createMBean(Endpoint endpoint) {
 		Response defaultResponse = endpoint.getResponses().iterator().next();
+		
 		String contentType = endpoint.getApi().getContentType();
+		int httpStatus = defaultResponse.getHttpStatus();
+		Map<String, String> headers = defaultResponse.getHeaders();
+		String body = findBody(defaultResponse);
 		boolean intercept = endpoint.getApi().getProxy() == null;
-		return new MockEndpoint(contentType, defaultResponse, intercept);
+		
+		return new MockEndpoint(contentType, httpStatus, headers, body, intercept);
 	}
 	
 	private void registerMBean(String type, String endpoint, MockResponse response, String name)
