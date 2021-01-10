@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 import static com.codepoetics.ambivalence.Either.ofLeft;
 
 /**
- * A module implementation that performs no logic. The name is bassed on the class name with 'RexyModule'
+ * A module implementation that performs no logic. The name is based on the class name with 'RexyModule'
  * removed, converted to lowercase.
  */
 public abstract class ModuleAdapter implements RexyModule {
