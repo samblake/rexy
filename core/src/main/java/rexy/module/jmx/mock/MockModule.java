@@ -38,36 +38,36 @@ import static rexy.utils.Json.booleanValue;
  * {@code Rexy/metaweather/location/mock}.</p>
  *
  * <pre>{@code
- *   "apis": [
- *     {
- *       "name": "metaweather",
- *       "baseUrl": "api/",
- *       "contentType": "application/json",
- *       "proxy": "http://www.metaweather.com/api",
- *       "endpoints": [{
- *         "name": "location",
- *         "endpoint": "/location/search/?query={query}",
- *         "responses": [{
- *             "name": "Successful",
- *             "httpStatus": 200,
- *             "body": {
- *               "title": "London",
- *               "location_type": "City",
- *               "woeid": 44418,
- *               "latt_long": "51.506321,-0.12714"
- *             }
- *           },
- *           {
- *             "name": "Invalid",
- *             "httpStatus": 401,
- *             "body": {
- *               "error": "invalid request"
- *             }
+ * "apis": [
+ *   {
+ *     "name": "metaweather",
+ *     "baseUrl": "api/",
+ *     "contentType": "application/json",
+ *     "proxy": "http://www.metaweather.com/api",
+ *     "endpoints": [{
+ *       "name": "location",
+ *       "endpoint": "/location/search/?query={query}",
+ *       "responses": [{
+ *           "name": "Successful",
+ *           "httpStatus": 200,
+ *           "body": {
+ *             "title": "London",
+ *             "location_type": "City",
+ *             "woeid": 44418,
+ *             "latt_long": "51.506321,-0.12714"
  *           }
- *         ]
- *       }]
- *     }
- *   ]
+ *         },
+ *         {
+ *           "name": "Invalid",
+ *           "httpStatus": 401,
+ *           "body": {
+ *             "error": "invalid request"
+ *           }
+ *         }
+ *       ]
+ *     }]
+ *   }
+ * ]
  * }</pre>
  *
  * <p>It is also possible to create presets that can be set to be returned. These can be seen in the above

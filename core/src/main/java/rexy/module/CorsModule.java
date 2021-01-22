@@ -34,12 +34,12 @@ import static rexy.utils.Streams.flattern;
  * can be triggered conditionally based on a specified header value. The configuration is:</p>
  *
  * <pre>{@code
- *   "cors": {
- *     "enabled": true,
- *     "allowOrigin": "*",
- *     "headerName": "X-Requested-With",
- *     "headerValue": "Wexy"
- *   }
+ * "cors": {
+ *   "enabled": true,
+ *   "allowOrigin": "*",
+ *   "headerName": "X-Requested-With",
+ *   "headerValue": "Wexy"
+ * }
  * }</pre>
  *
  * <table summary="Configuration details">

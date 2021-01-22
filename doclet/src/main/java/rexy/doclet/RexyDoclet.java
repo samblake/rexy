@@ -8,9 +8,7 @@ import jdk.javadoc.doclet.Reporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rexy.doclet.generator.*;
-import rexy.doclet.visitor.ConfigVisitor;
-import rexy.doclet.visitor.ModuleVisitor;
-import rexy.doclet.visitor.RequestMatcherVisitor;
+import rexy.doclet.visitor.*;
 
 import javax.lang.model.SourceVersion;
 import java.io.BufferedWriter;
@@ -30,8 +28,8 @@ public class RexyDoclet implements Doclet {
 
     private static final String DEFAULT_MARKDOWN_PATH = "../../../../README.md";
 
-    private static final VisitingGenerator<?,?> CONFIGURATION_GENERATOR = new ElementGenerator(
-            "Configuration", new ConfigVisitor());
+    private static final VisitingGenerator<?,?> CONFIGURATION_GENERATOR = new ConfigGenerator(
+            "Configuration", new CombinedElementVisitor(new PackageVisitor("rexy.config"), new ConfigVisitor()));
     private static final VisitingGenerator<?,?> MODULE_GENERATOR = new SubsectionGenerator(
             "Modules", "rexy.module", new ModuleVisitor());
     private static final VisitingGenerator<?,?> MATCHER_GENERATOR = new SubsectionGenerator(
@@ -54,7 +52,7 @@ public class RexyDoclet implements Doclet {
 
     @Override
     public void init(Locale locale, Reporter reporter) {
-        System.out.println("Init rexy doc");
+        logger.info("Generating Rexy doc");
     }
 
     @Override

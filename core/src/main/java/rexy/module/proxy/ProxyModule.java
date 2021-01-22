@@ -46,19 +46,19 @@ import static rexy.utils.Requests.toHeaders;
  * http://www.metaweather.com/api/location/search/?query=london.</p>
  *
  * <pre>{@code
- *   "apis": [
+ * "apis": [
+ *   {
+ *     "name": "metaweather",
+ *     "baseUrl": "api/",
+ *     "contentType": "application/json",
+ *     "proxy": "http://www.metaweather.com/api",
+ *     "endpoints": [
  *     {
- *       "name": "metaweather",
- *       "baseUrl": "api/",
- *       "contentType": "application/json",
- *       "proxy": "http://www.metaweather.com/api",
- *       "endpoints": [
- *       {
- *         "name": "location",
- *         "endpoint": "location/search/?query={query}",
- *       }
+ *       "name": "location",
+ *       "endpoint": "location/search/?query={query}",
  *     }
- *   ]
+ *   }
+ * ]
  * }</pre>
  */
 public class ProxyModule extends ModuleAdapter {

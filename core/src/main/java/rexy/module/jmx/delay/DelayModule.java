@@ -26,17 +26,17 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * {@code Rexy/metaweather/location/delay}.</p>
  *
  * <pre>{@code
- *   "apis": [
+ * "apis": [
+ *   {
+ *     "name": "metaweather",
+ *     ...
+ *     "endpoints": [
  *     {
- *       "name": "metaweather",
+ *       "name": "location",
  *       ...
- *       "endpoints": [
- *       {
- *         "name": "location",
- *         ...
- *       }
  *     }
- *   ]
+ *   }
+ * ]
  * }</pre>
  */
 public class DelayModule extends JmxModule<DelayEndpoint> {

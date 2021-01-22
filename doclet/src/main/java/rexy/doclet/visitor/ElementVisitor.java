@@ -1,5 +1,7 @@
 package rexy.doclet.visitor;
 
+import rexy.doclet.Utils;
+
 import javax.lang.model.element.Element;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
@@ -36,23 +38,7 @@ public interface ElementVisitor {
         }
 
         protected boolean hasInterface(TypeElement element, String className) {
-            for (TypeMirror inter : element.getInterfaces()) {
-                if (inter instanceof DeclaredType) {
-                    if (((DeclaredType)inter).asElement().toString().equals(className)) {
-                        return true;
-                    }
-                }
-            }
-
-            TypeMirror superclass = element.getSuperclass();
-            if (superclass instanceof DeclaredType) {
-                Element superElement = ((DeclaredType) superclass).asElement();
-                if (superElement instanceof TypeElement) {
-                    return hasInterface((TypeElement)superElement, className);
-                }
-            }
-
-            return false;
+            return Utils.hasInterface(element, className);
         }
 
     }

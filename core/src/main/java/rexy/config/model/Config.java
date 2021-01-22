@@ -45,17 +45,40 @@ import static java.util.Collections.emptyList;
 		"imports"
 })
 public class Config implements rexy.config.RexyConfig {
-	
+
+	/**
+	 * The port that listens for incoming connections.
+	 */
 	@JsonProperty("port")
 	private int port;
+
+	/**
+	 * The base path that all API endpoints run under.
+	 */
 	@JsonProperty("baseUrl")
 	private String baseUrl;
+
+	/**
+	 * Additional packages that will be scanned for modules.
+	 */
 	@JsonProperty("scanPackages")
 	private List<String> scanPackages = emptyList();
+
+	/**
+	 * The modules that will be enabled.
+	 */
 	@JsonProperty("modules")
 	private LinkedHashMap<String, JsonNode> modules = new LinkedHashMap<>();
+
+	/**
+	 * The APIs that will be running.
+	 */
 	@JsonProperty("apis")
 	private List<Api> apis = emptyList();
+
+	/**
+	 * Configuration files to be imported as APIs. Relative to the base config file
+	 */
 	@JsonProperty("imports")
 	private List<String> imports = emptyList();
 	
