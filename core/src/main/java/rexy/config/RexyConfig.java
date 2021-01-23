@@ -17,7 +17,7 @@ public interface RexyConfig {
 	int getPort();
 	
 	/**
-	 * The base path Rexy runs under. Defaults to <pre>{@code /}</pre>.
+	 * The base path Rexy runs under. Defaults to <pre><code>{@code /}</code></pre>.
 	 */
 	String getBasePath();
 	

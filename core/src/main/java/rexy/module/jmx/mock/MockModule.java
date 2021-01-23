@@ -37,7 +37,7 @@ import static rexy.utils.Json.booleanValue;
  * <p>For example, in the following configuration an MBean would be configured under
  * {@code Rexy/metaweather/location/mock}.</p>
  *
- * <pre>{@code
+ * <pre><code>{@code
  * "apis": [
  *   {
  *     "name": "metaweather",
@@ -68,7 +68,7 @@ import static rexy.utils.Json.booleanValue;
  *     }]
  *   }
  * ]
- * }</pre>
+ * }</code></pre>
  *
  * <p>It is also possible to create presets that can be set to be returned. These can be seen in the above
  * example under the <i>responses</i> array. Each response will have bean an MBean associated with it under

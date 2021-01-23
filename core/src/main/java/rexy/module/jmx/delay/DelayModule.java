@@ -25,7 +25,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * <p>For example, in the following configuration an MBean would be configured under
  * {@code Rexy/metaweather/location/delay}.</p>
  *
- * <pre>{@code
+ * <pre><code>{@code
  * "apis": [
  *   {
  *     "name": "metaweather",
@@ -37,7 +37,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  *     }
  *   }
  * ]
- * }</pre>
+ * }</code></pre>
  */
 public class DelayModule extends JmxModule<DelayEndpoint> {
 	private static final Logger logger = LogManager.getLogger(DelayModule.class);

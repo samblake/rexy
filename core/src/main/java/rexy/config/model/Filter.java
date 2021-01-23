@@ -8,12 +8,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 /**
  * <p>Models the endpoint filter config:</p>
  *
- * <pre>{@code
+ * <pre><code>{@code
  * {
  *   "type": "test",
  *   "query": "abc=123"
  * }
- * }</pre>
+ * }</code></pre>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

@@ -13,7 +13,7 @@ import static java.util.Collections.emptyList;
 /**
  * <p>Models the base config:</p>
  *
- * <pre>{@code
+ * <pre><code>{@code
  * {
  *   "port": "8081",
  *   "baseUrl": "/",
@@ -33,7 +33,7 @@ import static java.util.Collections.emptyList;
  *     ...
  *   ]
  * }
- * }</pre>
+ * }</code></pre>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

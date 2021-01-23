@@ -26,7 +26,7 @@ import static java.util.stream.Collectors.toList;
 public class RexyDoclet implements Doclet {
     private static final Logger logger = LoggerFactory.getLogger(RexyDoclet.class);
 
-    private static final String DEFAULT_MARKDOWN_PATH = "../../../../README.md";
+    private static final String DEFAULT_MARKDOWN_PATH = "../../../../../README.md";
 
     private static final VisitingGenerator<?,?> CONFIGURATION_GENERATOR = new ConfigGenerator(
             "Configuration", new CombinedElementVisitor(new PackageVisitor("rexy.config"), new ConfigVisitor()));
@@ -134,7 +134,7 @@ public class RexyDoclet implements Doclet {
         try {
             File file = new File("rexy.html");
             writeTemplate(file, context);
-            copyResources(Paths.get("../../../../doclet/src/main/resources/template"));
+            copyResources(Paths.get("../../../../../doclet/src/main/resources/template"));
         }
         catch (IOException e) {
             logger.error("Could not generate docs", e);

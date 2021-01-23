@@ -45,7 +45,7 @@ import static rexy.utils.Requests.toHeaders;
  * http://localhost/api/location/search/?query=london would be proxied to
  * http://www.metaweather.com/api/location/search/?query=london.</p>
  *
- * <pre>{@code
+ * <pre><code>{@code
  * "apis": [
  *   {
  *     "name": "metaweather",
@@ -59,7 +59,7 @@ import static rexy.utils.Requests.toHeaders;
  *     }
  *   }
  * ]
- * }</pre>
+ * }</code></pre>
  */
 public class ProxyModule extends ModuleAdapter {
 	private static final Logger logger = LogManager.getLogger(ProxyModule.class);

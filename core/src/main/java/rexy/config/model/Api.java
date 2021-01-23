@@ -14,7 +14,7 @@ import static java.util.Collections.emptyMap;
 /**
  * <p>Models the API config:</p>
  *
- * <pre>{@code
+ * <pre><code>{@code
  * {
  *   "name": "metaweather",
  *   "baseUrl": "api",
@@ -27,7 +27,7 @@ import static java.util.Collections.emptyMap;
  *     ...
  *   ]
  * }
- * }</pre>
+ * }</code></pre>
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

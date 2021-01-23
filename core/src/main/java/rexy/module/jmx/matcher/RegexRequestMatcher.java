@@ -37,11 +37,11 @@ public final class RegexRequestMatcher<T> implements RequestMatcher<T> {
 	 * <p>Creates a path matcher for an {@link Api} and {@link Endpoint}. The pattern is created from the endpoint.
 	 * For example:</p>
 	 *
-	 * <pre>
+	 * <pre><code>
 	 * {@code
 	 *     /path?abc={abc}&123={123}
 	 * }
-	 * </pre>
+	 * </code></pre>
 	 *
 	 * <p>will be converted to a pattern that matches the path with any values for the parameters. However, it
 	 * should be noted that parameter order is important.</p>

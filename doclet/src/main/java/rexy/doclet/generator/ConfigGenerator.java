@@ -2,6 +2,7 @@ package rexy.doclet.generator;
 
 import jdk.javadoc.doclet.DocletEnvironment;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 import rexy.doclet.Section;
 import rexy.doclet.visitor.CombinedElementVisitor;
 
@@ -55,28 +56,26 @@ public class ConfigGenerator extends VisitingGenerator<Pair<Element, Element>, C
         for (Element element : parent.getEnclosedElements()) {
             if (element.getKind().isField() && element instanceof VariableElement) {
                 findAnnotation(element,"com.fasterxml.jackson.annotation.JsonProperty").ifPresent(a -> {
-                    Element fieldElement = environment.getTypeUtils().asElement(element.asType());
+                    Element fieldElement = asElement(environment, element);
                     if (fieldElement != null) {
                         String fieldName = findName(fieldElement, a);
                         String fieldDocs = generateDocs(environment.getDocTrees(), element);
 
                         if (hasInterface(((TypeElement) fieldElement), "java.util.List")) {
-                            TypeMirror listOf = ((DeclaredType) element.asType()).getTypeArguments().get(0);
-                            Element fieldKind = environment.getTypeUtils().asElement(listOf);
-                            String fieldType = fieldKind.getSimpleName().toString();
-                            table.rows.add(new Table.Row(fieldName, fieldType, fieldDocs));
+                            Element fieldKind = getTypeParameter(environment, element, 0);
+                            String fieldType = "List of " + getTypeName(fieldKind);
+                            table.addRow(fieldName, fieldType, fieldDocs);
                             tables.addAll(processElement(environment, fieldKind, findName(fieldKind, a)));
                         }
                         else if (hasInterface(((TypeElement) fieldElement), "java.util.Map")) {
-                            TypeMirror mapOf = ((DeclaredType) element.asType()).getTypeArguments().get(1);
-                            Element fieldKind = environment.getTypeUtils().asElement(mapOf);
-                            String fieldType = fieldKind.getSimpleName().toString();
-                            table.rows.add(new Table.Row(fieldName, fieldType, fieldDocs));
+                            Element fieldKind = getTypeParameter(environment, element, 1);
+                            String fieldType = "Map of " + getTypeName(fieldKind);
+                            table.addRow(fieldName, fieldType, fieldDocs);
                             tables.addAll(processElement(environment, fieldKind, findName(fieldKind, a)));
                         }
                         else {
-                            String fieldType = fieldElement.getSimpleName().toString();
-                            table.rows.add(new Table.Row(fieldName, fieldType, fieldDocs));
+                            String fieldType = getTypeName(fieldElement);
+                            table.addRow(fieldName, fieldType, fieldDocs);
                             tables.addAll(processElement(environment, element, findName(fieldElement, a)));
                         }
                     }
@@ -85,6 +84,20 @@ public class ConfigGenerator extends VisitingGenerator<Pair<Element, Element>, C
         }
 
         return tables;
+    }
+
+    private Element asElement(DocletEnvironment environment, Element element) {
+        return environment.getTypeUtils().asElement(element.asType());
+    }
+
+    private Element getTypeParameter(DocletEnvironment environment, Element element, int i) {
+        TypeMirror listOf = ((DeclaredType) element.asType()).getTypeArguments().get(i);
+        return environment.getTypeUtils().asElement(listOf);
+    }
+
+    private String getTypeName(Element fieldElement) {
+        String fieldType = fieldElement.getSimpleName().toString();
+        return fieldType.equals("JsonNode") ? "Custom JSON" : fieldType;
     }
 
     private String findName(Element element, AnnotationMirror a) {
@@ -111,7 +124,7 @@ public class ConfigGenerator extends VisitingGenerator<Pair<Element, Element>, C
         .with(table.rows.stream().map(r -> tr(
             td(r.name),
             td(r.type),
-            td(r.description)
+            td(r.description == null ? "" : r.description)
         )))
         .render();
     }

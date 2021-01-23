@@ -33,14 +33,14 @@ import static rexy.utils.Streams.flattern;
  * {@code Access-Control-Allow-Headers} header to the response of all other requests The module
  * can be triggered conditionally based on a specified header value. The configuration is:</p>
  *
- * <pre>{@code
+ * <pre><code>{@code
  * "cors": {
  *   "enabled": true,
  *   "allowOrigin": "*",
  *   "headerName": "X-Requested-With",
  *   "headerValue": "Wexy"
  * }
- * }</pre>
+ * }</code></pre>
  *
  * <table summary="Configuration details">
  *     <tr>

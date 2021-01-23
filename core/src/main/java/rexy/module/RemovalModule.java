@@ -27,12 +27,12 @@ import static rexy.utils.Json.stringValue;
 /**
  * A module that removes a header from requests.
  *
- * <pre>{@code
+ * <pre><code>{@code
  * "removal": {
  *   "enabled": true,
  *   "headerName": "X-Requested-With"
  * }
- * }</pre>
+ * }</code></pre>
  *
  * <table summary="Configuration details">
  *     <tr>
