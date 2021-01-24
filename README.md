@@ -1,4 +1,5 @@
 # Rexy
+
 A lightweight REST mock/proxy server.
 
 ### Overview
@@ -16,38 +17,6 @@ configuration is performed via JMX or via [Wexy](https://github.com/samblake/wex
 
 Start Rexy by running the `rexy.Rexy` class, optionally specifying a configuration file as an argument. Alternatively
 build via Maven and run the resulting jar.
-
-### Modules
-
-Rexy it built around pluggable chain of interceptors knows as modules. When Rexy receives a request it is passed to 
-each module in order. Modifications can be made to the request as it is passed up the chain. When any of the modules 
-generate a response the flow is instantly reversed and the response will be passed back down the chain in the opposite
-direction. Again modifications can be made to the response as it flows down the chain. When the initial module is 
-reached the response will be returned to the originating server. All modules are configured to some extent by the Rexy 
-JSON configuration file, however some (those that should be modified at runtime) can also be configured by JMX.
-
-The two JMX modules supplied with Rexy are:
-
- * Mock - Allows returning of mocked responses, either specified in an ad-hoc manor or via presets
- * Delay - Introduces a fixed delay in processing the request
-
-The other modules are:
-
- * Proxy - Forwards the request to the specified server 
- * Cors - Generates a preflight response for OPTIONS requests
- * Removal - Removes a header from the request
-
-No modules are enabled by default. In order to enable a module it should be specified in the `modules` section in the
-configuration. Modules can be configured in any order but the final two modules in the chain should probably always be 
-the mock module followed by the proxy module.
-
-### Configuration
-
-On startup the configuration will be loaded from the classpath, falling back to the filesystem if that fails. The 
-default path is `rexy.json`. A custom path can be supplied as a command line argument when running Rexy.
-
-Rexy contains examples for two APIs, the metaweather API (http://www.metaweather.com/api) and the chucknorris.io API 
-(https://api.chucknorris.io).
 
 ### FAQ
 
