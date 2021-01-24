@@ -30,12 +30,16 @@ jobs:
       - name: Commit Change
         run: |
           git commit -a -m "Create $(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) release"
+          git remote set-url --push origin https://samblake:$GITHUB_TOKEN@github.com/samblake/rexy
           git push
 
       - name: Create Tag
         run: |
           git tag $(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           git push --tags
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: Deploy Docs
         uses: JamesIves/github-pages-deploy-action@3.7.1
