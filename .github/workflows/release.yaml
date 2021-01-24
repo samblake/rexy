@@ -9,6 +9,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
 
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
       - name: Checkout Project
         uses: actions/checkout@v2
@@ -37,9 +40,6 @@ jobs:
         run: |
           git tag $(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           git push --tags
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 
       - name: Deploy Docs
         uses: JamesIves/github-pages-deploy-action@3.7.1
