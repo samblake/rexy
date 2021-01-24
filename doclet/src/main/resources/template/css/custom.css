@@ -307,3 +307,7 @@ h3 {
     margin: 30px 0 30px 0;
     text-transform: capitalize;
 }
+
+.token.operator {
+    background-color: transparent;
+}

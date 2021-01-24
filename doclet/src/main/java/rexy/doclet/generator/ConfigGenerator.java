@@ -1,5 +1,7 @@
 package rexy.doclet.generator;
 
+import j2html.tags.DomContent;
+import j2html.tags.Text;
 import jdk.javadoc.doclet.DocletEnvironment;
 import org.apache.commons.lang3.tuple.Pair;
 import rexy.doclet.Section;
@@ -13,12 +15,16 @@ import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static j2html.TagCreator.*;
 import static rexy.doclet.Utils.hasInterface;
 
 public class ConfigGenerator extends VisitingGenerator<Pair<Element, Element>, CombinedElementVisitor> {
+
+    public static final String JSON_PROPERTY_ORDER = "com.fasterxml.jackson.annotation.JsonPropertyOrder";
+    public static final String JSON_PROPERTY = "com.fasterxml.jackson.annotation.JsonProperty";
 
     private final String title;
 
@@ -35,7 +41,6 @@ public class ConfigGenerator extends VisitingGenerator<Pair<Element, Element>, C
                 Section section = new Section(title, docs);
                 if (result.getRight() != null) {
                     List<Table> tables = processElement(environment, result.getRight(), "Root");
-
                     tables.stream()
                             .filter(t -> t.rows.size() > 0)
                             .map(t -> new Section(t.name, t.description + render(t)))
@@ -56,28 +61,29 @@ public class ConfigGenerator extends VisitingGenerator<Pair<Element, Element>, C
 
         for (Element element : parent.getEnclosedElements()) {
             if (element.getKind().isField() && element instanceof VariableElement) {
-                findAnnotation(element,"com.fasterxml.jackson.annotation.JsonProperty").ifPresent(a -> {
+                findAnnotation(element, JSON_PROPERTY).ifPresent(a -> {
                     Element fieldElement = asElement(environment, element);
                     if (fieldElement != null) {
                         String fieldName = findName(fieldElement, a);
                         String fieldDocs = generateDocs(environment.getDocTrees(), element);
 
-                        if (hasInterface(((TypeElement) fieldElement), "java.util.List")) {
+                        if (hasInterface(((TypeElement) fieldElement), List.class)) {
                             Element fieldKind = getTypeParameter(environment, element, 0);
-                            String fieldType = "List of " + getTypeName(fieldKind);
+                            DomContent[] fieldType = new DomContent[] { text("List of "), getType(fieldKind) };
                             table.addRow(fieldName, fieldType, fieldDocs);
-                            tables.addAll(processElement(environment, fieldKind, findName(fieldKind, a)));
+                            tables.addAll(processElement(environment, fieldKind, getTypeName(fieldKind)));
                         }
-                        else if (hasInterface(((TypeElement) fieldElement), "java.util.Map")) {
+                        else if (hasInterface(((TypeElement) fieldElement), Map.class)) {
                             Element fieldKind = getTypeParameter(environment, element, 1);
-                            String fieldType = "Map of " + getTypeName(fieldKind);
+                            DomContent[] fieldType = new DomContent[] { text("Map of "), getType(fieldKind) };
                             table.addRow(fieldName, fieldType, fieldDocs);
-                            tables.addAll(processElement(environment, fieldKind, findName(fieldKind, a)));
+                            tables.addAll(processElement(environment, fieldKind, getTypeName(fieldKind)));
                         }
                         else {
-                            String fieldType = getTypeName(fieldElement);
+                            DomContent fieldType = getType(fieldElement);
                             table.addRow(fieldName, fieldType, fieldDocs);
-                            tables.addAll(processElement(environment, element, findName(fieldElement, a)));
+                            Element fieldKind = environment.getTypeUtils().asElement(element.asType());
+                            tables.addAll(processElement(environment, fieldKind, findName(fieldElement, a)));
                         }
                     }
                 });
@@ -96,7 +102,18 @@ public class ConfigGenerator extends VisitingGenerator<Pair<Element, Element>, C
         return environment.getTypeUtils().asElement(listOf);
     }
 
-    private String getTypeName(Element fieldElement) {
+    private DomContent getType(Element fieldElement) {
+        String name = getTypeName(fieldElement);
+
+        if (findAnnotation(fieldElement, JSON_PROPERTY_ORDER).isPresent()) {
+            String href = "#" + title.toLowerCase() + "-" + fieldElement.getSimpleName().toString().toLowerCase();
+            return a().withHref(href).withText(name);
+        }
+
+        return new Text(name);
+    }
+
+    public String getTypeName(Element fieldElement) {
         String fieldType = fieldElement.getSimpleName().toString();
         return fieldType.equals("JsonNode") ? "Custom JSON" : fieldType;
     }
@@ -144,12 +161,28 @@ public class ConfigGenerator extends VisitingGenerator<Pair<Element, Element>, C
             rows.add(new Row(name, type, description));
         }
 
+        public void addRow(String name, DomContent type, String description) {
+            rows.add(new Row(name, type, description));
+        }
+
+        public void addRow(String name, DomContent[] type, String description) {
+            rows.add(new Row(name, type, description));
+        }
+
         private static class Row {
             private final String name;
-            private final String type;
+            private final DomContent[] type;
             private final String description;
 
             public Row(String name, String type, String description) {
+                this(name, new Text(type), description);
+            }
+
+            public Row(String name, DomContent type, String description) {
+                this(name, new DomContent[] { type }, description);
+            }
+
+            public Row(String name, DomContent[] type, String description) {
                 this.name = name;
                 this.type = type;
                 this.description = description;

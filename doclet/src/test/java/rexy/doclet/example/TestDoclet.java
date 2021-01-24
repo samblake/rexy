@@ -1,11 +1,12 @@
 package rexy.doclet.example;
 
+import j2html.tags.DomContent;
+import j2html.tags.Text;
 import jdk.javadoc.doclet.DocletEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rexy.doclet.RexyDoclet;
 import rexy.doclet.Section;
-import rexy.doclet.generator.ReadmeGenerator;
 import rexy.doclet.generator.VisitingGenerator;
 import rexy.doclet.visitor.ElementVisitor;
 import rexy.doclet.visitor.SingleElementVisitor;
@@ -19,9 +20,15 @@ import javax.lang.model.type.TypeMirror;
 import javax.tools.DocumentationTool;
 import javax.tools.ToolProvider;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import static j2html.TagCreator.*;
 import static rexy.doclet.Utils.hasInterface;
+import static rexy.doclet.generator.ConfigGenerator.JSON_PROPERTY;
+import static rexy.doclet.generator.ConfigGenerator.JSON_PROPERTY_ORDER;
 
 public class TestDoclet extends RexyDoclet {
 
@@ -29,7 +36,7 @@ public class TestDoclet extends RexyDoclet {
         super(gen);
     }
 
-    private static final VisitingGenerator<?,?> gen = new VisitingGenerator<>(new ParentVisitor()) {
+    private static final VisitingGenerator<?,?> gen = new VisitingGenerator<Element, ParentVisitor>(new ParentVisitor()) {
 
         @Override
         protected Optional<Section> generateSection(DocletEnvironment environment, Element result) {
@@ -42,31 +49,67 @@ public class TestDoclet extends RexyDoclet {
             return Optional.empty();
         }
 
-        private void processElement(DocletEnvironment environment, Element parent, String fieldName) {
-            System.out.println(fieldName);
+        private List<Table> processElement(DocletEnvironment environment, Element parent, String name) {
+            List<Table> tables = new ArrayList<>();
+
+            String docs = generateDocs(environment.getDocTrees(), parent);
+            Table table = new Table(name, docs);
+            tables.add(table);
 
             for (Element element : parent.getEnclosedElements()) {
                 if (element.getKind().isField() && element instanceof VariableElement) {
-                    findAnnotation(element,"com.fasterxml.jackson.annotation.JsonProperty").ifPresent(a -> {
-                        Element fieldElement = environment.getTypeUtils().asElement(element.asType());
+                    findAnnotation(element, JSON_PROPERTY).ifPresent(a -> {
+                        Element fieldElement = asElement(environment, element);
                         if (fieldElement != null) {
-                            if (hasInterface(((TypeElement) fieldElement), "java.util.List")) {
-                                TypeMirror listOf = ((DeclaredType) element.asType()).getTypeArguments().get(0);
-                                Element fieldKind = environment.getTypeUtils().asElement(listOf);
-                                processElement(environment, fieldKind, findName(fieldKind, a));
-                            }
-                            else if (hasInterface(((TypeElement) fieldElement), "java.util.Map")) {
-                                TypeMirror mapOf = ((DeclaredType) element.asType()).getTypeArguments().get(1);
-                                Element fieldKind = environment.getTypeUtils().asElement(mapOf);
-                                processElement(environment, fieldKind, findName(fieldKind, a));
-                            }
-                            else {
-                                processElement(environment, element, findName(fieldElement, a));
+                            String fieldName = findName(fieldElement, a);
+                            String fieldDocs = generateDocs(environment.getDocTrees(), element);
+
+                            if (hasInterface(((TypeElement) fieldElement), List.class)) {
+                                Element fieldKind = getTypeParameter(environment, element, 0);
+                                DomContent[] fieldType = new DomContent[]{text("List of "), getType(fieldKind)};
+                                table.addRow(fieldName, fieldType, fieldDocs);
+                                tables.addAll(processElement(environment, fieldKind, getTypeName(fieldKind)));
+                            } else if (hasInterface(((TypeElement) fieldElement), Map.class)) {
+                                Element fieldKind = getTypeParameter(environment, element, 1);
+                                DomContent[] fieldType = new DomContent[]{text("Map of "), getType(fieldKind)};
+                                table.addRow(fieldName, fieldType, fieldDocs);
+                                tables.addAll(processElement(environment, fieldKind, getTypeName(fieldKind)));
+                            } else {
+                                DomContent fieldType = getType(fieldElement);
+                                table.addRow(fieldName, fieldType, fieldDocs);
+                                tables.addAll(processElement(environment, element, findName(fieldElement, a)));
                             }
                         }
                     });
                 }
             }
+
+            return tables;
+        }
+
+        private Element asElement(DocletEnvironment environment, Element element) {
+            return environment.getTypeUtils().asElement(element.asType());
+        }
+
+        private Element getTypeParameter(DocletEnvironment environment, Element element, int i) {
+            TypeMirror listOf = ((DeclaredType) element.asType()).getTypeArguments().get(i);
+            return environment.getTypeUtils().asElement(listOf);
+        }
+
+        private DomContent getType(Element fieldElement) {
+            String name = getTypeName(fieldElement);
+
+            if (findAnnotation(fieldElement, JSON_PROPERTY_ORDER).isPresent()) {
+                String href = "#" + "test".toLowerCase() + "-" + fieldElement.getSimpleName().toString().toLowerCase();
+                return a().withHref(href).withText(name);
+            }
+
+            return new Text(name);
+        }
+
+        public String getTypeName(Element fieldElement) {
+            String fieldType = fieldElement.getSimpleName().toString();
+            return fieldType.equals("JsonNode") ? "Custom JSON" : fieldType;
         }
 
         private String findName(Element element, AnnotationMirror a) {
@@ -81,7 +124,66 @@ public class TestDoclet extends RexyDoclet {
                     .filter(a -> a.getAnnotationType().toString().equals(annotation))
                     .findAny();
         }
+
+        public String render(Table table) {
+            return table(
+                tr(
+                    th("Name"),
+                    th("Type"),
+                    th("Description")
+                )
+            )
+            .with(table.rows.stream().map(r -> tr(
+                td(r.name),
+                td(r.type),
+                td(r.description == null ? "" : r.description)
+            )))
+            .render();
+        }
     };
+
+    private static class Table {
+        private final String name;
+        private final String description;
+        private final List<Table.Row> rows = new ArrayList<>();
+
+        public Table(String name, String description) {
+            this.name = name;
+            this.description = description;
+        }
+
+        public void addRow(String name, String type, String description) {
+            rows.add(new Table.Row(name, type, description));
+        }
+
+        public void addRow(String name, DomContent type, String description) {
+            rows.add(new Table.Row(name, type, description));
+        }
+
+        public void addRow(String name, DomContent[] type, String description) {
+            rows.add(new Table.Row(name, type, description));
+        }
+
+        private static class Row {
+            private final String name;
+            private final DomContent[] type;
+            private final String description;
+
+            public Row(String name, String type, String description) {
+                this(name, new Text(type), description);
+            }
+
+            public Row(String name, DomContent type, String description) {
+                this(name, new DomContent[] { type }, description);
+            }
+
+            public Row(String name, DomContent[] type, String description) {
+                this.name = name;
+                this.type = type;
+                this.description = description;
+            }
+        }
+    }
 
     public static void main(String[] args) {
         String[] docletArgs = new String[]{

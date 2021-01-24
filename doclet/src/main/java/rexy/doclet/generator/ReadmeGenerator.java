@@ -1,16 +1,11 @@
 package rexy.doclet.generator;
 
 import com.vladsch.flexmark.ast.Heading;
-import com.vladsch.flexmark.html.AttributeProvider;
 import com.vladsch.flexmark.html.HtmlRenderer;
-import com.vladsch.flexmark.html.renderer.AttributablePart;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.util.data.MutableDataSet;
-import com.vladsch.flexmark.util.html.AttributeImpl;
-import com.vladsch.flexmark.util.html.MutableAttributes;
 import jdk.javadoc.doclet.DocletEnvironment;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rexy.doclet.Section;
@@ -18,7 +13,6 @@ import rexy.doclet.Section;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Optional;
 
 public class ReadmeGenerator implements Generator {
