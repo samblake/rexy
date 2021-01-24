@@ -19,13 +19,13 @@ jobs:
           java-version: 9
 
       - name: Bump Version
-        run: mvn versions:set -DgenerateBackupPoms=false -DremoveSnapshot
+        run: mvn --batch-mode versions:set -DgenerateBackupPoms=false -DremoveSnapshot
 
       - name: Build
-        run: mvn --update-snapshots install
+        run: mvn --batch-mode --update-snapshots install
 
       - name: Generate Docs
-        run: mvn -pl core clean javadoc:javadoc
+        run: mvn --batch-mode -pl core clean javadoc:javadoc
 
       - name: Commit Change
         run: |
