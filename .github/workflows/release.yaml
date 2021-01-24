@@ -1,0 +1,41 @@
+name: Deploy Pages
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 9
+        uses: actions/setup-java@v1
+        with:
+          java-version: 9
+
+      - name: Bump Version
+        run: mvn --batch-mode versions:set -DremoveSnapshot
+
+      - name: Build
+        run: mvn --batch-mode --update-snapshots install
+
+      - name: Generate Docs
+        run: mvn --batch-mode -pl core clean javadoc:javadoc
+
+      - name: Get Version
+        run: echo "rel_ver=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Create $rel_ver release
+
+      - name: Deploy Docs
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: core/target/site/apidocs/doxy
+          CLEAN: true
