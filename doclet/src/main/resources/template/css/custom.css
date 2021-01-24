@@ -264,7 +264,8 @@ table>tbody>tr:nth-of-type(odd) {
     background-color: #f9f9f9;
 }
 
-#modules td:nth-child(4) {
+#modules td:nth-child(4),
+#configuration td:nth-child(2) {
     white-space: nowrap;
 }
 

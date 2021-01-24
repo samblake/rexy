@@ -132,7 +132,7 @@ public class RexyDoclet implements Doclet {
         context.put("sections", sections);
 
         try {
-            File file = new File("rexy.html");
+            File file = new File("index.html");
             writeTemplate(file, context);
             copyResources(Paths.get("../../../../../doclet/src/main/resources/template"));
         }
