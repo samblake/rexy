@@ -19,22 +19,23 @@ jobs:
           java-version: 9
 
       - name: Bump Version
-        run: mvn --batch-mode versions:set -DremoveSnapshot
+        run: mvn versions:set -DgenerateBackupPoms=false -DremoveSnapshot
 
       - name: Build
-        run: mvn --batch-mode --update-snapshots install
+        run: mvn --update-snapshots install
 
       - name: Generate Docs
-        run: mvn --batch-mode -pl core clean javadoc:javadoc
+        run: mvn -pl core clean javadoc:javadoc
 
-      - name: Get Version
-        run: echo "rel_ver=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+      - name: Commit Change
+        run: |
+          git commit -a -m "Create $(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) release"
+          git push
 
-      - name: Commit change
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Create $rel_ver release
-          tagging_message: $rel_ver
+      - name: Create Tag
+        run: |
+          git tag $(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          git push --tags
 
       - name: Deploy Docs
         uses: JamesIves/github-pages-deploy-action@3.7.1
