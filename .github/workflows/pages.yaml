@@ -17,7 +17,10 @@ jobs:
           java-version: 9
 
       - name: Build
-        run: mvn --batch-mode --update-snapshots clean javadoc:javadoc
+        run: mvn --batch-mode --update-snapshots install
+
+      - name: Generate Docs
+        run: mvn --batch-mode --update-snapshots -pl core clean javadoc:javadoc
 
       - name: Deploy Docs
         uses: JamesIves/github-pages-deploy-action@3.7.1

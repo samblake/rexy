@@ -76,7 +76,7 @@
                     <destDir>doxy</destDir>
                     <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
                     <additionalOptions>
-                        <additionalOption>--name ${parent.artifactId}</additionalOption>
+                        <additionalOption>--name ${project.parent.artifactId}</additionalOption>
                         <additionalOption>--ver ${project.version}</additionalOption>
                         <additionalOption>--headline "A lightweight REST mock/proxy server"</additionalOption>
                     </additionalOptions>
