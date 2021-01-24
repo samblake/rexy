@@ -11,7 +11,9 @@ import rexy.doclet.visitor.ResultVisitor;
 import javax.lang.model.element.Element;
 import java.util.Optional;
 
+import static java.lang.System.lineSeparator;
 import static java.util.Arrays.copyOfRange;
+import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
 
 public abstract class VisitingGenerator<T, V extends ResultVisitor<T>> implements Generator {
@@ -55,7 +57,21 @@ public abstract class VisitingGenerator<T, V extends ResultVisitor<T>> implement
     }
 
     private String processCode(LiteralTree code) {
-        return "<code>" + trimCode(code.getBody().toString()) + "</code>";
+        String trimmed = trimCode(code.getBody().toString());
+        String[] lines = trimmed.split("\\r?\\n");
+        int indent = findIndent(lines[0]);
+        String collect = stream(lines).map(s -> s.substring(indent)).collect(joining(lineSeparator()));
+        return "<code>" + collect + "</code>";
+    }
+
+    private int findIndent(String line) {
+        char[] chars = line.toCharArray();
+        int length = chars.length - 1;
+        int indent = 0;
+        while (indent < length && chars[indent] <= 32) {
+            indent++;
+        }
+        return indent;
     }
 
     private String trimCode(String value) {
