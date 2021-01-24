@@ -26,7 +26,7 @@ import static rexy.doclet.Utils.hasInterface;
 public class TestDoclet extends RexyDoclet {
 
     public TestDoclet() {
-        super(new ReadmeGenerator("Introduction", "README.md"));
+        super(gen);
     }
 
     private static final VisitingGenerator<?,?> gen = new VisitingGenerator<>(new ParentVisitor()) {
