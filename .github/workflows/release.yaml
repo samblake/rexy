@@ -19,23 +19,27 @@ jobs:
           java-version: 9
 
       - name: Bump Version
-        run: mvn versions:set -DgenerateBackupPoms=false -DremoveSnapshot
+        run: mvn --batch-mode versions:set -DgenerateBackupPoms=false -DremoveSnapshot
 
       - name: Build
-        run: mvn --update-snapshots install
+        run: mvn --batch-mode --update-snapshots install
 
       - name: Generate Docs
-        run: mvn -pl core clean javadoc:javadoc
+        run: mvn --batch-mode -pl core clean javadoc:javadoc
 
       - name: Commit Change
         run: |
           git commit -a -m "Create $(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) release"
+          git remote set-url --push origin https://samblake:$GITHUB_TOKEN@github.com/samblake/rexy
           git push
 
       - name: Create Tag
         run: |
           git tag $(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           git push --tags
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: Deploy Docs
         uses: JamesIves/github-pages-deploy-action@3.7.1
