@@ -34,10 +34,12 @@ import static rexy.utils.Json.booleanValue;
  * <p>The MBean has other properties: <i>content type</i>, <i>HTTP status</i> and <i>body</i>. These values
  * dictate what is returned as the mock response.</p>
  *
- * <p>For example, in the following configuration an MBean would be configured under
+ * <p>For example, in the following configuration an MBean would be registered under
  * {@code Rexy/metaweather/location/mock}.</p>
  *
  * <pre><code>{@code
+ *
+ *
  * "apis": [
  *   {
  *     "name": "metaweather",
@@ -68,6 +70,8 @@ import static rexy.utils.Json.booleanValue;
  *     }]
  *   }
  * ]
+ *
+ *
  * }</code></pre>
  *
  * <p>It is also possible to create presets that can be set to be returned. These can be seen in the above

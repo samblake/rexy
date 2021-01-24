@@ -1,6 +1,8 @@
 package rexy.doclet.generator;
 
 import com.sun.source.doctree.DocCommentTree;
+import com.sun.source.doctree.DocTree;
+import com.sun.source.doctree.LiteralTree;
 import com.sun.source.util.DocTrees;
 import jdk.javadoc.doclet.DocletEnvironment;
 import rexy.doclet.Section;
@@ -9,7 +11,8 @@ import rexy.doclet.visitor.ResultVisitor;
 import javax.lang.model.element.Element;
 import java.util.Optional;
 
-import static org.apache.commons.lang3.StringUtils.join;
+import static java.util.Arrays.copyOfRange;
+import static java.util.stream.Collectors.joining;
 
 public abstract class VisitingGenerator<T, V extends ResultVisitor<T>> implements Generator {
 
@@ -31,7 +34,45 @@ public abstract class VisitingGenerator<T, V extends ResultVisitor<T>> implement
 
     protected String generateDocs(DocTrees docTrees, Element element) {
         DocCommentTree docCommentTree = docTrees.getDocCommentTree(element);
-        return docCommentTree == null ? null : join(docCommentTree.getFullBody(), "");
+        return docCommentTree == null ? "" : docCommentTree.getFullBody().stream()
+            .map(this::processDoc)
+            .collect(joining());
+    }
+
+    private String processDoc(DocTree c) {
+        switch (c.getKind()) {
+            case CODE:
+                return processCode((LiteralTree) c);
+            case LINK:
+                return processLink((LiteralTree) c);
+            default:
+                return c.toString();
+        }
+    }
+
+    private String processLink(LiteralTree link) {
+        return link.getBody().toString();
+    }
+
+    private String processCode(LiteralTree code) {
+        return "<code>" + trimCode(code.getBody().toString()) + "</code>";
+    }
+
+    private String trimCode(String value) {
+        char[] chars = value.toCharArray();
+        int length = chars.length - 1;
+
+        int start = 0;
+        while (start < length && chars[start] == 10 || chars[start] == 13) {
+            start++;
+        }
+
+        int end = length;
+        while (end > start && chars[end] <= 32) {
+            end--;
+        }
+
+        return start > 0 || end < length ?new String(copyOfRange(chars, start, end + 1)) : value;
     }
 
 }

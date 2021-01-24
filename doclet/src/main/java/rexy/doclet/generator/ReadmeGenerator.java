@@ -1,16 +1,24 @@
 package rexy.doclet.generator;
 
+import com.vladsch.flexmark.ast.Heading;
+import com.vladsch.flexmark.html.AttributeProvider;
 import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.html.renderer.AttributablePart;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.util.data.MutableDataSet;
+import com.vladsch.flexmark.util.html.AttributeImpl;
+import com.vladsch.flexmark.util.html.MutableAttributes;
 import jdk.javadoc.doclet.DocletEnvironment;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rexy.doclet.Section;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Optional;
 
 public class ReadmeGenerator implements Generator {
@@ -27,7 +35,7 @@ public class ReadmeGenerator implements Generator {
     @Override
     public Optional<Section> generate(DocletEnvironment environment) {
         try {
-            return Optional.of(new Section(title, renderReadme()));
+            return Optional.of(renderReadme(title, true));
         }
         catch (IOException e) {
             logger.warn("Could not generate readme");
@@ -35,14 +43,47 @@ public class ReadmeGenerator implements Generator {
         }
     }
 
-    private String renderReadme() throws IOException {
+    private Section renderReadme(String title, boolean removeFirstSection) throws IOException {
+        Section section = null;
+        StringBuilder content = new StringBuilder();
+
         MutableDataSet options = new MutableDataSet();
         Parser parser = Parser.builder(options).build();
         HtmlRenderer renderer = HtmlRenderer.builder(options).build();
 
         try (FileReader reader = new FileReader(path)) {
             Node document = parser.parseReader(reader);
-            return renderer.render(document);
+            Iterator<Node> it = document.getChildIterator();
+            while (it.hasNext()) {
+                Node node = it.next();
+                if (node.isOrDescendantOfType(Heading.class)) {
+                    if (section == null) {
+                        section = new Section(title, content.toString());
+                    }
+                    else {
+                        section.addSubsection(new Section(title, content.toString()));
+                    }
+
+                    title = ((Heading) node).getText().toString();
+                    content = new StringBuilder();
+                }
+                else {
+                    content.append(renderer.render(node));
+                }
+            }
+
+            if (section == null) {
+                section = new Section(title, content.toString());
+            }
+            else {
+                section.addSubsection(new Section(title, content.toString()));
+            }
+
+            if (removeFirstSection && !section.getSubsections().isEmpty()) {
+                section.getSubsections().remove(0);
+            }
+
+            return section;
         }
     }
 

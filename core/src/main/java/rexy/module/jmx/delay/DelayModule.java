@@ -19,10 +19,9 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  *
  * <p>To configure a delay an API is created in the configuration. Each endpoint has an an MBean associated with
  * it under the name {@code Rexy/[API name]/[Endpoint name]/delay}. The MBean has a single property - delay. If
- * the value of <i>delay</i> is greater then zero then a delay of that number of seconds will be artificially
- * introduced.</p>
+ * the value of <i>delay</i> is greater then zero then a delay of that number of seconds will be introduced.</p>
  *
- * <p>For example, in the following configuration an MBean would be configured under
+ * <p>For example, in the following configuration an MBean would be registered under
  * {@code Rexy/metaweather/location/delay}.</p>
  *
  * <pre><code>{@code

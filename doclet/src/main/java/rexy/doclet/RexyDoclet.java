@@ -120,7 +120,7 @@ public class RexyDoclet implements Doclet {
 
         List<Generator> generators = new ArrayList<>();
         String path = markdownPath == null ? DEFAULT_MARKDOWN_PATH : markdownPath;
-        generators.add(new ReadmeGenerator("Introduction", path));
+        generators.add(new ReadmeGenerator("Rexy", path));
         generators.addAll(asList(this.generators));
 
         List<Section> sections = generators.stream()

@@ -134,7 +134,8 @@ html #mode .dark {
 }
 
 .section.docs-heading {
-    padding: 60px 0;
+    padding: 30px 0;
+    margin: 30px 0;
 }
 
 .affix {
@@ -241,6 +242,7 @@ table {
     max-width: 100%;
     margin-bottom: 20px;
     margin-top: 20px;
+    clear: both;
 }
 
 table>tbody>tr>td, table>tbody>tr>th, table>tfoot>tr>td, table>tfoot>tr>th, table>thead>tr>td, table>thead>tr>th {
@@ -270,4 +272,37 @@ table>tbody>tr:nth-of-type(odd) {
 
 #mode {
     display: none;
+}
+
+#top, #footer {
+    background-color: #F5F2F0;
+}
+
+p {
+    padding: 5px 0 5px 0;
+    margin: 5px 0 5px 0;
+}
+
+pre, table {
+    margin: 30px 0 30px 0 !important;
+}
+
+code {
+    background-color: #F5F2F0;
+    color: #905;
+}
+
+h1 {
+    padding-bottom: 15px;
+}
+h2 {
+    padding-bottom: 10px;
+}
+h3 {
+    padding-bottom: 5px;
+}
+
+#footer {
+    padding: 10px 0 10px 0;
+    margin: 30px 0 30px 0;
 }

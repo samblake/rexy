@@ -78,20 +78,16 @@
             </div>
         </div>
 
-        <div class="container">
+        <section id="top" class="section docs-heading">
+            <div class="big-title text-center">
+                <h1>{{ name }} {{ version }} Documentation</h1>
+                {% if headline is not null %}
+                    <p class="lead">{{ headline }}</p>
+                {% endif %}
+            </div>
+        </section>
 
-            <section id="top" class="section docs-heading">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="big-title text-center">
-                            <h1>{{ name }} {{ version }} Documentation</h1>
-                            {% if headline is not null %}
-                                <p class="lead">{{ headline }}</p>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </section>
+        <div class="container">
 
             <div class="row">
 
@@ -144,6 +140,12 @@
 
             </div>
         </div>
+
+        <section id="footer" class="section">
+            <div class="text-center">
+                <p>{{ name }} {{ version }} Documentation</p>
+            </div>
+        </section>
     </div>
 
     <script>

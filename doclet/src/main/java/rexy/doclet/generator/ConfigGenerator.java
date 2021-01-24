@@ -2,7 +2,6 @@ package rexy.doclet.generator;
 
 import jdk.javadoc.doclet.DocletEnvironment;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.NotNull;
 import rexy.doclet.Section;
 import rexy.doclet.visitor.CombinedElementVisitor;
 
@@ -12,7 +11,9 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static j2html.TagCreator.*;
 import static rexy.doclet.Utils.hasInterface;
