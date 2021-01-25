@@ -11,7 +11,7 @@ import java.util.List;
 import static java.util.Collections.emptyList;
 
 /**
- * <p>Models the base config:</p>
+ * <p>The root configures the general details of the Rexy application.</p>
  *
  * <pre><code>{@code
  * {
@@ -47,37 +47,40 @@ import static java.util.Collections.emptyList;
 public class Config implements rexy.config.RexyConfig {
 
 	/**
-	 * The port that listens for incoming connections.
+	 * The port that listens for incoming connections. Your server should point it's API clients
+	 * to this port in order to proxy/mock them.
 	 */
 	@JsonProperty("port")
 	private int port;
 
 	/**
-	 * The base path that all API endpoints run under.
+	 * The base path that all API endpoints run under. Defaults to <code>/</code>.
 	 */
 	@JsonProperty("baseUrl")
 	private String baseUrl;
 
 	/**
-	 * Additional packages that will be scanned for modules.
+	 * The packages that should be scanned for modules.
 	 */
 	@JsonProperty("scanPackages")
 	private List<String> scanPackages = emptyList();
 
 	/**
-	 * The modules that will be enabled.
+	 * A map of module name to module specific configurations. All module configurations have, as a minimum,
+	 * an {@code enabled} element. All other values are defined by the module itself. Modules are disabled
+	 * by default and must be explicitly set to be enabled.
 	 */
 	@JsonProperty("modules")
 	private LinkedHashMap<String, JsonNode> modules = new LinkedHashMap<>();
 
 	/**
-	 * The APIs that will be running.
+	 * Configuration details of the APIs that Rexy will handle.
 	 */
 	@JsonProperty("apis")
 	private List<Api> apis = emptyList();
 
 	/**
-	 * Configuration files to be imported as APIs. Relative to the base config file
+	 * A list of supplementary files, each containing a single API configuration.
 	 */
 	@JsonProperty("imports")
 	private List<String> imports = emptyList();

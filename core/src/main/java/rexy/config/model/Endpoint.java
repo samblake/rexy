@@ -11,13 +11,20 @@ import java.util.List;
 import static java.util.Collections.emptyList;
 
 /**
- * <p>Models the endpoint config:</p>
+ * <p>Models an endpoint for an API.</p>
  *
  * <pre><code>{@code
  * {
  *   "name": "location",
  *   "method": "GET",
- *   "endpoint": "/location/search/?query={query}",
+ *   "endpoint": "	public Filter getFilter() {
+		return filter;
+	}
+
+	public void setFilter(Filter filter) {
+		this.filter = filter;
+	}
+/location/search/?query={query}",
  *   "responses": [
  *     ...
  *   ]
@@ -29,21 +36,34 @@ import static java.util.Collections.emptyList;
 		"name",
 		"method",
 		"endpoint",
-		"filter",
 		"responses"
 })
 public class Endpoint {
 	
 	@JsonBackReference
 	private Api api;
+
+	/**
+	 * The name of the endpoint.
+	 */
 	@JsonProperty("name")
 	private String name;
+
+	/**
+	 * The HTTP method of the endpoint.
+	 */
 	@JsonProperty("method")
 	private Method method;
+
+	/**
+	 * The path of the endpoint. Named parameters can be specified in curly braces.
+	 */
 	@JsonProperty("endpoint")
 	private String endpoint;
-	@JsonProperty("filter")
-	private Filter filter;
+
+	/**
+	 * Mock response presets.
+	 */
 	@JsonProperty("responses")
 	private List<Response> responses = emptyList();
 	
@@ -74,15 +94,7 @@ public class Endpoint {
 	public void setEndpoint(String endpoint) {
 		this.endpoint = endpoint;
 	}
-	
-	public Filter getFilter() {
-		return filter;
-	}
-	
-	public void setFilter(Filter filter) {
-		this.filter = filter;
-	}
-	
+
 	public List<Response> getResponses() {
 		return responses;
 	}

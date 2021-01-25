@@ -12,7 +12,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 
 /**
- * <p>Models the API config:</p>
+ * <p>Models an API that Rexy can handle. Each will run under it's own path.</p>
  *
  * <pre><code>{@code
  * {
@@ -39,17 +39,40 @@ import static java.util.Collections.emptyMap;
 		"endpoints"
 })
 public class Api {
-	
+
+	/**
+	 * The name of the API.
+	 */
 	@JsonProperty("name")
 	private String name;
+
+	/**
+	 * The path the API will be deployed to.
+	 */
 	@JsonProperty("baseUrl")
 	private String baseUrl;
+
+	/**
+	 * The default content type to use for mocked API responses. This can be overridden by the endpoint or response.
+	 */
 	@JsonProperty("contentType")
 	private String contentType;
+
+	/**
+	 * The URL that requests to this API should be proxied to.
+	 */
 	@JsonProperty("proxy")
 	private String proxy;
+
+	/**
+	 * The default headers to use for mocked API responses. This can be overridden by the endpoint or response.
+	 */
 	@JsonProperty("headers")
 	private Map<String, String> headers = emptyMap();
+
+	/**
+	 * The endpoints that are provided by the API.
+	 */
 	@JsonManagedReference
 	@JsonProperty("endpoints")
 	private List<Endpoint> endpoints = emptyList();

@@ -29,7 +29,7 @@ public interface RexyConfig {
 	/**
 	 * A map of module name to module specific configurations. All module configurations have, as a minimum,
 	 * an {@code enabled} element. All other values are defined by the module itself. Modules are disabled
-	 * by default and must be explicitaly set to be enabled.
+	 * by default and must be explicitly set to be enabled.
 	 */
 	LinkedHashMap<String, JsonNode> getModules();
 	

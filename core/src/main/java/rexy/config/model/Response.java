@@ -12,7 +12,7 @@ import static java.util.Collections.emptyMap;
 import static java.util.Optional.ofNullable;
 
 /**
- * <p>Models the response config:</p>
+ * <p>Models a mock response preset.</p>
  *
  * <pre><code>{@code
  * {
@@ -39,13 +39,29 @@ import static java.util.Optional.ofNullable;
 		"body"
 })
 public class Response {
-	
+
+	/**
+	 * The name of the preset.
+	 */
 	@JsonProperty("name")
 	private String name;
+
+	/**
+	 * The HTTP status code to return.
+	 */
 	@JsonProperty("httpStatus")
 	private int httpStatus;
+
+	/**
+	 * The HTTP response headers to return.
+	 */
 	@JsonProperty("headers")
 	private Map<String, String> headers = emptyMap();
+
+	/**
+	 * The response body to return. If the response is JSON the the object can be supplied directly in the config,
+	 * otherwise a reference to a text file containing the body should be supplied.
+	 */
 	@JsonProperty("body")
 	private JsonNode body;
 	
