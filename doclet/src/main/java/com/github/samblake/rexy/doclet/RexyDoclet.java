@@ -9,8 +9,6 @@ import jdk.javadoc.doclet.DocletEnvironment;
 import jdk.javadoc.doclet.Reporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import rexy.doclet.generator.*;
-import rexy.doclet.visitor.*;
 
 import javax.lang.model.SourceVersion;
 import java.io.BufferedWriter;
