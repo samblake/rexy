@@ -2,6 +2,8 @@
 
 A lightweight REST mock/proxy server.
 
+<a href="https://samblake.github.io/rexy">Documentation</a>
+
 ### Overview
 
 Rexy is designed to allow dynamic testing of different scenarios during integration testing of REST endpoints. It is
