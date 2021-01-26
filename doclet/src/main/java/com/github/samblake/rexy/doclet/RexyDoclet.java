@@ -39,6 +39,7 @@ public class RexyDoclet implements Doclet {
     private String name;
     private String version;
     private String headline;
+    private String url;
     private String markdownPath;
 
     private final Generator[] generators;
@@ -95,6 +96,13 @@ public class RexyDoclet implements Doclet {
                     return true;
                 }
             },
+            new RexyOption("url", "project url") {
+                @Override
+                public boolean process(String option, List<String> arguments) {
+                    url = arguments == null ? null : arguments.get(0);
+                    return true;
+                }
+            },
             new RexyOption("markdown", "markdown location") {
                 @Override
                 public boolean process(String option, List<String> arguments) {
@@ -116,6 +124,7 @@ public class RexyDoclet implements Doclet {
         context.put("name", name);
         context.put("version", version);
         context.put("headline", headline);
+        context.put("url", url);
 
         List<Generator> generators = new ArrayList<>();
         String path = markdownPath == null ? DEFAULT_MARKDOWN_PATH : markdownPath;

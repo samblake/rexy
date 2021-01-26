@@ -143,7 +143,13 @@
 
         <section id="footer" class="section">
             <div class="text-center">
-                <p>{{ name }} {{ version }} Documentation</p>
+                <p>
+                    {% if url is null %}
+                        {{ name }}
+                    {% else %}
+                        <a href="{{ url }}">{{ name }}</a>
+                    {% endif %}
+                </p>
             </div>
         </section>
     </div>

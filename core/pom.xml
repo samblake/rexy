@@ -79,6 +79,7 @@
                         <additionalOption>--name ${project.parent.artifactId}</additionalOption>
                         <additionalOption>--ver ${project.version}</additionalOption>
                         <additionalOption>--headline "A lightweight REST mock/proxy server"</additionalOption>
+                        <additionalOption>--url ${project.parent.url}</additionalOption>
                     </additionalOptions>
                 </configuration>
             </plugin>
