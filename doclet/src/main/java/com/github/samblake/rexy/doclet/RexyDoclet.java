@@ -53,7 +53,7 @@ public class RexyDoclet implements Doclet {
 
     @Override
     public void init(Locale locale, Reporter reporter) {
-        logger.info("Generating Rexy doc");
+        logger.info("Generating Rexy docs");
     }
 
     @Override
@@ -112,8 +112,6 @@ public class RexyDoclet implements Doclet {
 
     @Override
     public boolean run(DocletEnvironment environment) {
-        logger.info("Generating Rexy doclet");
-
         Map<String, Object> context = new HashMap<>();
         context.put("name", name);
         context.put("version", version);
