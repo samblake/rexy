@@ -7,25 +7,23 @@ import com.mitchellbosecke.pebble.template.PebbleTemplate;
 import jdk.javadoc.doclet.Doclet;
 import jdk.javadoc.doclet.DocletEnvironment;
 import jdk.javadoc.doclet.Reporter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.lang.model.SourceVersion;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
 import static com.github.samblake.rexy.doclet.Constants.*;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 public class RexyDoclet implements Doclet {
-    private static final Logger logger = LoggerFactory.getLogger(RexyDoclet.class);
+    private static final Logger logger = LogManager.getLogger(RexyDoclet.class);
 
     private static final String DEFAULT_MARKDOWN_PATH = "../../../../../README.md";
 
@@ -153,7 +151,7 @@ public class RexyDoclet implements Doclet {
     }
 
     private void writeTemplate(File outputFile, Map<String, Object> context) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
+        try (Writer writer = new OutputStreamWriter(new FileOutputStream(outputFile), UTF_8)) {
             PebbleEngine engine = new PebbleEngine.Builder().build();
             PebbleTemplate compiledTemplate = engine.getTemplate("template/index.peb");
             compiledTemplate.evaluate(writer, context);

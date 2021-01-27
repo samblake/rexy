@@ -1,22 +1,26 @@
 package com.github.samblake.rexy.doclet.generator;
 
+import com.github.samblake.rexy.doclet.Section;
 import com.vladsch.flexmark.ast.Heading;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.util.data.MutableDataSet;
 import jdk.javadoc.doclet.DocletEnvironment;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.github.samblake.rexy.doclet.Section;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Iterator;
 import java.util.Optional;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 public class ReadmeGenerator implements Generator {
-    private static final Logger logger = LoggerFactory.getLogger(ReadmeGenerator.class);
+    private static final Logger logger = LogManager.getLogger(ReadmeGenerator.class);
 
     private final String title;
     private final String path;
@@ -45,7 +49,7 @@ public class ReadmeGenerator implements Generator {
         Parser parser = Parser.builder(options).build();
         HtmlRenderer renderer = HtmlRenderer.builder(options).build();
 
-        try (FileReader reader = new FileReader(path)) {
+        try (Reader reader = new InputStreamReader(new FileInputStream(path), UTF_8)) {
             Node document = parser.parseReader(reader);
             Iterator<Node> it = document.getChildIterator();
             while (it.hasNext()) {
