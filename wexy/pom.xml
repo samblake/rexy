@@ -9,19 +9,25 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>doclet</artifactId>
+    <artifactId>wexy</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>io.pebbletemplates</groupId>
-            <artifactId>pebble</artifactId>
-            <version>3.1.4</version>
+            <groupId>com.github.samblake.rexy</groupId>
+            <artifactId>core</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.vladsch.flexmark</groupId>
-            <artifactId>flexmark-all</artifactId>
-            <version>0.62.2</version>
+            <groupId>tv.cntt</groupId>
+            <artifactId>jauter</artifactId>
+            <version>1.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.jknack</groupId>
+            <artifactId>handlebars</artifactId>
+            <version>4.2.0</version>
         </dependency>
 
         <dependency>
@@ -29,16 +35,15 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
 
+        <!-- Testing-->
         <dependency>
-            <groupId>com.j2html</groupId>
-            <artifactId>j2html</artifactId>
-            <version>1.4.0</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>2.11.3</version>
+            <groupId>com.google.truth</groupId>
+            <artifactId>truth</artifactId>
         </dependency>
 
     </dependencies>

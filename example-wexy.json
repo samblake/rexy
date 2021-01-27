@@ -1,0 +1,32 @@
+{
+  "port": "8081",
+  "baseUrl": "/",
+  "modules": {
+    "wexy": {
+      "enabled": true
+    },
+    "cors": {
+      "enabled": true,
+      "headerName": "X-Requested-With",
+      "headerValue": "Wexy"
+    },
+    "removal": {
+      "enabled": false,
+      "headerName": "X-Requested-With"
+    },
+    "delay": {
+      "enabled": true
+    },
+    "mock": {
+      "enabled": true,
+      "interceptOnSet": true
+    },
+    "proxy": {
+      "enabled": true
+    }
+  },
+  "apis": [],
+  "imports": [
+    "example-import.json"
+  ]
+}

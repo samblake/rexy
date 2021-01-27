@@ -49,7 +49,7 @@ import static com.github.samblake.rexy.utils.Requests.toHeaders;
  * "apis": [
  *   {
  *     "name": "metaweather",
- *     "baseUrl": "api/",
+ *     "baseUrl": "api/",LogManager
  *     "contentType": "application/json",
  *     "proxy": "http://www.metaweather.com/api",
  *     "endpoints": [
