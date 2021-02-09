@@ -20,11 +20,10 @@
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" integrity="sha512-i8+QythOYyQke6XbStjt9T4yQHhhM+9Y9yTY1fOxoDQwsQpKMEpIoSQZ8mVomtnVCf9PBvoQDnKl06gGOOD19Q==" crossorigin="anonymous" />    
-    <link rel="stylesheet" type="text/css" href="css/stroke.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.min.css" integrity="sha512-FWzWGvyU7ueo21SbhoCnq6YwJfDsjPEa9G+SmLRHTDfYj0MzYEuHFlfsVBWQlgmCd2HsjHKeQYV9ul/S464XfQ==" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" integrity="sha512-c42qTSw/wPZ3/5LBzD+Bw5f7bSF2oxou6wEb+I/lqeaKV5FDIfMvvRp772y4jcJLKuGUOpbJMdg/BTl50fJYAw==" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettyPhoto/3.1.6/css/prettyPhoto.min.css" integrity="sha512-aB3UdGCt+QZdSlPCgDsJBJ+JytRb8oq/cdMEpLTaypINSyom0h5vcw2HsF1m0eZtWsetJllPtQOfCPM9UrdKYw==" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="css/stroke.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/custom.css">
 
@@ -37,6 +36,8 @@
 </head>
 
 <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.9.0/mermaid.min.js" integrity="sha512-rnzOI40okRGVag0FuDA6Ofs9jmakPBssLCzYgsmnDkKHWg2cbCzKc4XEap1ScIRT7Rw3VtUy2GgTIBFA9fFFfQ==" crossorigin="anonymous"></script>
+
     <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
 
     <script>
@@ -155,18 +156,28 @@
     </div>
 
     <script>
+        mermaid.initialize({startOnLoad:true});
         var codes = document.querySelectorAll("pre > code");
         for (i = 0; i < codes.length; ++i) {
-            codes[i].classList.add("language-json");
+            var code = codes[i];
+            if (code.classList.contains("stateDiagram-v2")) {
+                var insertSvg = function(svgCode, bindFunctions) {
+                    code.style.display = 'flex';
+                    code.style.justifyContent = 'center';
+                    code.innerHTML = svgCode;
+                };
+
+                var markup = "stateDiagram-v2\n" + codes[i].innerText;
+                var graph = mermaid.render("mermaid" + i, markup, insertSvg);
+            }
+            else {
+                code.classList.add("language-json");
+            }
         }
     </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js" integrity="sha512-Znnj7n0C0Xz1tdk6ih39WPm3kSCTZEKnX/7WaNbySW7GFbwSjO5r9/uOAGLMbgv6llI1GdghC7xdaQsFUStM1w==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js" integrity="sha512-AthmoOeufPNt1aNOMYiHopEQKnT7y15IeG0cfoYPFD7vrvCGQIIMv2KHZ+n3mRQQSH2D1k1C58bnBH4ywNvsdQ==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/retina.js/2.1.3/retina.min.js" integrity="sha512-9RcSZpXlWiAq12BM82QI0qRtusQJonuUZ/h/bZl+Cd6O4Pw7UnGV6gnCcS5wV03/zvLwCeL3enaUa0RPy+VM2w==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fitvids/1.2.0/jquery.fitvids.min.js" integrity="sha512-/2sZKAsHDmHNoevKR/xsUKe+Bpf692q4tHNQs9VWWz0ujJ9JBM67iFYbIEdfDV9I2BaodgT5MIg/FTUmUv3oyQ==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.js" integrity="sha512-Rd5Gf5A6chsunOJte+gKWyECMqkG8MgBYD1u80LOOJBfl6ka9CtatRrD4P0P5Q5V/z/ecvOCSYC8tLoWNrCpPg==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prettyPhoto/3.1.6/js/jquery.prettyPhoto.min.js" integrity="sha512-IB7NSySDRedVEsYsOVuzN5O5jwRjV2ewVVmkDFIgE0yNu11GreBCOMv07i7hlQck41T+sTXSL05/cG+De4cZDw==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js" integrity="sha512-YBk7HhgDZvBxmtOfUdvX0z8IH2d10Hp3aEygaMNhtF8fSOvBZ16D/1bXZTJV6ndk/L/DlXxYStP8jrF77v2MIg==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-json.min.js" integrity="sha512-IC7rV8RslChgByOdUFC6ePqOGn+OwJhnKC3S5AezM8DAiOdGhJMwgsIvBChsa2yuxxoPbH2+W/kjNUM1cc+jUQ==" crossorigin="anonymous"></script>
     <script src="js/custom.js"></script>

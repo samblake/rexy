@@ -25,14 +25,21 @@ import static java.util.stream.Collectors.toList;
 public class RexyDoclet implements Doclet {
     private static final Logger logger = LogManager.getLogger(RexyDoclet.class);
 
-    private static final String DEFAULT_MARKDOWN_PATH = "../../../../../README.md";
+    private static final String BASE = "../../../../../";
 
-    private static final VisitingGenerator<?,?> CONFIGURATION_GENERATOR = new ConfigGenerator(
-            "Configuration", new CombinedElementVisitor(new PackageVisitor(CONFIG_PACKAGE), new ConfigVisitor()));
-    private static final VisitingGenerator<?,?> MODULE_GENERATOR = new SubsectionGenerator(
+    private static final String DEFAULT_MARKDOWN_PATH = BASE + "README.md";
+
+    private static final Generator MODULE_GENERATOR = new SubsectionGenerator(
             "Modules", MODULE_PACKAGE, new ModuleVisitor());
-    private static final VisitingGenerator<?,?> MATCHER_GENERATOR = new SubsectionGenerator(
+    private static final Generator MATCHER_GENERATOR = new SubsectionGenerator(
             "Matchers", MATCHER_PACKAGE, new RequestMatcherVisitor());
+
+    private static final Generator JAVA_CONFIG_GENERATOR = new ConfigGenerator(
+            "Configuration", new CombinedElementVisitor(new PackageVisitor(CONFIG_PACKAGE), new ConfigVisitor()));
+    private static final Generator CONFIG_GENERATOR = new CombiningGenerator(JAVA_CONFIG_GENERATOR,
+            new FileIncludeGenerator(BASE + "example-config.json"),
+            new FileIncludeGenerator(BASE + "example-import.json"),
+            new FileIncludeGenerator(BASE + "example-body.json"));
 
     private String name;
     private String version;
@@ -43,7 +50,7 @@ public class RexyDoclet implements Doclet {
     private final Generator[] generators;
 
     public RexyDoclet() {
-        this(CONFIGURATION_GENERATOR, MODULE_GENERATOR, MATCHER_GENERATOR);
+        this(CONFIG_GENERATOR, MODULE_GENERATOR, MATCHER_GENERATOR);
     }
 
     public RexyDoclet(Generator... generators) {
@@ -140,7 +147,7 @@ public class RexyDoclet implements Doclet {
         try {
             File file = new File("index.html");
             writeTemplate(file, context);
-            copyResources(Paths.get("../../../../../doclet/src/main/resources/template"));
+            copyResources(Paths.get(BASE + "doclet/src/main/resources/template"));
         }
         catch (IOException e) {
             logger.error("Could not generate docs", e);

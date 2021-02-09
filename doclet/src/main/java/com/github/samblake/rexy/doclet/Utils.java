@@ -17,6 +17,15 @@ public class Utils {
         return join(splitByCharacterTypeCamelCase(camelCase), " ");
     }
 
+    public static String removeFileExtension(String filename) {
+        int idx = filename.lastIndexOf('.');
+        return idx >= 0 ? filename.substring(0, idx) : filename;
+    }
+
+    public static String replaceConcat(String text) {
+        return text.replaceAll("[-_./\\\\|~]", " ");
+    }
+
     public static boolean hasInterface(TypeElement element, Class<?> clazz) {
         return hasInterface(element, clazz.getName());
     }
