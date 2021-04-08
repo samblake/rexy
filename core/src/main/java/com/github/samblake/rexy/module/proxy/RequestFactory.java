@@ -37,12 +37,10 @@ public final class RequestFactory {
 		request.getHeaders().stream().filter(RexyHeader::isProxyable)
 				.forEach(header -> proxyRequest.addHeader(header.getName(), header.getValue()));
 		
-		if (proxyRequest instanceof HttpEntityEnclosingRequest) {
-				if (request.getBody() != null) {
-					ContentType contentType = findContentType(request.getHeaders());
-					HttpEntity entity = new StringEntity(request.getBody(), contentType);
-					((HttpEntityEnclosingRequest)proxyRequest).setEntity(entity);
-				}
+		if (proxyRequest instanceof HttpEntityEnclosingRequest && request.getBody() != null) {
+			ContentType contentType = findContentType(request.getHeaders());
+			HttpEntity entity = new StringEntity(request.getBody(), contentType);
+			((HttpEntityEnclosingRequest)proxyRequest).setEntity(entity);
 		}
 		
 		return proxyRequest;
