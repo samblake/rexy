@@ -46,6 +46,6 @@ public interface RexyRequest {
 	/**
 	 * The request body encoded as a byte array.
 	 */
-	String getBody() throws IOException;
+	String getBody();
 	
 }

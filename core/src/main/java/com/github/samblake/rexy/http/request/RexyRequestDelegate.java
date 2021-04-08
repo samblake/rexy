@@ -49,7 +49,7 @@ public abstract class RexyRequestDelegate implements RexyRequest {
 	}
 	
 	@Override
-	public String getBody() throws IOException {
+	public String getBody() {
 		return delegate.getBody();
 	}
 	

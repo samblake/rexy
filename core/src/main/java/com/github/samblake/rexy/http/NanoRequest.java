@@ -66,7 +66,7 @@ public class NanoRequest implements RexyRequest {
 				.collect(toMap(Entry::getKey, entry -> entry.getValue().stream().findFirst().get()));
 	}
 	
-	public String getBody() throws IOException {
+	public String getBody() {
 		return body;
 	}
 	

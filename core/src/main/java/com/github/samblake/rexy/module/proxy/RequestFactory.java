@@ -2,18 +2,17 @@ package com.github.samblake.rexy.module.proxy;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.HttpRequest;
 import org.apache.http.client.methods.*;
 import com.github.samblake.rexy.http.Method;
 import com.github.samblake.rexy.http.RexyHeader;
 import com.github.samblake.rexy.http.request.RexyRequest;
-import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.message.BasicHttpEntityEnclosingRequest;
 
-import java.io.IOException;
+import java.util.List;
 
 import static com.github.samblake.rexy.http.Method.*;
+import static com.github.samblake.rexy.http.RexyHeader.HEADER_CONTENT_TYPE;
 
 /**
  * Takes a {@link RexyRequest} and converts it into a {@link HttpUriRequest} that can be used to proxy
@@ -39,15 +38,11 @@ public final class RequestFactory {
 				.forEach(header -> proxyRequest.addHeader(header.getName(), header.getValue()));
 		
 		if (proxyRequest instanceof HttpEntityEnclosingRequest) {
-			try {
 				if (request.getBody() != null) {
-					HttpEntity entity = new StringEntity(request.getBody());
+					ContentType contentType = findContentType(request.getHeaders());
+					HttpEntity entity = new StringEntity(request.getBody(), contentType);
 					((HttpEntityEnclosingRequest)proxyRequest).setEntity(entity);
 				}
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 		
 		return proxyRequest;
@@ -99,6 +94,13 @@ public final class RequestFactory {
 			super("Unknown HTTP method: " + method);
 		}
 		
+	}
+	
+	private static ContentType findContentType(List<RexyHeader> headers) {
+		return headers.stream()
+				.filter(h -> h.getName().equalsIgnoreCase(HEADER_CONTENT_TYPE))
+				.map(h -> ContentType.parse(h.getValue()))
+				.findAny().orElse(null);
 	}
 	
 }
