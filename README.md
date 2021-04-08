@@ -17,8 +17,8 @@ configuration is performed via JMX or via the Wexy module as a web application.
 
 ### Running
 
-Start Rexy by running the `rexy.Rexy` class, optionally specifying a configuration file as an argument. Alternatively
-build via Maven and run the resulting jar.
+Start Rexy by running the `com.github.samblake.rexy.Rexy` class, optionally specifying a configuration file as an 
+argument. Alternatively build via Maven and run the resulting jar.
 
 ### FAQ
 

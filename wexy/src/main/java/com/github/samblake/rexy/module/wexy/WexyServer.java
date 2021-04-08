@@ -10,15 +10,22 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.github.jknack.handlebars.helper.ConditionalHelpers.eq;
 import static com.github.samblake.rexy.http.Method.GET;
 import static fi.iki.elonen.NanoHTTPD.Response.Status.INTERNAL_ERROR;
 import static fi.iki.elonen.NanoHTTPD.Response.Status.OK;
+import static java.lang.System.lineSeparator;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.stream.Collectors.joining;
 
 public class WexyServer extends RexyServer {
 	private static final Logger logger = LogManager.getLogger(WexyServer.class);
@@ -60,7 +67,14 @@ public class WexyServer extends RexyServer {
 				if (resource != null) {
 					logger.debug("Serving " + url);
 					String mineType = url.endsWith(".css") ? "text/css" : "application/javascript";
-					return newChunkedResponse(OK, mineType, resource);
+					
+					// return newChunkedResponse(OK, mineType, resource);
+					// FIXME chunked response stopped working, fall back on reading file to String as below
+					
+					try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource, UTF_8))) {
+						String file = reader.lines().collect(joining(lineSeparator()));
+						return newFixedLengthResponse(OK, mineType, file);
+					}
 				}
 			}
 			catch (IOException e) {
