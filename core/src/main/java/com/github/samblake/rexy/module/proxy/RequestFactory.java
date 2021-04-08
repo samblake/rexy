@@ -1,9 +1,17 @@
 package com.github.samblake.rexy.module.proxy;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpEntityEnclosingRequest;
+import org.apache.http.HttpRequest;
 import org.apache.http.client.methods.*;
 import com.github.samblake.rexy.http.Method;
 import com.github.samblake.rexy.http.RexyHeader;
 import com.github.samblake.rexy.http.request.RexyRequest;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.message.BasicHttpEntityEnclosingRequest;
+
+import java.io.IOException;
 
 import static com.github.samblake.rexy.http.Method.*;
 
@@ -29,6 +37,18 @@ public final class RequestFactory {
 		
 		request.getHeaders().stream().filter(RexyHeader::isProxyable)
 				.forEach(header -> proxyRequest.addHeader(header.getName(), header.getValue()));
+		
+		if (proxyRequest instanceof HttpEntityEnclosingRequest) {
+			try {
+				if (request.getBody() != null) {
+					HttpEntity entity = new StringEntity(request.getBody());
+					((HttpEntityEnclosingRequest)proxyRequest).setEntity(entity);
+				}
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		return proxyRequest;
 	}

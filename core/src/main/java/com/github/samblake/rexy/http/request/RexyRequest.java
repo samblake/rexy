@@ -3,6 +3,7 @@ package com.github.samblake.rexy.http.request;
 import com.github.samblake.rexy.http.Method;
 import com.github.samblake.rexy.http.RexyHeader;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -38,8 +39,13 @@ public interface RexyRequest {
 	
 	/**
 	 * The request parameters in a map from name to value. If multiple values exist for the same
-	 * parameter then only the first occurance of the parameter will be returned.
+	 * parameter then only the first occurrence of the parameter will be returned.
 	 */
 	Map<String, String> getParameters();
+	
+	/**
+	 * The request body encoded as a byte array.
+	 */
+	String getBody() throws IOException;
 	
 }
