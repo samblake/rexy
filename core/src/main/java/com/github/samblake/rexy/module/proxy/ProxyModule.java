@@ -95,7 +95,7 @@ public class ProxyModule extends ModuleAdapter {
 		List<RexyHeader> headers = Arrays.stream(response.getAllHeaders())
 				.map(h -> new RexyHeader(h.getName(), h.getValue())).collect(toList());
 		
-		return new BasicRexyResponse(statusCode, headers, getMimeType(response), body);
+		return new BasicRexyResponse(statusCode, headers, null, body);
 	}
 	
 	private byte[] getBody(CloseableHttpResponse response) throws IOException {
@@ -117,17 +117,6 @@ public class ProxyModule extends ModuleAdapter {
 			}
 		}
 		return ISO_8859_1;
-	}
-	
-	private String getMimeType(CloseableHttpResponse response) {
-		Header[] contentType = response.getHeaders(HEADER_CONTENT_TYPE);
-		for (Header header : contentType) {
-			String mimeType = ContentType.parse(header.getValue()).getMimeType();
-			if (mimeType != null) {
-				return mimeType;
-			}
-		}
-		return null;
 	}
 	
 }
