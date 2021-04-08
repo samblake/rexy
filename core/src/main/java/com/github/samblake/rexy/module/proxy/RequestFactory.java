@@ -51,6 +51,13 @@ public final class RequestFactory {
 		return request.getQueryString() == null ? url : url + '?' + request.getQueryString();
 	}
 	
+	private static ContentType findContentType(List<RexyHeader> headers) {
+		return headers.stream()
+				.filter(h -> h.getName().equalsIgnoreCase(HEADER_CONTENT_TYPE))
+				.map(h -> ContentType.parse(h.getValue()))
+				.findAny().orElse(null);
+	}
+	
 	/**
 	 * Creates a request of a specific method (GET, POST, etc.) to the given URL.
 	 *
@@ -92,13 +99,6 @@ public final class RequestFactory {
 			super("Unknown HTTP method: " + method);
 		}
 		
-	}
-	
-	private static ContentType findContentType(List<RexyHeader> headers) {
-		return headers.stream()
-				.filter(h -> h.getName().equalsIgnoreCase(HEADER_CONTENT_TYPE))
-				.map(h -> ContentType.parse(h.getValue()))
-				.findAny().orElse(null);
 	}
 	
 }
