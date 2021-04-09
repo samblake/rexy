@@ -15,16 +15,15 @@
     <meta name="author" content="">
     <meta name="keywords" content="">
 
-    <title>rexy 1.3.0 Documentation</title>
+    <title>rexy 1.4.0 Documentation</title>
 
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" integrity="sha512-i8+QythOYyQke6XbStjt9T4yQHhhM+9Y9yTY1fOxoDQwsQpKMEpIoSQZ8mVomtnVCf9PBvoQDnKl06gGOOD19Q==" crossorigin="anonymous" />    
-    <link rel="stylesheet" type="text/css" href="css/stroke.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.min.css" integrity="sha512-FWzWGvyU7ueo21SbhoCnq6YwJfDsjPEa9G+SmLRHTDfYj0MzYEuHFlfsVBWQlgmCd2HsjHKeQYV9ul/S464XfQ==" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" integrity="sha512-c42qTSw/wPZ3/5LBzD+Bw5f7bSF2oxou6wEb+I/lqeaKV5FDIfMvvRp772y4jcJLKuGUOpbJMdg/BTl50fJYAw==" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettyPhoto/3.1.6/css/prettyPhoto.min.css" integrity="sha512-aB3UdGCt+QZdSlPCgDsJBJ+JytRb8oq/cdMEpLTaypINSyom0h5vcw2HsF1m0eZtWsetJllPtQOfCPM9UrdKYw==" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="css/stroke.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/custom.css">
 
@@ -37,6 +36,8 @@
 </head>
 
 <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.9.0/mermaid.min.js" integrity="sha512-rnzOI40okRGVag0FuDA6Ofs9jmakPBssLCzYgsmnDkKHWg2cbCzKc4XEap1ScIRT7Rw3VtUy2GgTIBFA9fFFfQ==" crossorigin="anonymous"></script>
+
     <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
 
     <script>
@@ -80,7 +81,7 @@
 
         <section id="top" class="section docs-heading">
             <div class="big-title text-center">
-                <h1>rexy 1.3.0 Documentation</h1>
+                <h1>rexy 1.4.0 Documentation</h1>
                                     <p class="lead">A lightweight REST mock/proxy server</p>
                             </div>
         </section>
@@ -105,15 +106,18 @@
                                                                                             <li><a href="#configuration-api">Api</a></li>
                                                                                             <li><a href="#configuration-endpoint">Endpoint</a></li>
                                                                                             <li><a href="#configuration-response">Response</a></li>
+                                                                                            <li><a href="#configuration-example-config">example config</a></li>
+                                                                                            <li><a href="#configuration-example-import">example import</a></li>
+                                                                                            <li><a href="#configuration-example-body">example body</a></li>
                                                                                     </ul>
                                                                     </li>
                                                             <li><a href="#modules">Modules</a>
                                                                             <ul class="nav">
-                                                                                            <li><a href="#modules-cors-module">Cors Module</a></li>
+                                                                                            <li><a href="#modules-proxy-module">Proxy Module</a></li>
                                                                                             <li><a href="#modules-removal-module">Removal Module</a></li>
+                                                                                            <li><a href="#modules-cors-module">Cors Module</a></li>
                                                                                             <li><a href="#modules-mock-module">Mock Module</a></li>
                                                                                             <li><a href="#modules-delay-module">Delay Module</a></li>
-                                                                                            <li><a href="#modules-proxy-module">Proxy Module</a></li>
                                                                                     </ul>
                                                                     </li>
                                                             <li><a href="#matchers">Matchers</a>
@@ -146,7 +150,7 @@ endpoint. Rexy can then be configured to intercept certain requests and return s
 for testing error scenarios that may be difficult or impossible to trigger on an ad-hoc bases on the API endpoint
 itself.</p>
 <p>Details of the different APIs to proxy as well as presets for responses are configured by a simple JSON file. Runtime
-configuration is performed via JMX or via Wexy as a web application.</p>
+configuration is performed via JMX or via the Wexy module as a web application.</p>
                                             </div>
                                         </div>
                                     </div>
@@ -154,8 +158,8 @@ configuration is performed via JMX or via Wexy as a web application.</p>
                                         <h4 id="rexy-running">Running</h4>
                                         <div class="row">
                                             <div class="col-md-12 full">
-                                                <p>Start Rexy by running the <code>rexy.Rexy</code> class, optionally specifying a configuration file as an argument. Alternatively
-build via Maven and run the resulting jar.</p>
+                                                <p>Start Rexy by running the <code>com.github.samblake.rexy.Rexy</code> class, optionally specifying a configuration file as an
+argument. Alternatively build via Maven and run the resulting jar.</p>
                                             </div>
                                         </div>
                                     </div>
@@ -167,8 +171,7 @@ build via Maven and run the resulting jar.</p>
 <p>Yes, it is not a requirement to specify an endpoint to proxy to. If a request is not intercepted a 502 response will be
 returned. This can be useful for testing APIs when there is only a production endpoint.</p>
 <p><strong>Can Rexy be configured without JMX?</strong></p>
-<p>Although it still uses JMX in the background the Wexy module provides a web
-interface for runtime configuration.</p>
+<p>Although it still uses JMX in the background the Wexy module provides a web interface for runtime configuration.</p>
 <p><strong>Can non-JSON response presets be configured?</strong></p>
 <p>Yes, they just need to be specified in their own files and referenced from the JSON configuration.</p>
                                             </div>
@@ -279,6 +282,162 @@ interface for runtime configuration.</p>
  otherwise a reference to a text file containing the body should be supplied.</td></tr></table>                                            </div>
                                         </div>
                                     </div>
+                                                                    <div class="col-md-12 left-align">
+                                        <h4 id="configuration-example-config">example config</h4>
+                                        <div class="row">
+                                            <div class="col-md-12 full">
+                                                example-config.json<pre><code>{
+  "port": "8081",
+  "baseUrl": "/",
+  "modules": {
+    "delay": {
+      "enabled": true
+    },
+    "mock": {
+      "enabled": true,
+      "interceptOnSet": true
+    },
+    "proxy": {
+      "enabled": true
+    }
+  },
+  "apis": [
+    {
+      "name": "metaweather",
+      "baseUrl": "weather",
+      "contentType": "application/json",
+      "proxy": "http://www.metaweather.com/api",
+      "endpoints": [
+        {
+          "name": "location",
+          "method": "GET",
+          "endpoint": "/location/search/?query={query}",
+          "responses": [
+            {
+              "name": "Successful",
+              "httpStatus": 200,
+              "headers": {
+                "Accept-Charset": "utf-8"
+              },
+              "body": "example-body.json"
+            },
+            {
+              "name": "Invalid",
+              "httpStatus": 401,
+              "body": {
+                "error": "invalid request"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "imports": [
+    "example-import.json"
+  ]
+}</code></pre>                                            </div>
+                                        </div>
+                                    </div>
+                                                                    <div class="col-md-12 left-align">
+                                        <h4 id="configuration-example-import">example import</h4>
+                                        <div class="row">
+                                            <div class="col-md-12 full">
+                                                example-import.json<pre><code>{
+  "name": "chuck norris",
+  "baseUrl": "chucknorris",
+  "contentType": "application/json",
+  "proxy": "https://api.chucknorris.io",
+  "endpoints": [
+    {
+      "name": "joke",
+      "endpoint": "/jokes/random",
+      "method": "GET",
+      "responses": [
+        {
+          "name": "Successful",
+          "httpStatus": 200,
+          "body": {
+            "icon_url": "https://assets.chucknorris.host/img/avatar/chuck-norris.png",
+            "id": "g6Tk9tCFQpeqqxY2Rh-sTw",
+            "url": "https://api.chucknorris.io/jokes/g6Tk9tCFQpeqqxY2Rh-sTw",
+            "value": "Phobias are afraid of Chuck Norris."
+          }
+        }
+      ]
+    },
+    {
+      "name": "category joke",
+      "endpoint": "/jokes/random?category={category}",
+      "method": "GET",
+      "responses": [
+        {
+          "name": "Successful",
+          "httpStatus": 200,
+          "body":{
+            "category": [
+              "dev"
+            ],
+            "icon_url": "https://assets.chucknorris.host/img/avatar/chuck-norris.png",
+            "id": "nmlts0sqrwifigqta-rv_g",
+            "url": "https://api.chucknorris.io/jokes/nmlts0sqrwifigqta-rv_g",
+            "value": "Chuck Norris's log statements are always at the FATAL level."
+          }
+        },
+        {
+          "name": "Error",
+          "httpStatus": 404,
+          "headers": {
+            "content-type": "text/html; charset=UTF-8"
+          }
+        }
+      ]
+    },
+    {
+      "name": "categories",
+      "endpoint": "/jokes/categories",
+      "method": "GET",
+      "responses": [
+        {
+          "name": "Successful",
+          "httpStatus": 200,
+          "body": [
+            "explicit",
+            "dev",
+            "movie",
+            "food",
+            "celebrity",
+            "science",
+            "sport",
+            "political",
+            "religion",
+            "animal",
+            "history",
+            "music",
+            "travel",
+            "career",
+            "money",
+            "fashion"
+          ]
+        }
+      ]
+    }
+  ]
+}</code></pre>                                            </div>
+                                        </div>
+                                    </div>
+                                                                    <div class="col-md-12 left-align">
+                                        <h4 id="configuration-example-body">example body</h4>
+                                        <div class="row">
+                                            <div class="col-md-12 full">
+                                                example-body.json<pre><code>{
+  "title": "London",
+  "location_type": "City",
+  "woeid": 44418,
+  "latt_long": "51.506321,-0.12714"
+}</code></pre>                                            </div>
+                                        </div>
+                                    </div>
                                 
                             </div>
                         </section>
@@ -302,6 +461,64 @@ interface for runtime configuration.</p>
                                     </div>
                                 </div>
 
+                                                                    <div class="col-md-12 left-align">
+                                        <h4 id="modules-proxy-module">Proxy Module</h4>
+                                        <div class="row">
+                                            <div class="col-md-12 full">
+                                                <p>A module that proxies a request to another URL. This will always write a response so will always be the
+ last module in a chain.</p>
+
+ <p>To configure a proxy an API is created in the configuration. The <code>baseUrl</code> of the API corresponds
+ to the context root of the API on the Rexy server. The <code>proxy</code> value is the base URL that any request
+ to that context root will be forwarded to.</p>
+
+ <p>For example, if the following configuration, if Rexy was running on localhost going to
+ http://localhost/api would be proxied to http://www.metaweather.com/api and going to
+ http://localhost/api/location/search/?query=london would be proxied to
+ http://www.metaweather.com/api/location/search/?query=london.</p>
+
+ <pre><code><code>"apis": [
+  {
+    "name": "metaweather",
+    "baseUrl": "api/",
+    "contentType": "application/json",
+    "proxy": "http://www.metaweather.com/api",
+    "endpoints": [
+    {
+      "name": "location",
+      "endpoint": "location/search/?query={query}",
+    }
+  }
+]</code></code></pre>                                            </div>
+                                        </div>
+                                    </div>
+                                                                    <div class="col-md-12 left-align">
+                                        <h4 id="modules-removal-module">Removal Module</h4>
+                                        <div class="row">
+                                            <div class="col-md-12 full">
+                                                A module that removes a header from requests.
+
+ <pre><code><code>"removal": {
+  "enabled": true,
+  "headerName": "X-Requested-With"
+}</code></code></pre>
+
+ <table summary="Configuration details">
+     <tr>
+         <th>Name</th>
+         <th>Description</th>
+         <th>Type</th>
+         <th>Default</th>
+     </tr>
+     <tr>
+         <td>headerName</td>
+         <td>The name of the header to removed.</td>
+         <td>string</td>
+         <td>X-Requested-With</td>
+     </tr>
+ </table>                                            </div>
+                                        </div>
+                                    </div>
                                                                     <div class="col-md-12 left-align">
                                         <h4 id="modules-cors-module">Cors Module</h4>
                                         <div class="row">
@@ -342,33 +559,6 @@ interface for runtime configuration.</p>
          is set then the module will trigger for all requests.</td>
          <td>string</td>
          <td><i>null</i></td>
-     </tr>
- </table>                                            </div>
-                                        </div>
-                                    </div>
-                                                                    <div class="col-md-12 left-align">
-                                        <h4 id="modules-removal-module">Removal Module</h4>
-                                        <div class="row">
-                                            <div class="col-md-12 full">
-                                                A module that removes a header from requests.
-
- <pre><code><code>"removal": {
-  "enabled": true,
-  "headerName": "X-Requested-With"
-}</code></code></pre>
-
- <table summary="Configuration details">
-     <tr>
-         <th>Name</th>
-         <th>Description</th>
-         <th>Type</th>
-         <th>Default</th>
-     </tr>
-     <tr>
-         <td>headerName</td>
-         <td>The name of the header to removed.</td>
-         <td>string</td>
-         <td>X-Requested-With</td>
      </tr>
  </table>                                            </div>
                                         </div>
@@ -460,37 +650,6 @@ interface for runtime configuration.</p>
 ]</code></code></pre>                                            </div>
                                         </div>
                                     </div>
-                                                                    <div class="col-md-12 left-align">
-                                        <h4 id="modules-proxy-module">Proxy Module</h4>
-                                        <div class="row">
-                                            <div class="col-md-12 full">
-                                                <p>A module that proxies a request to another URL. This will always write a response so will always be the
- last module in a chain.</p>
-
- <p>To configure a proxy an API is created in the configuration. The <code>baseUrl</code> of the API corresponds
- to the context root of the API on the Rexy server. The <code>proxy</code> value is the base URL that any request
- to that context root will be forwarded to.</p>
-
- <p>For example, if the following configuration, if Rexy was running on localhost going to
- http://localhost/api would be proxied to http://www.metaweather.com/api and going to
- http://localhost/api/location/search/?query=london would be proxied to
- http://www.metaweather.com/api/location/search/?query=london.</p>
-
- <pre><code><code>"apis": [
-  {
-    "name": "metaweather",
-    "baseUrl": "api/",
-    "contentType": "application/json",
-    "proxy": "http://www.metaweather.com/api",
-    "endpoints": [
-    {
-      "name": "location",
-      "endpoint": "location/search/?query={query}",
-    }
-  }
-]</code></code></pre>                                            </div>
-                                        </div>
-                                    </div>
                                 
                             </div>
                         </section>
@@ -523,24 +682,36 @@ interface for runtime configuration.</p>
 
         <section id="footer" class="section">
             <div class="text-center">
-                <p>rexy 1.3.0 Documentation</p>
+                <p>
+                                            <a href="https://github.com/samblake/rexy/">rexy</a>
+                                    </p>
             </div>
         </section>
     </div>
 
     <script>
+        mermaid.initialize({startOnLoad:true});
         var codes = document.querySelectorAll("pre > code");
         for (i = 0; i < codes.length; ++i) {
-            codes[i].classList.add("language-json");
+            var code = codes[i];
+            if (code.classList.contains("stateDiagram-v2")) {
+                var insertSvg = function(svgCode, bindFunctions) {
+                    code.style.display = 'flex';
+                    code.style.justifyContent = 'center';
+                    code.innerHTML = svgCode;
+                };
+
+                var markup = "stateDiagram-v2\n" + codes[i].innerText;
+                var graph = mermaid.render("mermaid" + i, markup, insertSvg);
+            }
+            else {
+                code.classList.add("language-json");
+            }
         }
     </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js" integrity="sha512-Znnj7n0C0Xz1tdk6ih39WPm3kSCTZEKnX/7WaNbySW7GFbwSjO5r9/uOAGLMbgv6llI1GdghC7xdaQsFUStM1w==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js" integrity="sha512-AthmoOeufPNt1aNOMYiHopEQKnT7y15IeG0cfoYPFD7vrvCGQIIMv2KHZ+n3mRQQSH2D1k1C58bnBH4ywNvsdQ==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/retina.js/2.1.3/retina.min.js" integrity="sha512-9RcSZpXlWiAq12BM82QI0qRtusQJonuUZ/h/bZl+Cd6O4Pw7UnGV6gnCcS5wV03/zvLwCeL3enaUa0RPy+VM2w==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fitvids/1.2.0/jquery.fitvids.min.js" integrity="sha512-/2sZKAsHDmHNoevKR/xsUKe+Bpf692q4tHNQs9VWWz0ujJ9JBM67iFYbIEdfDV9I2BaodgT5MIg/FTUmUv3oyQ==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.js" integrity="sha512-Rd5Gf5A6chsunOJte+gKWyECMqkG8MgBYD1u80LOOJBfl6ka9CtatRrD4P0P5Q5V/z/ecvOCSYC8tLoWNrCpPg==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prettyPhoto/3.1.6/js/jquery.prettyPhoto.min.js" integrity="sha512-IB7NSySDRedVEsYsOVuzN5O5jwRjV2ewVVmkDFIgE0yNu11GreBCOMv07i7hlQck41T+sTXSL05/cG+De4cZDw==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js" integrity="sha512-YBk7HhgDZvBxmtOfUdvX0z8IH2d10Hp3aEygaMNhtF8fSOvBZ16D/1bXZTJV6ndk/L/DlXxYStP8jrF77v2MIg==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-json.min.js" integrity="sha512-IC7rV8RslChgByOdUFC6ePqOGn+OwJhnKC3S5AezM8DAiOdGhJMwgsIvBChsa2yuxxoPbH2+W/kjNUM1cc+jUQ==" crossorigin="anonymous"></script>
     <script src="js/custom.js"></script>
