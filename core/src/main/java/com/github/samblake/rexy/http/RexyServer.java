@@ -93,19 +93,29 @@ public class RexyServer extends NanoHTTPD {
 	
 	private RexyResponse performRequest(IHTTPSession session, String route, RexyHandler handler) {
 		try {
-			if (session.getMethod() == POST || session.getMethod() == PUT) {
-				// If we don't parse the body form parameters are not made available
-				session.parseBody(new HashMap<>());
-			}
-			
-			NanoRequest request = new NanoRequest(session, route);
-			
+			NanoRequest request = createRequest(session, route);
 			return handler.handle(request).orElseGet(() -> errorResponse(501,
 					"No API endpoint registered for %s %s", session.getUri(), session.getMethod()));
 		}
 		catch (IOException | ResponseException e) {
 			logger.error("Error processing request", e);
 			return errorResponse(500, "Error processing request");
+		}
+	}
+	
+	private NanoRequest createRequest(IHTTPSession session, String route) throws IOException, ResponseException {
+		if (session.getMethod() == POST || session.getMethod() == PUT) {
+			// If we don't parse the body form parameters are not made available
+			HashMap<String, String> body = new HashMap<>();
+			session.parseBody(body);
+			
+			// There are many suggestions of how to read body data, this is the only that has worked for me so far
+			// See https://stackoverflow.com/questions/22349772/retrieve-http-body-in-nanohttpd
+			String postData = body.get("postData");
+			return new NanoRequest(session, route, postData);
+		}
+		else {
+			return new NanoRequest(session, route);
 		}
 	}
 	

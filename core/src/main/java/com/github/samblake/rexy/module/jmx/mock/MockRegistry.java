@@ -9,8 +9,8 @@ import javax.management.*;
 import java.lang.management.ManagementFactory;
 import java.util.Map;
 
-import static org.apache.commons.lang.StringUtils.isEmpty;
 import static com.github.samblake.rexy.utils.Bodies.findBody;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * A registry for {@link MockEndpoint mock endpoints}.

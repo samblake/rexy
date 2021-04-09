@@ -1,11 +1,12 @@
 package com.github.samblake.rexy.utils.loader;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
 public class ChainLoader implements Loader {
-	private static final Logger logger = Logger.getLogger(ChainLoader.class);
+	private static final Logger logger = LogManager.getLogger(ChainLoader.class);
 	
 	private final Loader[] loaders;
 	

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Rexy</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cash/3.0.0-beta.1/cash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.2/ace.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-checkradio@2.1.0/dist/css/bulma-checkradio.min.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/bulma-modal-fx/dist/css/modal-fx.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/bulma-toast@2.0.3/dist/bulma-toast.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bulma-tagsinput@2.0.0/dist/js/bulma-tagsinput.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8.1/dist/polyfill.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/whatwg-fetch@3.0/dist/fetch.umd.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/wexy.css"/>
+    <script src="/wexy.js"></script>
+
+    <script>
+        $(document).ready(
+            function() {
+                bulmaTagsinput.attach('[type="tags"]');
+
+                $('.editor').each(function(index, element) {
+                    var next = $(element).next();
+                    if (next != undefined && next.prop('tagName') == 'INPUT') {
+                        makeEditor(element, $(element).data("type"));
+                    }
+                    else {
+                        makeViewer(element, $(element).data("type"));
+                    }
+                });
+
+                {{#notification}}
+                    bulmaToast.toast({
+                        message: "{{message}}",
+                        type: "{{#eq type 'success'}}is-primary{{/eq}} {{#eq type 'failure'}}is-warning{{/eq}}",
+                        animate: { in: 'fadeIn', out: 'fadeOut' }
+                    });
+                {{/notification}}
+            }
+        );
+    </script>
+
+</head>
+
+<body>
+
+<div class="container">
+    {{#block "content"}}
+    {{/block}}
+</div>
+
+</body>
+
+<script type="text/javascript" src="https://unpkg.com/bulma-modal-fx/dist/js/modal-fx.js"></script>
+
+</html>

@@ -1,0 +1,41 @@
+<div id="presets" class="modal modal-fx-fadeInScale">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+
+        <div class="column is-12">
+
+            <div class="box">
+                <header class="card-header">
+                    <p class="card-header-title">
+                        Presets
+                    </p>
+                </header>
+
+                <div class="content">
+                    <table class="table is-fullwidth">
+                        <tbody>
+                        {{#presets}}
+                            <tr>
+                                <td width="5%"><i class="fa fa-angle-double-right"></i></td>
+                                <td>{{{name}}}</td>
+                                <td class="action-cell">
+                                    <form method="post" action="{{link}}" id="preset-{{name}}-form">
+                                        <input type="hidden" name="module" value="mock" />
+                                        <input type="hidden" name="preset" value="{{name}}" />
+                                        <a class="button is-small is-primary" onclick="document.getElementById('preset-{{name}}-form').submit();">
+                                            Apply
+                                        </a>
+                                    </form>
+                                </td>
+                            </tr>
+                        {{/presets}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <button class="modal-close is-large" aria-label="close"></button>
+</div>

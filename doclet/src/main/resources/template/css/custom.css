@@ -252,6 +252,10 @@ table>tbody>tr>td, table>tbody>tr>th, table>tfoot>tr>td, table>tfoot>tr>th, tabl
     line-height: 1.5em;
 }
 
+.nav>li {
+    line-height: 31px;
+}
+
 th {
     text-align: left;
 }
@@ -288,7 +292,7 @@ pre, table {
     margin: 30px 0 30px 0 !important;
 }
 
-code {
+pre, code {
     background-color: #F5F2F0;
     color: #905;
 }

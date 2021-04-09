@@ -1,0 +1,126 @@
+{{#partial "content"}}
+    <div class="columns">
+        <div class="column is-12">
+
+            {{> includes/hero}}
+
+            <div class="column is-12">
+                <div class="card bar level">
+                    {{#with uri}}
+                        <div class="level-left"><span class="method">{{method}}</span> {{template}}</div>
+                        <div class="level-right">
+                            <a id="test-button" class="button is-primary modal-button" data-target="parameters">Test</a>
+                        </div>
+                    {{/with}}
+                </div>
+
+                <div class="card">
+                    <div class="card-header tabs is-centered is-toggle is-medium is-primary">
+                        <ul>
+                            {{#tabs}}
+                                <li {{#if active}}class="is-active"{{/if}}>
+                                    <a>{{name}}</a>
+                                </li>
+                            {{/tabs}}
+                        </ul>
+                    </div>
+
+                    <div id="tabs" class="content">
+                        {{#tabs}}
+                            <div {{#unless active}}class="is-hidden"{{/unless}}>
+
+                                {{#with model}}
+                                    <form id="{{name}}-form" method="post" action="{{action}}">
+
+                                        {{#inputs}}
+                                            <div class="field is-horizontal">
+                                                <div class="field-label is-normal">
+                                                    <label class="label" for="{{name}}-input">{{label}}</label>
+                                                </div>
+                                                <div class="field-body">
+                                                    <div class="field">
+                                                        {{#eq type 'json'}}
+                                                            <pre id="{{name}}-editor" class="input editor" data-type="json">{{prettyValue}}</pre>
+                                                            <input name="{{name}}" id="{{name}}-input" type="hidden" {{#if disabled}}disabled="disabled"{{/if}} value="{{prettyValue}}"/>
+                                                        {{/eq}}
+                                                        {{#eq type 'xml'}}
+                                                            <pre id="{{name}}-editor" class="input editor" data-type="xml">{{prettyValue}}</pre>
+                                                            <input name="{{name}}" id="{{name}}-input" type="hidden" {{#if disabled}}disabled="disabled"{{/if}} value="{{prettyValue}}"/>
+                                                        {{/eq}}
+                                                        {{#eq type 'checkbox'}}
+                                                            <div class="is-checkradio">
+                                                                <input class="is-checkradio is-info is-ltr" name="{{name}}" id="{{name}}-input" type="checkbox" value="true" {{#if disabled}}disabled="disabled"{{/if}} {{#if value}}checked="checked"{{/if}}/>
+                                                                <label for="{{name}}-input"/>
+                                                            </div>
+                                                        {{/eq}}
+                                                        {{#eq type 'number'}}
+                                                            <input class="input" name="{{name}}" id="{{name}}-input" type="number" {{#if disabled}}disabled="disabled"{{/if}} value="{{value}}"/>
+                                                        {{/eq}}
+                                                        {{#eq type 'text'}}
+                                                            <input class="input" name="{{name}}" id="{{name}}-input" type="text" {{#if disabled}}disabled="disabled"{{/if}} value="{{value}}"/>
+                                                        {{/eq}}
+                                                        {{#eq type 'tag'}}
+                                                            <input class="input" name="{{name}}" id="{{name}}-input" type="tags" placeholder="Add Value" {{#if disabled}}disabled="disabled"{{/if}} value="{{value}}"/>
+                                                        {{/eq}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {{/inputs}}
+
+                                        <input type="hidden" name="module" value="{{name}}"/>
+
+                                    </form>
+
+                                    <form method="post" action="{{action}}" id="{{name}}-reset">
+                                        <input type="hidden" name="module" value="{{name}}"/>
+
+                                        <div class="field is-grouped is-grouped-centered is-horizontal">
+                                            <p class="control">
+                                                <a class="button" onclick="document.getElementById('{{name}}-reset').submit();">
+                                                    Reset
+                                                </a>
+                                            </p>
+
+                                            {{#eq ../name 'mock'}}
+                                                <p class="control">
+                                                    <a class="button is-info modal-button" data-target="presets">
+                                                        Presets...
+                                                    </a>
+                                                </p>
+                                            {{/eq}}
+
+                                            <p class="control">
+                                                <a class="button is-primary" onclick="document.getElementById('{{name}}-form').submit();">
+                                                    Save
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </form>
+                                {{/with}}
+
+                            </div>
+                        {{/tabs}}
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    {{#tabs}}
+        {{#with model}}
+            {{#eq name 'mock'}}
+                {{> modals/preset}}
+            {{/eq}}
+        {{/with}}
+    {{/tabs}}
+
+    {{#with uri}}
+            {{> modals/test}}
+    {{/with}}
+
+{{/partial}}
+
+{{> layout}}

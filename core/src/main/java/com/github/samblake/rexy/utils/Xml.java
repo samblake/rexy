@@ -1,6 +1,7 @@
 package com.github.samblake.rexy.utils;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -13,7 +14,7 @@ import java.io.StringWriter;
 import static javax.xml.transform.OutputKeys.INDENT;
 
 public class Xml {
-	private static final Logger logger = Logger.getLogger(Xml.class);
+	private static final Logger logger = LogManager.getLogger(Xml.class);
 	
 	private Xml() {
 	}

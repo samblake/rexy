@@ -7,44 +7,50 @@ import com.mitchellbosecke.pebble.template.PebbleTemplate;
 import jdk.javadoc.doclet.Doclet;
 import jdk.javadoc.doclet.DocletEnvironment;
 import jdk.javadoc.doclet.Reporter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.lang.model.SourceVersion;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
 import static com.github.samblake.rexy.doclet.Constants.*;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 public class RexyDoclet implements Doclet {
-    private static final Logger logger = LoggerFactory.getLogger(RexyDoclet.class);
+    private static final Logger logger = LogManager.getLogger(RexyDoclet.class);
 
-    private static final String DEFAULT_MARKDOWN_PATH = "../../../../../README.md";
+    private static final String BASE = "../../../../../";
 
-    private static final VisitingGenerator<?,?> CONFIGURATION_GENERATOR = new ConfigGenerator(
-            "Configuration", new CombinedElementVisitor(new PackageVisitor(CONFIG_PACKAGE), new ConfigVisitor()));
-    private static final VisitingGenerator<?,?> MODULE_GENERATOR = new SubsectionGenerator(
+    private static final String DEFAULT_MARKDOWN_PATH = BASE + "README.md";
+
+    private static final Generator MODULE_GENERATOR = new SubsectionGenerator(
             "Modules", MODULE_PACKAGE, new ModuleVisitor());
-    private static final VisitingGenerator<?,?> MATCHER_GENERATOR = new SubsectionGenerator(
+    private static final Generator MATCHER_GENERATOR = new SubsectionGenerator(
             "Matchers", MATCHER_PACKAGE, new RequestMatcherVisitor());
+
+    private static final Generator JAVA_CONFIG_GENERATOR = new ConfigGenerator(
+            "Configuration", new CombinedElementVisitor(new PackageVisitor(CONFIG_PACKAGE), new ConfigVisitor()));
+    private static final Generator CONFIG_GENERATOR = new CombiningGenerator(JAVA_CONFIG_GENERATOR,
+            new FileIncludeGenerator(BASE + "example-config.json"),
+            new FileIncludeGenerator(BASE + "example-import.json"),
+            new FileIncludeGenerator(BASE + "example-body.json"));
 
     private String name;
     private String version;
     private String headline;
+    private String url;
     private String markdownPath;
 
     private final Generator[] generators;
 
     public RexyDoclet() {
-        this(CONFIGURATION_GENERATOR, MODULE_GENERATOR, MATCHER_GENERATOR);
+        this(CONFIG_GENERATOR, MODULE_GENERATOR, MATCHER_GENERATOR);
     }
 
     public RexyDoclet(Generator... generators) {
@@ -53,7 +59,7 @@ public class RexyDoclet implements Doclet {
 
     @Override
     public void init(Locale locale, Reporter reporter) {
-        logger.info("Generating Rexy doc");
+        logger.info("Generating Rexy docs");
     }
 
     @Override
@@ -95,6 +101,13 @@ public class RexyDoclet implements Doclet {
                     return true;
                 }
             },
+            new RexyOption("url", "project url") {
+                @Override
+                public boolean process(String option, List<String> arguments) {
+                    url = arguments == null ? null : arguments.get(0);
+                    return true;
+                }
+            },
             new RexyOption("markdown", "markdown location") {
                 @Override
                 public boolean process(String option, List<String> arguments) {
@@ -112,12 +125,11 @@ public class RexyDoclet implements Doclet {
 
     @Override
     public boolean run(DocletEnvironment environment) {
-        logger.info("Generating Rexy doclet");
-
         Map<String, Object> context = new HashMap<>();
         context.put("name", name);
         context.put("version", version);
         context.put("headline", headline);
+        context.put("url", url);
 
         List<Generator> generators = new ArrayList<>();
         String path = markdownPath == null ? DEFAULT_MARKDOWN_PATH : markdownPath;
@@ -135,7 +147,7 @@ public class RexyDoclet implements Doclet {
         try {
             File file = new File("index.html");
             writeTemplate(file, context);
-            copyResources(Paths.get("../../../../../doclet/src/main/resources/template"));
+            copyResources(Paths.get(BASE + "doclet/src/main/resources/template"));
         }
         catch (IOException e) {
             logger.error("Could not generate docs", e);
@@ -146,7 +158,7 @@ public class RexyDoclet implements Doclet {
     }
 
     private void writeTemplate(File outputFile, Map<String, Object> context) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
+        try (Writer writer = new OutputStreamWriter(new FileOutputStream(outputFile), UTF_8)) {
             PebbleEngine engine = new PebbleEngine.Builder().build();
             PebbleTemplate compiledTemplate = engine.getTemplate("template/index.peb");
             compiledTemplate.evaluate(writer, context);

@@ -13,12 +13,12 @@ for testing error scenarios that may be difficult or impossible to trigger on an
 itself. 
 
 Details of the different APIs to proxy as well as presets for responses are configured by a simple JSON file. Runtime 
-configuration is performed via JMX or via [Wexy](https://github.com/samblake/wexy) as a web application.
+configuration is performed via JMX or via the Wexy module as a web application.
 
 ### Running
 
-Start Rexy by running the `rexy.Rexy` class, optionally specifying a configuration file as an argument. Alternatively
-build via Maven and run the resulting jar.
+Start Rexy by running the `com.github.samblake.rexy.Rexy` class, optionally specifying a configuration file as an 
+argument. Alternatively build via Maven and run the resulting jar.
 
 ### FAQ
 
@@ -29,8 +29,7 @@ returned. This can be useful for testing APIs when there is only a production en
 
 **Can Rexy be configured without JMX?**
 
-Although it still uses JMX in the background the [Wexy module](https://github.com/samblake/wexy) provides a web 
-interface for runtime configuration.
+Although it still uses JMX in the background the Wexy module provides a web interface for runtime configuration.
 
 **Can non-JSON response presets be configured?**
 

@@ -1,0 +1,53 @@
+<div id="parameters" class="modal modal-fx-fadeInScale">
+    <div id="parameters-background" class="modal-background"></div>
+    <div class="modal-content">
+
+        <div class="column is-12">
+
+            <div class="box">
+                <header class="card-header">
+                    <p class="card-header-title">
+                        Test
+                    </p>
+                </header>
+
+                <div class="content">
+                    <form id="test-form" method="{{method}}" action="{{baseUrl}}{{template}}" target="_blank"
+                            onsubmit="event.preventDefault(); go(this, document.getElementById('test-viewer').editor);">
+
+                        {{#parameters}}
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label" for="{{this}}-param">{{this}}</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <input id="{{this}}-param" type="text" class="input" name="{{this}}" value="" placeholder="{{this}}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        {{/parameters}}
+
+                        <div class="field is-grouped is-grouped-centered is-horizontal">
+                            <p class="control">
+                                <button id="go-button" type="submit" class="button is-primary">Go</button>
+                            </p>
+                        </div>
+
+                    </form>
+                </div>
+
+                <div class="content">
+                    <div class="field-body">
+                        <div class="field">
+                            <pre id="test-viewer" class="input editor">{{prettyValue}}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <button class="modal-close is-large" aria-label="close"></button>
+</div>

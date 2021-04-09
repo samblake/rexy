@@ -1,11 +1,18 @@
 package com.github.samblake.rexy.module.proxy;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.client.methods.*;
 import com.github.samblake.rexy.http.Method;
 import com.github.samblake.rexy.http.RexyHeader;
 import com.github.samblake.rexy.http.request.RexyRequest;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+
+import java.util.List;
 
 import static com.github.samblake.rexy.http.Method.*;
+import static com.github.samblake.rexy.http.RexyHeader.HEADER_CONTENT_TYPE;
 
 /**
  * Takes a {@link RexyRequest} and converts it into a {@link HttpUriRequest} that can be used to proxy
@@ -30,12 +37,25 @@ public final class RequestFactory {
 		request.getHeaders().stream().filter(RexyHeader::isProxyable)
 				.forEach(header -> proxyRequest.addHeader(header.getName(), header.getValue()));
 		
+		if (proxyRequest instanceof HttpEntityEnclosingRequest && request.getBody() != null) {
+			ContentType contentType = findContentType(request.getHeaders());
+			HttpEntity entity = new StringEntity(request.getBody(), contentType);
+			((HttpEntityEnclosingRequest)proxyRequest).setEntity(entity);
+		}
+		
 		return proxyRequest;
 	}
 	
 	private static String createUrl(String baseUrl, RexyRequest request) {
 		String url = baseUrl + request.getUri().replace(request.getContextPath(), "");
 		return request.getQueryString() == null ? url : url + '?' + request.getQueryString();
+	}
+	
+	private static ContentType findContentType(List<RexyHeader> headers) {
+		return headers.stream()
+				.filter(h -> h.getName().equalsIgnoreCase(HEADER_CONTENT_TYPE))
+				.map(h -> ContentType.parse(h.getValue()))
+				.findAny().orElse(null);
 	}
 	
 	/**
