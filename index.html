@@ -15,7 +15,7 @@
     <meta name="author" content="">
     <meta name="keywords" content="">
 
-    <title>rexy 1.4.0 Documentation</title>
+    <title>rexy 1.4.1 Documentation</title>
 
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 
@@ -81,7 +81,7 @@
 
         <section id="top" class="section docs-heading">
             <div class="big-title text-center">
-                <h1>rexy 1.4.0 Documentation</h1>
+                <h1>rexy 1.4.1 Documentation</h1>
                                     <p class="lead">A lightweight REST mock/proxy server</p>
                             </div>
         </section>
@@ -113,16 +113,21 @@
                                                                     </li>
                                                             <li><a href="#modules">Modules</a>
                                                                             <ul class="nav">
-                                                                                            <li><a href="#modules-proxy-module">Proxy Module</a></li>
                                                                                             <li><a href="#modules-removal-module">Removal Module</a></li>
                                                                                             <li><a href="#modules-cors-module">Cors Module</a></li>
+                                                                                            <li><a href="#modules-proxy-module">Proxy Module</a></li>
                                                                                             <li><a href="#modules-mock-module">Mock Module</a></li>
                                                                                             <li><a href="#modules-delay-module">Delay Module</a></li>
                                                                                     </ul>
                                                                     </li>
                                                             <li><a href="#matchers">Matchers</a>
                                                                             <ul class="nav">
+                                                                                            <li><a href="#matchers-header-matcher">Header Matcher</a></li>
+                                                                                            <li><a href="#matchers-xpath-body-matcher">Xpath Body Matcher</a></li>
+                                                                                            <li><a href="#matchers-json-path-body-matcher">Json Path Body Matcher</a></li>
                                                                                             <li><a href="#matchers-regex-request-matcher">Regex Request Matcher</a></li>
+                                                                                            <li><a href="#matchers-regex-body-matcher">Regex Body Matcher</a></li>
+                                                                                            <li><a href="#matchers-not-matcher">Not Matcher</a></li>
                                                                                     </ul>
                                                                     </li>
                                                     </ul>
@@ -253,10 +258,13 @@ returned. This can be useful for testing APIs when there is only a production en
   "name": "location",
   "method": "GET",
   "endpoint": "location/search/?query={query}",
+  "matchers": {
+     ...
+  },
   "responses": [
     ...
   ]
-}</code></code></pre><table><tr><th>Name</th><th>Type</th><th>Description</th></tr><tr><td>name</td><td>String</td><td>The name of the endpoint.</td></tr><tr><td>method</td><td>Method</td><td>The HTTP method of the endpoint.</td></tr><tr><td>endpoint</td><td>String</td><td>The path of the endpoint. Named parameters can be specified in curly braces.</td></tr><tr><td>responses</td><td>List of <a href="#configuration-response">Response</a></td><td>Mock response presets.</td></tr></table>                                            </div>
+}</code></code></pre><table><tr><th>Name</th><th>Type</th><th>Description</th></tr><tr><td>name</td><td>String</td><td>The name of the endpoint.</td></tr><tr><td>method</td><td>Method</td><td>The HTTP method of the endpoint.</td></tr><tr><td>endpoint</td><td>String</td><td>The path of the endpoint. Named parameters can be specified in curly braces.</td></tr><tr><td>matchers</td><td>Map of Custom JSON</td><td>Key-value pairs of matcher name to custom JSON configuration.</td></tr><tr><td>responses</td><td>List of <a href="#configuration-response">Response</a></td><td>Mock response presets.</td></tr></table>                                            </div>
                                         </div>
                                     </div>
                                                                     <div class="col-md-12 left-align">
@@ -462,37 +470,6 @@ returned. This can be useful for testing APIs when there is only a production en
                                 </div>
 
                                                                     <div class="col-md-12 left-align">
-                                        <h4 id="modules-proxy-module">Proxy Module</h4>
-                                        <div class="row">
-                                            <div class="col-md-12 full">
-                                                <p>A module that proxies a request to another URL. This will always write a response so will always be the
- last module in a chain.</p>
-
- <p>To configure a proxy an API is created in the configuration. The <code>baseUrl</code> of the API corresponds
- to the context root of the API on the Rexy server. The <code>proxy</code> value is the base URL that any request
- to that context root will be forwarded to.</p>
-
- <p>For example, if the following configuration, if Rexy was running on localhost going to
- http://localhost/api would be proxied to http://www.metaweather.com/api and going to
- http://localhost/api/location/search/?query=london would be proxied to
- http://www.metaweather.com/api/location/search/?query=london.</p>
-
- <pre><code><code>"apis": [
-  {
-    "name": "metaweather",
-    "baseUrl": "api/",
-    "contentType": "application/json",
-    "proxy": "http://www.metaweather.com/api",
-    "endpoints": [
-    {
-      "name": "location",
-      "endpoint": "location/search/?query={query}",
-    }
-  }
-]</code></code></pre>                                            </div>
-                                        </div>
-                                    </div>
-                                                                    <div class="col-md-12 left-align">
                                         <h4 id="modules-removal-module">Removal Module</h4>
                                         <div class="row">
                                             <div class="col-md-12 full">
@@ -561,6 +538,37 @@ returned. This can be useful for testing APIs when there is only a production en
          <td><i>null</i></td>
      </tr>
  </table>                                            </div>
+                                        </div>
+                                    </div>
+                                                                    <div class="col-md-12 left-align">
+                                        <h4 id="modules-proxy-module">Proxy Module</h4>
+                                        <div class="row">
+                                            <div class="col-md-12 full">
+                                                <p>A module that proxies a request to another URL. This will always write a response so will always be the
+ last module in a chain.</p>
+
+ <p>To configure a proxy an API is created in the configuration. The <code>baseUrl</code> of the API corresponds
+ to the context root of the API on the Rexy server. The <code>proxy</code> value is the base URL that any request
+ to that context root will be forwarded to.</p>
+
+ <p>For example, if the following configuration, if Rexy was running on localhost going to
+ http://localhost/api would be proxied to http://www.metaweather.com/api and going to
+ http://localhost/api/location/search/?query=london would be proxied to
+ http://www.metaweather.com/api/location/search/?query=london.</p>
+
+ <pre><code><code>"apis": [
+  {
+    "name": "metaweather",
+    "baseUrl": "api/",
+    "contentType": "application/json",
+    "proxy": "http://www.metaweather.com/api",
+    "endpoints": [
+    {
+      "name": "location",
+      "endpoint": "location/search/?query={query}",
+    }
+  }
+]</code></code></pre>                                            </div>
                                         </div>
                                     </div>
                                                                     <div class="col-md-12 left-align">
@@ -659,17 +667,91 @@ returned. This can be useful for testing APIs when there is only a production en
                                    <h2 class="dark-text">Matchers</h2>
                                     <div class="row">
                                         <div class="col-md-12 full">
-                                            Matchers are used to see if an MBean should handle a HTTP request. Currently there is only a single, simple
- regular expression based matcher, others may be provided in the future to address the limitations of that approach.                                        </div>
+                                            <p>Matchers are used to see if an MBean should handle a HTTP request. A base matcher is used to match all requests
+ against the endpoint URL and HTTP method. Currently this is a simple regular expression based matcher. In the
+ future other matchers may be supplied to address the limitations of this approach.
+
+ <p>Additional matchers can be supplied as part of the <code>matchers</code> JSON. The keys in the  <code>matchers</code>
+ object are the name of the matcher and the values are the configuration required by that matcher. If additional
+ matchers are supplied all matchers, including the base matcher, must match for the MBean to process the request.                                        </div>
                                     </div>
                                 </div>
 
                                                                     <div class="col-md-12 left-align">
+                                        <h4 id="matchers-header-matcher">Header Matcher</h4>
+                                        <div class="row">
+                                            <div class="col-md-12 full">
+                                                <p>Matches requests that contain a specific header. The header name and value should be supplied as a
+ key-value pair in the configuration. For example:
+
+ <pre><code><code>"matchers": {
+  "header": {
+     "Accept": "application/xhtml+xml"
+  }
+},</code></code></pre>                                            </div>
+                                        </div>
+                                    </div>
+                                                                    <div class="col-md-12 left-align">
+                                        <h4 id="matchers-xpath-body-matcher">Xpath Body Matcher</h4>
+                                        <div class="row">
+                                            <div class="col-md-12 full">
+                                                <p>Matches requests with bodies that match a given XPath expression. As such it should be used with requests
+ that contain an XML body. The expression should be supplied as the configuration. For example:
+
+ <pre><code><code>"matchers": {
+  "xpath": "//elements/element"
+},</code></code></pre>                                            </div>
+                                        </div>
+                                    </div>
+                                                                    <div class="col-md-12 left-align">
+                                        <h4 id="matchers-json-path-body-matcher">Json Path Body Matcher</h4>
+                                        <div class="row">
+                                            <div class="col-md-12 full">
+                                                <p>Matches requests with bodies that match a given
+ <a href="https://tools.ietf.org/id/draft-goessner-dispatch-jsonpath-00.html">JsonPath</a> expression. As such it
+ should be used with requests that contain a JSON body. The expression should be supplied as the configuration.
+ For example:
+
+ <pre><code><code>"matchers": {
+  "jsonpath": "$['object']['value']"
+},</code></code></pre>                                            </div>
+                                        </div>
+                                    </div>
+                                                                    <div class="col-md-12 left-align">
                                         <h4 id="matchers-regex-request-matcher">Regex Request Matcher</h4>
                                         <div class="row">
                                             <div class="col-md-12 full">
-                                                <p>Associates an MBean with a HTTP method and a regular expression pattern. The matcher can be used to check
- if the MBean should handle a requests.                                            </div>
+                                                <p>The base matcher that is applied to every request. Associates an MBean with a HTTP method and a regular
+ expression pattern that is matched against the requested URL.                                            </div>
+                                        </div>
+                                    </div>
+                                                                    <div class="col-md-12 left-align">
+                                        <h4 id="matchers-regex-body-matcher">Regex Body Matcher</h4>
+                                        <div class="row">
+                                            <div class="col-md-12 full">
+                                                <p>Matches requests with bodies that match a given regular expression. The expression should be supplied as the
+ configuration. For example:
+
+ <pre><code><code>"matchers": {
+  "regex": "^error"
+},</code></code></pre>                                            </div>
+                                        </div>
+                                    </div>
+                                                                    <div class="col-md-12 left-align">
+                                        <h4 id="matchers-not-matcher">Not Matcher</h4>
+                                        <div class="row">
+                                            <div class="col-md-12 full">
+                                                <p>Inverts a request matcher to match when a request does not match the enclosed matcher. For example:
+
+ <pre><code><code>"matchers": {
+  "not": {
+    "header": {
+       "Accept": "application/xhtml+xml"
+    }
+  }
+},</code></code></pre>
+
+ <p>This would match a request that doesn't contain the header specified in the request matcher.                                            </div>
                                         </div>
                                     </div>
                                 
