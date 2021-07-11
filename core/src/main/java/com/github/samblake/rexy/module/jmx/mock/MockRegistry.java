@@ -1,11 +1,15 @@
 package com.github.samblake.rexy.module.jmx.mock;
 
-import com.github.samblake.rexy.module.jmx.JmxRegistry;
-import com.github.samblake.rexy.module.jmx.ObjectNameBuilder;
 import com.github.samblake.rexy.config.model.Endpoint;
 import com.github.samblake.rexy.config.model.Response;
+import com.github.samblake.rexy.module.jmx.JmxRegistry;
+import com.github.samblake.rexy.module.jmx.ObjectNameBuilder;
 
-import javax.management.*;
+import javax.management.JMException;
+import javax.management.MBeanRegistrationException;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+import javax.management.OperationsException;
 import java.lang.management.ManagementFactory;
 import java.util.Map;
 

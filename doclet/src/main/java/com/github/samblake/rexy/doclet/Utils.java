@@ -53,5 +53,10 @@ public class Utils {
 
         return false;
     }
+    
+    public static boolean hasAnnotation(Element element, String annotation) {
+        return element.getAnnotationMirrors().stream()
+                .anyMatch(a -> a.getAnnotationType().toString().equals(annotation));
+    }
 
 }

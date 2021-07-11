@@ -1,20 +1,14 @@
 package com.github.samblake.rexy.http;
 
-import fi.iki.elonen.NanoHTTPD.IHTTPSession;
 import com.github.samblake.rexy.http.request.RexyRequest;
-import fi.iki.elonen.NanoHTTPD.ResponseException;
+import fi.iki.elonen.NanoHTTPD.IHTTPSession;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.atomic.AtomicReference;
 
-import static java.lang.Integer.parseInt;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
-import static org.apache.pdfbox.io.IOUtils.toByteArray;
 
 /**
  * An adapter for a {@link NanoRequest} onto the generic {@link RexyRequest}.

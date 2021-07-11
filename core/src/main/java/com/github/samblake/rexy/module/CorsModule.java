@@ -3,14 +3,14 @@ package com.github.samblake.rexy.module;
 import com.codepoetics.ambivalence.Either;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.samblake.rexy.Rexy;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import com.github.samblake.rexy.config.model.Api;
 import com.github.samblake.rexy.http.Method;
 import com.github.samblake.rexy.http.RexyHeader;
 import com.github.samblake.rexy.http.request.RexyRequest;
 import com.github.samblake.rexy.http.response.RexyResponse;
 import com.github.samblake.rexy.http.response.RexyResponseDelegate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,13 +19,18 @@ import java.util.List;
 import java.util.Map;
 
 import static com.codepoetics.ambivalence.Either.ofRight;
-import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.joining;
 import static com.github.samblake.rexy.http.Method.OPTIONS;
-import static com.github.samblake.rexy.http.RexyHeader.*;
+import static com.github.samblake.rexy.http.RexyHeader.ACCESS_CONTROL_ALLOW_HEADERS;
+import static com.github.samblake.rexy.http.RexyHeader.ACCESS_CONTROL_ALLOW_METHODS;
+import static com.github.samblake.rexy.http.RexyHeader.ACCESS_CONTROL_ALLOW_ORIGIN;
+import static com.github.samblake.rexy.http.RexyHeader.ACCESS_CONTROL_REQUEST_HEADERS;
+import static com.github.samblake.rexy.http.RexyHeader.X_REQUESTED_WTH;
+import static com.github.samblake.rexy.http.RexyHeader.toMap;
 import static com.github.samblake.rexy.http.response.BasicRexyResponse.emptyResponse;
 import static com.github.samblake.rexy.utils.Json.stringValue;
 import static com.github.samblake.rexy.utils.Streams.flattern;
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.joining;
 
 /**
  * <p>A module that generates a preflight response for OPTIONS requests and adds/overrides the

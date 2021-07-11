@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.github.samblake.rexy.http.Method;
 
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Collections.emptyList;
 
@@ -18,6 +20,9 @@ import static java.util.Collections.emptyList;
  *   "name": "location",
  *   "method": "GET",
  *   "endpoint": "location/search/?query={query}",
+ *   "matchers": {
+ *      ...
+ *   },
  *   "responses": [
  *     ...
  *   ]
@@ -53,6 +58,12 @@ public class Endpoint {
 	 */
 	@JsonProperty("endpoint")
 	private String endpoint;
+	
+	/**
+	 * Key-value pairs of matcher name to custom JSON configuration.
+	 */
+	@JsonProperty("matchers")
+	private Map<String, JsonNode> matchers;
 
 	/**
 	 * Mock response presets.
@@ -87,7 +98,11 @@ public class Endpoint {
 	public void setEndpoint(String endpoint) {
 		this.endpoint = endpoint;
 	}
-
+	
+	public Map<String, JsonNode> getMatchers() {
+		return matchers;
+	}
+	
 	public List<Response> getResponses() {
 		return responses;
 	}

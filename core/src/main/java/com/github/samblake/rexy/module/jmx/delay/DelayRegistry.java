@@ -1,7 +1,7 @@
 package com.github.samblake.rexy.module.jmx.delay;
 
-import com.github.samblake.rexy.module.jmx.JmxRegistry;
 import com.github.samblake.rexy.config.model.Endpoint;
+import com.github.samblake.rexy.module.jmx.JmxRegistry;
 
 /**
  * A registry for {@link DelayEndpoint delay endpoints}.

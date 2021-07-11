@@ -1,17 +1,32 @@
 package com.github.samblake.rexy.module.proxy;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.client.methods.*;
 import com.github.samblake.rexy.http.Method;
 import com.github.samblake.rexy.http.RexyHeader;
 import com.github.samblake.rexy.http.request.RexyRequest;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpEntityEnclosingRequest;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
+import org.apache.http.client.methods.HttpOptions;
+import org.apache.http.client.methods.HttpPatch;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpTrace;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 
 import java.util.List;
 
-import static com.github.samblake.rexy.http.Method.*;
+import static com.github.samblake.rexy.http.Method.DELETE;
+import static com.github.samblake.rexy.http.Method.GET;
+import static com.github.samblake.rexy.http.Method.HEAD;
+import static com.github.samblake.rexy.http.Method.OPTIONS;
+import static com.github.samblake.rexy.http.Method.PATCH;
+import static com.github.samblake.rexy.http.Method.POST;
+import static com.github.samblake.rexy.http.Method.PUT;
+import static com.github.samblake.rexy.http.Method.TRACE;
 import static com.github.samblake.rexy.http.RexyHeader.HEADER_CONTENT_TYPE;
 
 /**

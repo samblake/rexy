@@ -1,11 +1,12 @@
 package com.github.samblake.rexy.module.jmx.matcher;
 
-import com.github.samblake.rexy.module.jmx.JmxRegistry;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import com.github.samblake.rexy.config.model.Api;
 import com.github.samblake.rexy.config.model.Endpoint;
 import com.github.samblake.rexy.http.Method;
+import com.github.samblake.rexy.http.request.RexyRequest;
+import com.github.samblake.rexy.module.jmx.JmxRegistry;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,24 +14,23 @@ import java.util.regex.Pattern;
 import static java.util.regex.Pattern.compile;
 
 /**
- * <p>Associates an MBean with a HTTP method and a regular expression pattern. The matcher can be used to check
- * if the MBean should handle a requests.
+ * <p>The base matcher that is applied to every request. Associates an MBean with a HTTP method and a regular
+ * expression pattern that is matched against the requested URL.
  *
  * @param <T> The type of MBean
  */
-public final class RegexRequestMatcher<T> implements RequestMatcher<T> {
+public final class RegexRequestMatcher<T> extends AbstractRequestMatcher<T> {
 	private static final Logger logger = LogManager.getLogger(JmxRegistry.class);
 	
 	private static final Pattern PATTERN = compile("\\{.+?}");
 	
 	private final Method method;
 	private final Pattern pattern;
-	private final T mBean;
 	
 	private RegexRequestMatcher(Method method, Pattern pattern, T mBean) {
+		super(mBean);
 		this.method = method;
 		this.pattern = pattern;
-		this.mBean = mBean;
 	}
 	
 	/**
@@ -55,22 +55,17 @@ public final class RegexRequestMatcher<T> implements RequestMatcher<T> {
 	}
 	
 	@Override
-	public T getMBean() {
-		return mBean;
-	}
-	
-	@Override
-	public boolean matches(Method method, String path) {
+	public boolean matches(RexyRequest request) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Testing endpoint " + pattern);
 		}
 		
-		return this.method == method && pattern.matcher(path).matches();
+		return method == request.getMethod() && pattern.matcher(request.getPath()).matches();
 	}
 	
 	@Override
 	public String toString() {
-		return mBean.getClass().getSimpleName() + ':' + pattern;
+		return super.toString() + ':' + pattern;
 	}
 	
 }

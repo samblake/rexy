@@ -2,13 +2,13 @@ package com.github.samblake.rexy.http;
 
 import com.github.samblake.rexy.config.RexyConfig;
 import com.github.samblake.rexy.config.model.Api;
+import com.github.samblake.rexy.http.response.RexyResponse;
 import com.github.samblake.rexy.module.RexyModule;
 import com.github.samblake.rexy.utils.Paths;
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.NanoHTTPD.Response.Status;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.github.samblake.rexy.http.response.RexyResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,10 +18,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
+import static com.github.samblake.rexy.http.response.BasicRexyResponse.errorResponse;
 import static fi.iki.elonen.NanoHTTPD.Method.POST;
 import static fi.iki.elonen.NanoHTTPD.Method.PUT;
 import static java.util.Collections.emptyList;
-import static com.github.samblake.rexy.http.response.BasicRexyResponse.errorResponse;
 
 /**
  * The Rexy HTTP server. Listens for incoming requests and routes them to handlers for each API.

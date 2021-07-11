@@ -1,11 +1,11 @@
 package com.github.samblake.rexy.module.jmx;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import com.github.samblake.rexy.config.model.Endpoint;
-import com.github.samblake.rexy.http.Method;
+import com.github.samblake.rexy.http.request.RexyRequest;
 import com.github.samblake.rexy.module.jmx.matcher.MatcherFactory;
 import com.github.samblake.rexy.module.jmx.matcher.RequestMatcher;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.management.JMException;
 import javax.management.MBeanServer;
@@ -65,7 +65,7 @@ public abstract class JmxRegistry<T> {
 		
 		server.registerMBean(endpoint, objectName);
 	}
-
+	
 	/**
 	 * Returns the name of an MBean. This is used as part of the {@link ObjectName JMX object name}.
 	 *
@@ -74,19 +74,18 @@ public abstract class JmxRegistry<T> {
 	protected abstract String getMBeanName();
 	
 	/**
-	 * Finds the MBean associated with the given path.
+	 * Finds the MBean associated with the given request.
 	 *
-	 * @param method The HTTP method find the MBean for
-	 * @param path The path to find the MBean for
+	 * @param request The HTTP method find the MBean for
 	 * @return The MBean or empty if one is not found
 	 */
-	public Optional<T> getMBean(Method method, String path) {
+	public Optional<T> getMBean(RexyRequest request) {
 		if (logger.isDebugEnabled()) {
-			logger.debug("Finding endpoint for " + path);
+			logger.debug("Finding endpoint for " + request.getPath());
 		}
 		
 		Optional<RequestMatcher<T>> matcher = repo.stream()
-				.filter((m) -> m.matches(method, path))
+				.filter((m) -> m.matches(request))
 				.findFirst();
 		
 		if (matcher.isPresent()) {
@@ -95,8 +94,9 @@ public abstract class JmxRegistry<T> {
 			}
 			return matcher.map(RequestMatcher::getMBean);
 		}
-
-		logger.warn("No matching endpoint for " + path);
+		
+		logger.warn("No matching endpoint for " + request.getMethod() + " " + request.getPath());
 		return empty();
 	}
+	
 }

@@ -1,8 +1,8 @@
 package com.github.samblake.rexy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Test;
 import com.github.samblake.rexy.config.model.Config;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;

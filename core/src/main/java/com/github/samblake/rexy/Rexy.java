@@ -1,16 +1,16 @@
 package com.github.samblake.rexy;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.github.samblake.rexy.exception.RexyException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import com.github.samblake.rexy.config.ConfigParser;
 import com.github.samblake.rexy.config.RexyConfig;
 import com.github.samblake.rexy.config.model.Api;
+import com.github.samblake.rexy.exception.RexyException;
 import com.github.samblake.rexy.http.RexyServer;
 import com.github.samblake.rexy.module.ModuleInitialisationException;
 import com.github.samblake.rexy.module.ModuleScanner;
 import com.github.samblake.rexy.module.RexyModule;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;

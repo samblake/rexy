@@ -3,7 +3,6 @@ package com.github.samblake.rexy.http.request;
 import com.github.samblake.rexy.http.Method;
 import com.github.samblake.rexy.http.RexyHeader;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -47,5 +46,10 @@ public interface RexyRequest {
 	 * The request body encoded as a byte array.
 	 */
 	String getBody();
+	
+	default String getPath() {
+		String query = getQueryString();
+		return getUri() + (query == null ? "" : '?' + query);
+	}
 	
 }

@@ -1,11 +1,11 @@
 package com.github.samblake.rexy.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.samblake.rexy.config.model.Api;
+import com.github.samblake.rexy.config.model.Config;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.github.samblake.rexy.config.model.Api;
-import com.github.samblake.rexy.config.model.Config;
 
 import java.io.File;
 import java.io.IOException;

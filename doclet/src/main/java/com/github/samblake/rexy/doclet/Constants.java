@@ -9,5 +9,7 @@ public class Constants {
     public static final String CONFIG_INTERFACE = "com.github.samblake.rexy.config.model.Config";
     public static final String MODULE_INTERFACE = "com.github.samblake.rexy.module.RexyModule";
     public static final String MATCHER_INTERFACE = "com.github.samblake.rexy.module.jmx.matcher.RequestMatcher";
+    
+    public static final String INTERNAL_ANNOTATION = "com.github.samblake.rexy.annotations.Internal";
 
 }

@@ -2,6 +2,7 @@ package com.github.samblake.rexy.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.TextNode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,6 +23,14 @@ public class Json {
 	public static Integer intValue(JsonNode node, String name, int def) {
 		JsonNode jsonValue = node.get(name);
 		return jsonValue != null && jsonValue.isInt() ? jsonValue.intValue() : def;
+	}
+	
+	public static String textValue(JsonNode node) {
+		return textValue(node, (String)null);
+	}
+	
+	public static String textValue(JsonNode node, String def) {
+		return node instanceof TextNode && node.textValue() != null ? node.textValue() : def;
 	}
 	
 	public static String stringValue(JsonNode node, String name) {

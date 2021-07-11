@@ -3,24 +3,24 @@ package com.github.samblake.rexy.module.jmx.mock;
 import com.codepoetics.ambivalence.Either;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.samblake.rexy.Rexy;
-import com.github.samblake.rexy.module.ModuleInitialisationException;
-import com.github.samblake.rexy.module.jmx.JmxModule;
-import com.github.samblake.rexy.module.jmx.JmxRegistry;
-import org.apache.http.entity.ContentType;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import com.github.samblake.rexy.config.model.Api;
 import com.github.samblake.rexy.http.request.RexyRequest;
 import com.github.samblake.rexy.http.response.BasicRexyResponse;
 import com.github.samblake.rexy.http.response.RexyResponse;
+import com.github.samblake.rexy.module.ModuleInitialisationException;
+import com.github.samblake.rexy.module.jmx.JmxModule;
+import com.github.samblake.rexy.module.jmx.JmxRegistry;
 import com.github.samblake.rexy.utils.Json;
 import com.github.samblake.rexy.utils.Requests;
 import com.github.samblake.rexy.utils.Xml;
+import org.apache.http.entity.ContentType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import static com.codepoetics.ambivalence.Either.ofLeft;
 import static com.codepoetics.ambivalence.Either.ofRight;
-import static java.nio.charset.Charset.defaultCharset;
 import static com.github.samblake.rexy.utils.Json.booleanValue;
+import static java.nio.charset.Charset.defaultCharset;
 
 /**
  * <p>A module that intercepts a request and optionally returns a mock response.</p>

@@ -3,11 +3,11 @@ package com.github.samblake.rexy.http;
 import com.codepoetics.ambivalence.Either;
 import com.github.samblake.rexy.Rexy;
 import com.github.samblake.rexy.config.model.Api;
+import com.github.samblake.rexy.http.request.RexyRequest;
+import com.github.samblake.rexy.http.response.RexyResponse;
 import com.github.samblake.rexy.module.RexyModule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.github.samblake.rexy.http.request.RexyRequest;
-import com.github.samblake.rexy.http.response.RexyResponse;
 
 import java.io.IOException;
 import java.util.List;

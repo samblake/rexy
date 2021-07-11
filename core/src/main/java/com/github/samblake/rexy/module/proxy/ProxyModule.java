@@ -1,7 +1,13 @@
 package com.github.samblake.rexy.module.proxy;
 
 import com.codepoetics.ambivalence.Either;
+import com.github.samblake.rexy.config.model.Api;
+import com.github.samblake.rexy.http.RexyHeader;
+import com.github.samblake.rexy.http.request.RexyRequest;
+import com.github.samblake.rexy.http.response.BasicRexyResponse;
+import com.github.samblake.rexy.http.response.RexyResponse;
 import com.github.samblake.rexy.module.ModuleAdapter;
+import com.github.samblake.rexy.utils.Requests;
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -10,12 +16,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.github.samblake.rexy.config.model.Api;
-import com.github.samblake.rexy.http.RexyHeader;
-import com.github.samblake.rexy.http.request.RexyRequest;
-import com.github.samblake.rexy.http.response.BasicRexyResponse;
-import com.github.samblake.rexy.http.response.RexyResponse;
-import com.github.samblake.rexy.utils.Requests;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,12 +25,12 @@ import java.util.List;
 import java.util.Scanner;
 
 import static com.codepoetics.ambivalence.Either.ofRight;
-import static java.nio.charset.StandardCharsets.ISO_8859_1;
-import static java.util.stream.Collectors.toList;
 import static com.github.samblake.rexy.http.RexyHeader.HEADER_CONTENT_TYPE;
 import static com.github.samblake.rexy.http.response.BasicRexyResponse.emptyResponse;
 import static com.github.samblake.rexy.module.proxy.RequestFactory.createRequest;
 import static com.github.samblake.rexy.utils.Requests.toHeaders;
+import static java.nio.charset.StandardCharsets.ISO_8859_1;
+import static java.util.stream.Collectors.toList;
 
 /**
  * <p>A module that proxies a request to another URL. This will always write a response so will always be the

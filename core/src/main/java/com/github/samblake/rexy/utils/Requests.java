@@ -6,8 +6,8 @@ import com.github.samblake.rexy.http.request.RexyRequest;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.stream.Collectors.toList;
 import static com.github.samblake.rexy.http.RexyHeader.HEADER_CONTENT_TYPE;
+import static java.util.stream.Collectors.toList;
 
 public class Requests {
 	

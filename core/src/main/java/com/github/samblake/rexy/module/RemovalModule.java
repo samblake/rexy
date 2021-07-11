@@ -3,26 +3,26 @@ package com.github.samblake.rexy.module;
 import com.codepoetics.ambivalence.Either;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.samblake.rexy.Rexy;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import com.github.samblake.rexy.config.model.Api;
 import com.github.samblake.rexy.http.RexyHeader;
 import com.github.samblake.rexy.http.request.RexyRequest;
 import com.github.samblake.rexy.http.request.RexyRequestDelegate;
 import com.github.samblake.rexy.http.response.RexyResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
 import static com.codepoetics.ambivalence.Either.ofLeft;
-import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
 import static com.github.samblake.rexy.http.Method.OPTIONS;
 import static com.github.samblake.rexy.http.RexyHeader.ACCESS_CONTROL_REQUEST_HEADERS;
 import static com.github.samblake.rexy.http.RexyHeader.X_REQUESTED_WTH;
 import static com.github.samblake.rexy.utils.Json.stringValue;
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 /**
  * A module that removes a header from requests.

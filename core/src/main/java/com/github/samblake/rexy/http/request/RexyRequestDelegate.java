@@ -3,7 +3,6 @@ package com.github.samblake.rexy.http.request;
 import com.github.samblake.rexy.http.Method;
 import com.github.samblake.rexy.http.RexyHeader;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 

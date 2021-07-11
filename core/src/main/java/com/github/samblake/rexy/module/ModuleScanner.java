@@ -9,7 +9,9 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.reflect.Modifier.*;
+import static java.lang.reflect.Modifier.isAbstract;
+import static java.lang.reflect.Modifier.isInterface;
+import static java.lang.reflect.Modifier.isPrivate;
 
 /**
  * Scans certain packages on the classpath to find modules. The {@code rexy} classpath will always be

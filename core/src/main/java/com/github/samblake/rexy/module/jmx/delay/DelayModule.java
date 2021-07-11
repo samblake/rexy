@@ -2,13 +2,13 @@ package com.github.samblake.rexy.module.jmx.delay;
 
 import com.codepoetics.ambivalence.Either;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.github.samblake.rexy.config.model.Api;
+import com.github.samblake.rexy.http.request.RexyRequest;
+import com.github.samblake.rexy.http.response.RexyResponse;
 import com.github.samblake.rexy.module.jmx.JmxModule;
 import com.github.samblake.rexy.module.jmx.JmxRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.github.samblake.rexy.config.model.Api;
-import com.github.samblake.rexy.http.request.RexyRequest;
-import com.github.samblake.rexy.http.response.RexyResponse;
 
 import static com.codepoetics.ambivalence.Either.ofLeft;
 import static java.lang.Thread.sleep;

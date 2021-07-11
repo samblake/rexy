@@ -3,14 +3,14 @@ package com.github.samblake.rexy.module.jmx;
 import com.codepoetics.ambivalence.Either;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.samblake.rexy.Rexy;
-import com.github.samblake.rexy.module.ModuleAdapter;
-import com.github.samblake.rexy.module.ModuleInitialisationException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import com.github.samblake.rexy.config.model.Api;
 import com.github.samblake.rexy.config.model.Endpoint;
 import com.github.samblake.rexy.http.request.RexyRequest;
 import com.github.samblake.rexy.http.response.RexyResponse;
+import com.github.samblake.rexy.module.ModuleAdapter;
+import com.github.samblake.rexy.module.ModuleInitialisationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.management.JMException;
 import java.util.Optional;
@@ -65,9 +65,7 @@ public abstract class JmxModule<T> extends ModuleAdapter {
 	}
 	
 	private Optional<T> findEndpointMBean(RexyRequest request) {
-		String query = request.getQueryString();
-		String path = request.getUri() + (query == null ? "" : '?' + query);
-		return registry.getMBean(request.getMethod(), path);
+		return registry.getMBean(request);
 	}
 	
 	/**

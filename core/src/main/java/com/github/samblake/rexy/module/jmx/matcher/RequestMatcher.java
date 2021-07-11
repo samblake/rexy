@@ -1,6 +1,6 @@
 package com.github.samblake.rexy.module.jmx.matcher;
 
-import com.github.samblake.rexy.http.Method;
+import com.github.samblake.rexy.http.request.RexyRequest;
 
 
 /**
@@ -18,10 +18,9 @@ public interface RequestMatcher<T> {
 	/**
 	 * Checks to see if the MBean should handle the request.
 	 *
-	 * @param method The HTTP request method
-	 * @param path The URI path
+	 * @param request The request to check
 	 * @return True if the MBean should handle the request, false otherwise
 	 */
-	boolean matches(Method method, String path);
+	boolean matches(RexyRequest request);
 	
 }
