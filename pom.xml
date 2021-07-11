@@ -7,7 +7,7 @@
     <groupId>com.github.samblake.rexy</groupId>
     <artifactId>rexy</artifactId>
     <packaging>pom</packaging>
-    <version>1.4.1</version>
+    <version>1.4.2-SNAPSHOT</version>
 
     <url>https://github.com/samblake/rexy/</url>
 
