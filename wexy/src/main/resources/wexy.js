@@ -67,7 +67,7 @@ function go(form, editor) {
                     editor.setValue(jsonString);
                 });
             }
-            if (contentType.includes("xml")) {
+            else if (contentType.includes("xml")) {
                 response.text().then(function (xml) {
                     editor.session.setMode("ace/mode/xml");
                     editor.setValue(xml);
