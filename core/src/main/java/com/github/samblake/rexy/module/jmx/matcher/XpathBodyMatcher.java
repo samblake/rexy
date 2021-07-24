@@ -1,7 +1,6 @@
 package com.github.samblake.rexy.module.jmx.matcher;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.github.samblake.rexy.http.request.RexyRequest;
 import com.github.samblake.rexy.module.jmx.JmxRegistry;
 import com.github.samblake.rexy.utils.Json;
 import org.apache.logging.log4j.LogManager;

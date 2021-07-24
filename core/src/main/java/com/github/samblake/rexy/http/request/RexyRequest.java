@@ -3,7 +3,7 @@ package com.github.samblake.rexy.http.request;
 import com.github.samblake.rexy.http.Method;
 import com.github.samblake.rexy.http.RexyHeader;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -29,7 +29,7 @@ public interface RexyRequest {
 	/**
 	 * The headers as a list of {@link RexyHeader Rexy headers}.
 	 */
-	List<RexyHeader> getHeaders();
+	Collection<RexyHeader> getHeaders();
 	
 	/**
 	 * The HTTP method.
