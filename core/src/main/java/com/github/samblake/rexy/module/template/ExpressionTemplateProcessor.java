@@ -44,7 +44,7 @@ public abstract class ExpressionTemplateProcessor implements TemplateProcessor {
 	
 	protected abstract String substituteExpression(RexyRequest request, String expression) throws SubstituteException;
 	
-	protected static class SubstituteException extends Throwable {
+	protected static class SubstituteException extends Exception {
 		
 		public SubstituteException(String message, Exception e) {
 			super(message, e);
