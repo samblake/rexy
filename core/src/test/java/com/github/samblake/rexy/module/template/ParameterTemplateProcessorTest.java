@@ -11,7 +11,7 @@ public class ParameterTemplateProcessorTest {
 	public void testSubstitute() {
 		MockRequest request = new MockRequest().withParameter("query", "substitution");
 		TemplateProcessor processor = new ParameterTemplateProcessor("param");
-		String substitute = processor.substitute(request, "param:query");
+		String substitute = processor.substitute(api, request, "param:query");
 		assertThat(substitute, is("substitution"));
 	}
 	
@@ -19,7 +19,7 @@ public class ParameterTemplateProcessorTest {
 	public void testSubstituteNoMatch() {
 		MockRequest request = new MockRequest();
 		TemplateProcessor processor = new ParameterTemplateProcessor("param");
-		String substitute = processor.substitute(request, "param:query");
+		String substitute = processor.substitute(api, request, "param:query");
 		assertThat(substitute, is(""));
 	}
 	

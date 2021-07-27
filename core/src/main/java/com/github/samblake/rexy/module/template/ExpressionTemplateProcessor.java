@@ -46,6 +46,10 @@ public abstract class ExpressionTemplateProcessor implements TemplateProcessor {
 	
 	protected static class SubstituteException extends Exception {
 		
+		public SubstituteException(String message) {
+			super(message);
+		}
+		
 		public SubstituteException(String message, Exception e) {
 			super(message, e);
 		}
