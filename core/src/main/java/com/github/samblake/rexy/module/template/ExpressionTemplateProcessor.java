@@ -28,7 +28,7 @@ public abstract class ExpressionTemplateProcessor implements TemplateProcessor {
 		String expression = template.substring(template.indexOf(":") + 1);
 		String substitution = substituteExpression(request, template, expression);
 		
-		logger.debug("Substituting ${" + name + ":" + template + "} with " + substitution);
+		logger.debug("Substituting ${" + template + "} with " + substitution);
 		return substitution;
 	}
 	
