@@ -11,7 +11,7 @@ public class RegexTemplateProcessorTest {
 	public void testSubstitute() {
 		MockRequest request = new MockRequest().withBody("This is a [substitution] body");
 		TemplateProcessor processor = new RegexTemplateProcessor("regex");
-		String substitute = processor.substitute(api, request, "regex:\\[.*\\]");
+		String substitute = processor.substitute(request, "regex:\\[.*\\]");
 		assertThat(substitute, is("[substitution]"));
 	}
 	
@@ -19,7 +19,7 @@ public class RegexTemplateProcessorTest {
 	public void testSubstituteGroup() {
 		MockRequest request = new MockRequest().withBody("This is a [substitution] body");
 		TemplateProcessor processor = new RegexTemplateProcessor("regex");
-		String substitute = processor.substitute(api, request, "regex:\\[(.*)\\]");
+		String substitute = processor.substitute(request, "regex:\\[(.*)\\]");
 		assertThat(substitute, is("substitution"));
 	}
 	
@@ -27,7 +27,7 @@ public class RegexTemplateProcessorTest {
 	public void testSubstituteNoMatch() {
 		MockRequest request = new MockRequest().withBody("This is a [substitution] body");
 		TemplateProcessor processor = new RegexTemplateProcessor("regex");
-		String substitute = processor.substitute(api, request, "regex:[0-9]*");
+		String substitute = processor.substitute(request, "regex:[0-9]*");
 		assertThat(substitute, is(""));
 	}
 	

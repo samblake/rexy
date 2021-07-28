@@ -11,7 +11,7 @@ public class XpathTemplateProcessorTest {
 	public void testSubstitute() {
 		MockRequest request = new MockRequest().withBody("<a><b/><c x=\"param\">text</c></a>");
 		TemplateProcessor processor = new XpathTemplateProcessor("xpath");
-		String substitute = processor.substitute(api, request, "xpath://b");
+		String substitute = processor.substitute(request, "xpath://b");
 		assertThat(substitute, is("<b/>"));
 	}
 	
@@ -19,7 +19,7 @@ public class XpathTemplateProcessorTest {
 	public void testSubstituteFull() {
 		MockRequest request = new MockRequest().withBody("<a><b/><c x=\"param\">text</c></a>");
 		TemplateProcessor processor = new XpathTemplateProcessor("xpath");
-		String substitute = processor.substitute(api, request, "xpath:/a");
+		String substitute = processor.substitute(request, "xpath:/a");
 		assertThat(substitute, is("<a><b/><c x=\"param\">text</c></a>"));
 	}
 	
@@ -27,7 +27,7 @@ public class XpathTemplateProcessorTest {
 	public void testSubstituteAttribute() {
 		MockRequest request = new MockRequest().withBody("<a><b/><c x=\"param\">text</c></a>");
 		TemplateProcessor processor = new XpathTemplateProcessor("xpath");
-		String substitute = processor.substitute(api, request, "xpath://c/@x");
+		String substitute = processor.substitute(request, "xpath://c/@x");
 		assertThat(substitute, is("param"));
 	}
 	
@@ -35,7 +35,7 @@ public class XpathTemplateProcessorTest {
 	public void testSubstituteText() {
 		MockRequest request = new MockRequest().withBody("<a><b/><c x=\"param\">text</c></a>");
 		TemplateProcessor processor = new XpathTemplateProcessor("xpath");
-		String substitute = processor.substitute(api, request, "xpath://c/text()");
+		String substitute = processor.substitute(request, "xpath://c/text()");
 		assertThat(substitute, is("text"));
 	}
 	
@@ -43,7 +43,7 @@ public class XpathTemplateProcessorTest {
 	public void testSubstituteNoMatch() {
 		MockRequest request = new MockRequest().withBody("<a><b/><c x=\"param\">text</c></a>");
 		TemplateProcessor processor = new XpathTemplateProcessor("xpath");
-		String substitute = processor.substitute(api, request, "xpath://d");
+		String substitute = processor.substitute(request, "xpath://d");
 		assertThat(substitute, is(""));
 	}
 	

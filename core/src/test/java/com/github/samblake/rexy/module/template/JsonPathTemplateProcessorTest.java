@@ -11,7 +11,7 @@ public class JsonPathTemplateProcessorTest {
 	public void testSubstitute() {
 		MockRequest request = new MockRequest().withBody("{ 'a': 1, 'b': { 'c': 2 } }");
 		TemplateProcessor processor = new JsonPathTemplateProcessor("jsonpath");
-		String substitute = processor.substitute(api, request, "jsonpath:$.b.c");
+		String substitute = processor.substitute(request, "jsonpath:$.b.c");
 		assertThat(substitute, is("2"));
 	}
 	
@@ -19,7 +19,7 @@ public class JsonPathTemplateProcessorTest {
 	public void testSubstituteFull() {
 		MockRequest request = new MockRequest().withBody("{ 'a': 1, 'b': { 'c': 2 } }");
 		TemplateProcessor processor = new JsonPathTemplateProcessor("jsonpath");
-		String substitute = processor.substitute(api, request, "jsonpath:$");
+		String substitute = processor.substitute(request, "jsonpath:$");
 		assertThat(substitute, is("{a=1, b={c=2}}"));
 	}
 	
@@ -27,7 +27,7 @@ public class JsonPathTemplateProcessorTest {
 	public void testSubstituteNoMatch() {
 		MockRequest request = new MockRequest().withBody("{ 'a': 1, 'b': { 'c': 2 } }");
 		TemplateProcessor processor = new JsonPathTemplateProcessor("jsonpath");
-		String substitute = processor.substitute(api, request, "jsonpath:$.d");
+		String substitute = processor.substitute(request, "jsonpath:$.d");
 		assertThat(substitute, is(""));
 	}
 	

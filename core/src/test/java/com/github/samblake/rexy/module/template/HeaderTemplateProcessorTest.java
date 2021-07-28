@@ -11,7 +11,7 @@ public class HeaderTemplateProcessorTest {
 	public void testSubstitute() {
 		MockRequest request = new MockRequest().withHeader("X-Test-Header", "substitution");
 		TemplateProcessor processor = new HeaderTemplateProcessor("header");
-		String substitute = processor.substitute(api, request, "header:X-Test-Header");
+		String substitute = processor.substitute(request, "header:X-Test-Header");
 		assertThat(substitute, is("substitution"));
 	}
 	
@@ -19,7 +19,7 @@ public class HeaderTemplateProcessorTest {
 	public void testSubstituteNoMatch() {
 		MockRequest request = new MockRequest();
 		TemplateProcessor processor = new HeaderTemplateProcessor("header");
-		String substitute = processor.substitute(api, request, "header:X-Test-Header");
+		String substitute = processor.substitute(request, "header:X-Test-Header");
 		assertThat(substitute, is(""));
 	}
 	
