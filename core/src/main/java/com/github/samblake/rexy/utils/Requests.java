@@ -26,10 +26,10 @@ public class Requests {
 		return headers.entrySet().stream().map(RexyHeader::fromEntry).collect(toList());
 	}
 	
-	public static String getBaseUrl(RexyRequest request) throws URISyntaxException {
+	public static String getOrigin(RexyRequest request) throws URISyntaxException {
 		URI url = new URI(request.getUri());
 		String port = url.getPort() == -1 ? "" : ":" + url.getPort();
-		return url.getScheme() + "://" + url.getHost() + port + "/";
+		return url.getScheme() + "://" + url.getHost() + port;
 	}
 	
 }

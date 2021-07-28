@@ -25,7 +25,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * }
  * }</code></pre>
  *
- * <p>There are six different types of substitution: param, header, xpath, jsonpath, regex and request. Each can be
+ * <p>There are five different types of substitution: param, header, xpath, jsonpath and regex. Each can be
  * inserted into a response body with the following syntax:
  *
  * <pre><code>{@code
@@ -83,19 +83,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * <pre><code>{@code
  * ${regex:id=(.*?)(&|$)}
  * }</code></pre>
- *
- * <p><b>Request</b></p>
- *
- * <p>The {@code request} substitution's expression should be one of two fixed values; {@code origin} or {@code path}.
- * If origin is specified the template will be substituted for the origin of the request. For example if the request
- * was {@code https://localhost:8080/rexy/api/endpoint} the value would be {@code https://localhost:8080/}. If
- * path is specified the template will be substituted for the path of the request. For example if the request
- * was {@code https://localhost:8080/rexy/api/endpoint} the value would be {@code /rexy/api/endpoint}. An example
- * template is:</p>
- *
- * <pre><code>{@code
- * ${request:origin}
- * }</code></pre>
  */
 public class TemplateModule extends ModuleAdapter {
 	
@@ -106,7 +93,6 @@ public class TemplateModule extends ModuleAdapter {
 	public static final String XPATH = "xpath";
 	public static final String JSONPATH = "jsonpath";
 	public static final String REGEX = "regex";
-	public static final String REQUEST = "request";
 	
 	private final TemplateProcessorFactory processorFactory = new TemplateProcessorFactory();
 	
@@ -117,7 +103,6 @@ public class TemplateModule extends ModuleAdapter {
 		processorFactory.addProcessor(new XpathTemplateProcessor(XPATH));
 		processorFactory.addProcessor(new JsonPathTemplateProcessor(JSONPATH));
 		processorFactory.addProcessor(new RegexTemplateProcessor(REGEX));
-		processorFactory.addProcessor(new RequestTemplateProcessor(REQUEST));
 	}
 	
 	@Override
