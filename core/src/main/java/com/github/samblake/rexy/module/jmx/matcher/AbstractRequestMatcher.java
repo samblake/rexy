@@ -1,8 +1,5 @@
 package com.github.samblake.rexy.module.jmx.matcher;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.github.samblake.rexy.utils.Json;
-
 /**
  * An abstract request matcher that is associated with an MBean. Matching needs to be implemented by the subclass.
  *

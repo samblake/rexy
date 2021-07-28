@@ -11,6 +11,7 @@ import com.github.samblake.rexy.http.response.RexyResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -108,7 +109,7 @@ public class RemovalModule extends ModuleAdapter {
 		}
 		
 		@Override
-		public List<RexyHeader> getHeaders() {
+		public Collection<RexyHeader> getHeaders() {
 			List<RexyHeader> headers = super.getHeaders().stream()
 					.filter(header -> header.is(name))
 					.collect(toList());
@@ -130,7 +131,7 @@ public class RemovalModule extends ModuleAdapter {
 		}
 		
 		@Override
-		public List<RexyHeader> getHeaders() {
+		public Collection<RexyHeader> getHeaders() {
 			return super.getHeaders().stream()
 					.filter(header -> header.is(name))
 					.collect(toList());

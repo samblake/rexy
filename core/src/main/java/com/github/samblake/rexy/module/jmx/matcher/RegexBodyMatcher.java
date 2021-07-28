@@ -1,24 +1,11 @@
 package com.github.samblake.rexy.module.jmx.matcher;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.github.samblake.rexy.http.request.RexyRequest;
 import com.github.samblake.rexy.module.jmx.JmxRegistry;
 import com.github.samblake.rexy.utils.Json;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-import javax.xml.xpath.XPathNodes;
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;

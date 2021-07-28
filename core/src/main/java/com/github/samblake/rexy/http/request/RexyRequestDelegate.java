@@ -3,7 +3,7 @@ package com.github.samblake.rexy.http.request;
 import com.github.samblake.rexy.http.Method;
 import com.github.samblake.rexy.http.RexyHeader;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -33,7 +33,7 @@ public abstract class RexyRequestDelegate implements RexyRequest {
 	}
 	
 	@Override
-	public List<RexyHeader> getHeaders() {
+	public Collection<RexyHeader> getHeaders() {
 		return delegate.getHeaders();
 	}
 	

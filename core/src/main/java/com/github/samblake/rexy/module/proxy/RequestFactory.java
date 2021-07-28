@@ -17,7 +17,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 
-import java.util.List;
+import java.util.Collection;
 
 import static com.github.samblake.rexy.http.Method.DELETE;
 import static com.github.samblake.rexy.http.Method.GET;
@@ -66,7 +66,7 @@ public final class RequestFactory {
 		return request.getQueryString() == null ? url : url + '?' + request.getQueryString();
 	}
 	
-	private static ContentType findContentType(List<RexyHeader> headers) {
+	private static ContentType findContentType(Collection<RexyHeader> headers) {
 		return headers.stream()
 				.filter(h -> h.getName().equalsIgnoreCase(HEADER_CONTENT_TYPE))
 				.map(h -> ContentType.parse(h.getValue()))

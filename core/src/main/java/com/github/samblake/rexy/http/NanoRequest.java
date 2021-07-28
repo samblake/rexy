@@ -3,7 +3,7 @@ package com.github.samblake.rexy.http;
 import com.github.samblake.rexy.http.request.RexyRequest;
 import fi.iki.elonen.NanoHTTPD.IHTTPSession;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -45,7 +45,7 @@ public class NanoRequest implements RexyRequest {
 	}
 	
 	@Override
-	public List<RexyHeader> getHeaders() {
+	public Collection<RexyHeader> getHeaders() {
 		return session.getHeaders().entrySet().stream().map(RexyHeader::fromEntry).collect(toList());
 	}
 	

@@ -3,6 +3,8 @@ package com.github.samblake.rexy.utils;
 import com.github.samblake.rexy.http.RexyHeader;
 import com.github.samblake.rexy.http.request.RexyRequest;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +24,12 @@ public class Requests {
 	
 	public static List<RexyHeader> toHeaders(Map<String, String> headers) {
 		return headers.entrySet().stream().map(RexyHeader::fromEntry).collect(toList());
+	}
+	
+	public static String getOrigin(RexyRequest request) throws URISyntaxException {
+		URI url = new URI(request.getUri());
+		String port = url.getPort() == -1 ? "" : ":" + url.getPort();
+		return url.getScheme() + "://" + url.getHost() + port;
 	}
 	
 }
