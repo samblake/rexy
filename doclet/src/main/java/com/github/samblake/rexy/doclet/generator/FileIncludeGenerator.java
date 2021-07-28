@@ -12,7 +12,6 @@ import java.util.Optional;
 
 import static com.github.samblake.rexy.doclet.Utils.removeFileExtension;
 import static com.github.samblake.rexy.doclet.Utils.replaceConcat;
-import static java.lang.System.lineSeparator;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.readAllBytes;
 

@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.github.samblake.rexy.module.wexy.actions.endpoint.InputFactory.createInput;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
-import static com.github.samblake.rexy.module.wexy.actions.endpoint.InputFactory.createInput;
 
 public class EndpointAction extends AbstractEndpointAction {
 	

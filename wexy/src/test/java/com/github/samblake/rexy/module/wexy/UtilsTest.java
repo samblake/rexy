@@ -3,8 +3,6 @@ package com.github.samblake.rexy.module.wexy;
 import com.google.common.truth.Truth;
 import org.junit.Test;
 
-import static com.google.common.truth.Truth.assertThat;
-
 public class UtilsTest {
 	
 	@Test

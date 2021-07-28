@@ -1,7 +1,6 @@
 package com.github.samblake.rexy.module.wexy.model.input;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static com.github.samblake.rexy.utils.Xml.prettyPrint;
 
 public abstract class FormattedInput extends ValueInput<String> {
 	

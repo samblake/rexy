@@ -1,8 +1,8 @@
 package com.github.samblake.rexy.doclet.generator;
 
-import jdk.javadoc.doclet.DocletEnvironment;
 import com.github.samblake.rexy.doclet.Section;
 import com.github.samblake.rexy.doclet.visitor.MultiElementVisitor;
+import jdk.javadoc.doclet.DocletEnvironment;
 
 import java.util.Optional;
 

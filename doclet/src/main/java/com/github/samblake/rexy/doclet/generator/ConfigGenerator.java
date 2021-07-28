@@ -1,12 +1,12 @@
 package com.github.samblake.rexy.doclet.generator;
 
+import com.github.samblake.rexy.doclet.Section;
 import com.github.samblake.rexy.doclet.Utils;
+import com.github.samblake.rexy.doclet.visitor.CombinedElementVisitor;
 import j2html.tags.DomContent;
 import j2html.tags.Text;
 import jdk.javadoc.doclet.DocletEnvironment;
 import org.apache.commons.lang3.tuple.Pair;
-import com.github.samblake.rexy.doclet.Section;
-import com.github.samblake.rexy.doclet.visitor.CombinedElementVisitor;
 
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
@@ -19,8 +19,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static j2html.TagCreator.*;
-import static com.github.samblake.rexy.doclet.Utils.hasInterface;
+import static j2html.TagCreator.a;
+import static j2html.TagCreator.table;
+import static j2html.TagCreator.td;
+import static j2html.TagCreator.text;
+import static j2html.TagCreator.th;
+import static j2html.TagCreator.tr;
 
 public class ConfigGenerator extends VisitingGenerator<Pair<Element, Element>, CombinedElementVisitor> {
 

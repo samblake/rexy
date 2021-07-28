@@ -3,9 +3,6 @@ package com.github.samblake.rexy.module.wexy;
 import com.codepoetics.ambivalence.Either;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.jknack.handlebars.Handlebars;
-import jauter.Routed;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import com.github.samblake.rexy.Rexy.RexyDetails;
 import com.github.samblake.rexy.config.model.Api;
 import com.github.samblake.rexy.http.RexyHandler;
@@ -16,6 +13,9 @@ import com.github.samblake.rexy.module.wexy.actions.WexyAction;
 import com.github.samblake.rexy.module.wexy.actions.api.ApiAction;
 import com.github.samblake.rexy.module.wexy.actions.endpoint.EndpointAction;
 import com.github.samblake.rexy.module.wexy.actions.module.UpdateModuleAction;
+import jauter.Routed;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -24,11 +24,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.codepoetics.ambivalence.Either.ofRight;
-import static java.util.Collections.singletonList;
 import static com.github.samblake.rexy.http.Method.GET;
 import static com.github.samblake.rexy.http.Method.POST;
 import static com.github.samblake.rexy.utils.Json.intValue;
 import static com.github.samblake.rexy.utils.Json.stringValue;
+import static java.util.Collections.singletonList;
 
 public class WexyModule extends ModuleAdapter {
 	private static final Logger logger = LogManager.getLogger(WexyModule.class);
