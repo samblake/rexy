@@ -81,7 +81,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * the first group will be supplied as the result rather than the entire match. An example template is:</p>
  *
  * <pre><code>{@code
- * ${regex:id=(.*?)(&|$)}
+ * ${regex:(?:&|^)id=(.*?)(&|$)}
  * }</code></pre>
  */
 public class TemplateModule extends ModuleAdapter {
