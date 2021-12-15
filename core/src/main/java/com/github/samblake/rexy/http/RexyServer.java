@@ -88,7 +88,7 @@ public class RexyServer extends NanoHTTPD {
 		RexyResponse response = route.map(r -> performRequest(session, r.getKey(), r.getValue()))
 				.orElseGet(() -> errorResponse(404, "No API registered for %s", session.getUri()));
 		
-		return createRespone(response);
+		return createResponse(response);
 	}
 	
 	private RexyResponse performRequest(IHTTPSession session, String route, RexyHandler handler) {
@@ -119,7 +119,7 @@ public class RexyServer extends NanoHTTPD {
 		}
 	}
 	
-	protected Response createRespone(RexyResponse rexyResponse) {
+	protected Response createResponse(RexyResponse rexyResponse) {
 		int responseLength = rexyResponse.getResponseLength();
 		InputStream body = rexyResponse.getBody();
 		Status status = Status.lookup(rexyResponse.getStatusCode());

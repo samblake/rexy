@@ -85,7 +85,7 @@ public class WexyServer extends RexyServer {
 		if (url.equalsIgnoreCase(baseUrl)) {
 			NanoRequest request = new NanoRequest(session, "/");
 			if (request.getMethod() == GET) {
-				return createRespone(indexAction.perform());
+				return createResponse(indexAction.perform());
 			}
 		}
 		
