@@ -37,7 +37,7 @@ function go(form, editor) {
 
     var button = $(form).find('button[type=submit]');
 
-    var regex = /\{(.+?)}/g;
+    var regex = /%7B(.+?)%7D/g;
     var template = form.action;
     var match = regex.exec(template);
     while (match != null) {
