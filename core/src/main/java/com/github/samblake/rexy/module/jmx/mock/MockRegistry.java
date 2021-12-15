@@ -1,5 +1,6 @@
 package com.github.samblake.rexy.module.jmx.mock;
 
+import com.github.samblake.rexy.config.model.Api;
 import com.github.samblake.rexy.config.model.Endpoint;
 import com.github.samblake.rexy.config.model.Response;
 import com.github.samblake.rexy.module.jmx.JmxRegistry;
@@ -20,6 +21,8 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * A registry for {@link MockEndpoint mock endpoints}.
  */
 public final class MockRegistry extends JmxRegistry<MockEndpoint> {
+	
+	private static final int NO_CONTENT = 204;
 	
 	private final boolean interceptOnSet;
 	
@@ -48,6 +51,16 @@ public final class MockRegistry extends JmxRegistry<MockEndpoint> {
 	
 	@Override
 	protected MockEndpoint createMBean(Endpoint endpoint) {
+		return endpoint.getResponses().isEmpty()
+				? noContentResponse(endpoint.getApi())
+				: createMockEndpoint(endpoint);
+	}
+	
+	private MockEndpoint noContentResponse(Api api) {
+		return new MockEndpoint(api.getContentType(), NO_CONTENT, api.getHeaders(), null, api.getProxy() == null);
+	}
+	
+	private MockEndpoint createMockEndpoint(Endpoint endpoint) {
 		Response defaultResponse = endpoint.getResponses().iterator().next();
 		
 		String contentType = endpoint.getApi().getContentType();

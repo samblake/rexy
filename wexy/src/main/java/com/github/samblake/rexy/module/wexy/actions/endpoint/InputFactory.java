@@ -1,7 +1,5 @@
 package com.github.samblake.rexy.module.wexy.actions.endpoint;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import com.github.samblake.rexy.module.wexy.model.input.CheckboxInput;
 import com.github.samblake.rexy.module.wexy.model.input.Input;
 import com.github.samblake.rexy.module.wexy.model.input.JsonInput;

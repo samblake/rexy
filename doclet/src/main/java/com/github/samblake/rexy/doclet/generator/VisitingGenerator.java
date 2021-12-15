@@ -1,12 +1,12 @@
 package com.github.samblake.rexy.doclet.generator;
 
+import com.github.samblake.rexy.doclet.Section;
+import com.github.samblake.rexy.doclet.visitor.ResultVisitor;
 import com.sun.source.doctree.DocCommentTree;
 import com.sun.source.doctree.DocTree;
 import com.sun.source.doctree.LiteralTree;
 import com.sun.source.util.DocTrees;
 import jdk.javadoc.doclet.DocletEnvironment;
-import com.github.samblake.rexy.doclet.Section;
-import com.github.samblake.rexy.doclet.visitor.ResultVisitor;
 
 import javax.lang.model.element.Element;
 import java.util.Optional;

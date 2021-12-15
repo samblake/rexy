@@ -1,9 +1,11 @@
 package com.github.samblake.rexy;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.github.samblake.rexy.config.ConfigException;
 import com.github.samblake.rexy.config.ConfigParser;
 import com.github.samblake.rexy.config.RexyConfig;
 import com.github.samblake.rexy.config.model.Api;
+import com.github.samblake.rexy.config.model.Endpoint;
 import com.github.samblake.rexy.exception.RexyException;
 import com.github.samblake.rexy.http.RexyServer;
 import com.github.samblake.rexy.module.ModuleInitialisationException;
@@ -53,6 +55,8 @@ public class Rexy {
 		logger.info("Starting Rexy");
 		try {
 			RexyConfig config = new ConfigParser(configPath).parse();
+			validateConfig(config);
+			
 			List<RexyModule> allModules = new ModuleScanner(config.getScanPackages()).scan();
 			List<RexyModule> enabledModules = initModules(config, allModules);
 			
@@ -61,6 +65,19 @@ public class Rexy {
 		}
 		catch (IOException | RexyException e) {
 			logger.error("Rexy server failed to start", e);
+		}
+	}
+	
+	private void validateConfig(RexyConfig config) throws ConfigException {
+		// TODO validate duplicate APIs, paths, etc.
+		
+		for (Api api : config.getApis()) {
+			for (Endpoint endpoint : api.getEndpoints()) {
+				if (api.getProxy() == null && endpoint.getResponses().isEmpty()) {
+					throw new ConfigException(api.getName() + ":" + endpoint.getName()
+							+ " has no proxy and no responses specified");
+				}
+			}
 		}
 	}
 	

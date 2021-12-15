@@ -1,8 +1,8 @@
 package com.github.samblake.rexy.doclet.visitor;
 
+import com.github.samblake.rexy.doclet.RexyDoclet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.github.samblake.rexy.doclet.RexyDoclet;
 
 import javax.lang.model.element.Element;
 

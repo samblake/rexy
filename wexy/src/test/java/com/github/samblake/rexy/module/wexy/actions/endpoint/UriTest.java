@@ -2,8 +2,8 @@ package com.github.samblake.rexy.module.wexy.actions.endpoint;
 
 import org.junit.Test;
 
-import static com.google.common.truth.Truth.assertThat;
 import static com.github.samblake.rexy.http.Method.GET;
+import static com.google.common.truth.Truth.assertThat;
 
 public class UriTest {
 	

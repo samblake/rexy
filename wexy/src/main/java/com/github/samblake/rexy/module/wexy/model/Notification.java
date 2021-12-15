@@ -1,8 +1,8 @@
 package com.github.samblake.rexy.module.wexy.model;
 
-import static java.lang.String.format;
 import static com.github.samblake.rexy.module.wexy.model.Notification.Type.FAILURE;
 import static com.github.samblake.rexy.module.wexy.model.Notification.Type.SUCCESS;
+import static java.lang.String.format;
 
 public class Notification {
 	

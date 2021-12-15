@@ -47,7 +47,6 @@ public class ConfigParser {
 			importedApis.add(parse(Api.class, importPath));
 		}
 		
-		// TODO validate (duplicate APIs, paths, etc.)
 		return new ApiConfig(config, importedApis);
 	}
 	

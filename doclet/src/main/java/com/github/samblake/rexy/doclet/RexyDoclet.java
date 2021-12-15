@@ -1,7 +1,16 @@
 package com.github.samblake.rexy.doclet;
 
-import com.github.samblake.rexy.doclet.generator.*;
-import com.github.samblake.rexy.doclet.visitor.*;
+import com.github.samblake.rexy.doclet.generator.CombiningGenerator;
+import com.github.samblake.rexy.doclet.generator.ConfigGenerator;
+import com.github.samblake.rexy.doclet.generator.FileIncludeGenerator;
+import com.github.samblake.rexy.doclet.generator.Generator;
+import com.github.samblake.rexy.doclet.generator.ReadmeGenerator;
+import com.github.samblake.rexy.doclet.generator.SubsectionGenerator;
+import com.github.samblake.rexy.doclet.visitor.CombinedElementVisitor;
+import com.github.samblake.rexy.doclet.visitor.ConfigVisitor;
+import com.github.samblake.rexy.doclet.visitor.ModuleVisitor;
+import com.github.samblake.rexy.doclet.visitor.PackageVisitor;
+import com.github.samblake.rexy.doclet.visitor.RequestMatcherVisitor;
 import com.mitchellbosecke.pebble.PebbleEngine;
 import com.mitchellbosecke.pebble.template.PebbleTemplate;
 import jdk.javadoc.doclet.Doclet;
@@ -11,13 +20,25 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.lang.model.SourceVersion;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
-import static com.github.samblake.rexy.doclet.Constants.*;
+import static com.github.samblake.rexy.doclet.Constants.CONFIG_PACKAGE;
+import static com.github.samblake.rexy.doclet.Constants.MATCHER_PACKAGE;
+import static com.github.samblake.rexy.doclet.Constants.MODULE_PACKAGE;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;

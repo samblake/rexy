@@ -1,8 +1,8 @@
 package com.github.samblake.rexy.module.wexy;
 
-import jauter.Router;
 import com.github.samblake.rexy.http.Method;
 import com.github.samblake.rexy.module.wexy.actions.WexyAction;
+import jauter.Router;
 
 public class WexyRouter extends Router<Method, WexyAction, WexyRouter> {
 
