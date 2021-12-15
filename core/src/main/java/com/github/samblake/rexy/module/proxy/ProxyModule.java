@@ -93,9 +93,14 @@ public class ProxyModule extends ModuleAdapter {
 		int statusCode = response.getStatusLine().getStatusCode();
 		
 		List<RexyHeader> headers = Arrays.stream(response.getAllHeaders())
+				.filter(h -> !isChunkedEncoding(h)) // We're always going to send a fixed length response
 				.map(h -> new RexyHeader(h.getName(), h.getValue())).collect(toList());
 		
 		return new BasicRexyResponse(statusCode, headers, null, body);
+	}
+	
+	private boolean isChunkedEncoding(Header header) {
+		return header.getName().equals("Transfer-Encoding") && header.getValue().equals("chunked");
 	}
 	
 	private byte[] getBody(CloseableHttpResponse response) throws IOException {
