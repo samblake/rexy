@@ -36,20 +36,22 @@ import static java.util.stream.Collectors.toList;
  * <p>A module that proxies a request to another URL. This will always write a response so will always be the
  * last module in a chain.</p>
  *
- * <p>To configure a proxy an API is created in the configuration. The {@code baseUrl} of the API corresponds
- * to the context root of the API on the Rexy server. The {@code proxy} value is the base URL that any request
- * to that context root will be forwarded to.</p>
+ * <p>To configure a proxy an API is needs to be defined configuration. The {@code baseUrl} of the API corresponds
+ * to the root path of the API on the Rexy server. The {@code proxy} value is the base URL that any request
+ * to that path will be forwarded to. The URL before, and including, the {@code baseUrl} value is swapped for
+ * the {@code proxy} value. This combined with the {@code endpoint} value forms the full URL that the request
+ * will be proxied to.</p>
  *
- * <p>For example, if the following configuration, if Rexy was running on localhost going to
- * http://localhost/api would be proxied to http://www.metaweather.com/api and going to
- * http://localhost/api/location/search/?query=london would be proxied to
- * http://www.metaweather.com/api/location/search/?query=london.</p>
+ * <p>For example, in the following configuration, if Rexy was running on {@code localhost}, a request to
+ * {@code http://localhost/metaweather-api} would be converted to {@code http://www.metaweather.com/api} and a
+ * request to {@code http://localhost/metaweather-api/location/search/?query=london} would be proxied to
+ * {@code http://www.metaweather.com/api/location/search/?query=london}.</p>
  *
  * <pre><code>{@code
  * "apis": [
  *   {
  *     "name": "metaweather",
- *     "baseUrl": "api/",
+ *     "baseUrl": "metaweather-api/",
  *     "contentType": "application/json",
  *     "proxy": "http://www.metaweather.com/api",
  *     "endpoints": [
